@@ -29,7 +29,7 @@ export const STRUCTURES: readonly StructureDefinition[] = Object.freeze([
     id: 'priority-queue',
     label: 'Priority Queue',
     description: 'Watch heap ordering.',
-    availability: 'planned',
+    availability: 'available',
   },
   { id: 'graph', label: 'Graph', description: 'Explore BFS and DFS.', availability: 'planned' },
 ]);

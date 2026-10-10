@@ -1,0 +1,213 @@
+import { StepRecorder } from '../../domain/StepRecorder';
+import type { ComplexityInfo, OperationResult } from '../../domain/visualization';
+import {
+  PriorityQueueModel,
+  type HeapEvent,
+  type PriorityQueueSnapshot,
+} from './PriorityQueueModel';
+
+export type PriorityQueueResult = OperationResult<PriorityQueueModel, PriorityQueueSnapshot>;
+
+const COMPLEXITY = {
+  insert: {
+    time: 'O(log n)',
+    space: 'O(1)',
+    explanation:
+      'The new item starts at the next open leaf and swaps upward at most once per level of the tree.',
+  },
+  extract: {
+    time: 'O(log n)',
+    space: 'O(1)',
+    explanation:
+      'The last item replaces the root and swaps downward with its smaller child at most once per level.',
+  },
+  peek: {
+    time: 'O(1)',
+    space: 'O(1)',
+    explanation: 'The minimum is always stored at the root, index 0 of the heap array.',
+  },
+} satisfies Record<string, ComplexityInfo>;
+
+export class PriorityQueueOperations {
+  insert(model: PriorityQueueModel, value: number): PriorityQueueResult {
+    const working = model.clone();
+    const recorder = new StepRecorder<PriorityQueueSnapshot>();
+    const visited: string[] = [];
+
+    recorder.record({
+      message: working.isEmpty()
+        ? `The heap is empty, so ${value} will become the root.`
+        : `Prepare to add ${value} at the next open position so the tree stays complete.`,
+      snapshot: working.snapshot(),
+    });
+
+    working.insert(value, (event: HeapEvent) => {
+      switch (event.kind) {
+        case 'placed':
+          visited.push(event.item.id);
+          recorder.record({
+            message: `${event.item.value} is placed at index ${event.index}, the next open leaf.`,
+            snapshot: working.snapshot(),
+            activeNodeIds: [event.item.id],
+            visitedNodeIds: visited,
+          });
+          break;
+        case 'compare':
+          recorder.record({
+            message: event.willSwap
+              ? `Compare ${event.item.value} with its parent ${event.other.value}: the child is smaller, so they must swap.`
+              : `Compare ${event.item.value} with its parent ${event.other.value}: the parent is not larger, so heap order holds.`,
+            snapshot: working.snapshot(),
+            activeNodeIds: [event.item.id],
+            visitedNodeIds: visited,
+            matchedNodeIds: [event.other.id],
+          });
+          break;
+        case 'swap':
+          recorder.record({
+            message: `${event.item.value} swaps upward with ${event.other.value}.`,
+            snapshot: working.snapshot(),
+            activeNodeIds: [event.item.id],
+            visitedNodeIds: visited,
+          });
+          break;
+        case 'settled':
+          recorder.record({
+            message: `${event.item.value} is at the root, so it is now the highest-priority item.`,
+            snapshot: working.snapshot(),
+            activeNodeIds: [event.item.id],
+            visitedNodeIds: visited,
+          });
+          break;
+        default:
+          break;
+      }
+    });
+
+    return this.result(working, recorder, 'success', COMPLEXITY.insert, 'Insert');
+  }
+
+  extractMin(model: PriorityQueueModel): PriorityQueueResult {
+    const working = model.clone();
+    const recorder = new StepRecorder<PriorityQueueSnapshot>();
+    const root = working.peekMin();
+
+    if (!root) {
+      recorder.record({
+        message: 'The priority queue is empty, so there is no minimum to remove.',
+        snapshot: working.snapshot(),
+      });
+      return this.result(working, recorder, 'blocked', COMPLEXITY.extract, 'Extract min');
+    }
+
+    recorder.record({
+      message: `${root.value} is at the root, so it has the highest priority and leaves first.`,
+      snapshot: working.snapshot(),
+      activeNodeIds: [root.id],
+      matchedNodeIds: [root.id],
+    });
+
+    const visited: string[] = [];
+    const output = [root.value];
+
+    working.extractMin((event: HeapEvent) => {
+      switch (event.kind) {
+        case 'replaced-root':
+          visited.push(event.moved.id);
+          recorder.record({
+            message: `Remove ${event.removed.value} and move the last item, ${event.moved.value}, into the root.`,
+            snapshot: working.snapshot(),
+            activeNodeIds: [event.moved.id],
+            visitedNodeIds: visited,
+            output,
+          });
+          break;
+        case 'compare':
+          recorder.record({
+            message: event.willSwap
+              ? `Compare ${event.item.value} with its smaller child ${event.other.value}: the child is smaller, so they must swap.`
+              : `Compare ${event.item.value} with its smaller child ${event.other.value}: the parent is not larger, so heap order is restored.`,
+            snapshot: working.snapshot(),
+            activeNodeIds: [event.item.id],
+            visitedNodeIds: visited,
+            matchedNodeIds: [event.other.id],
+            output,
+          });
+          break;
+        case 'swap':
+          recorder.record({
+            message: `${event.item.value} swaps downward with ${event.other.value}.`,
+            snapshot: working.snapshot(),
+            activeNodeIds: [event.item.id],
+            visitedNodeIds: visited,
+            output,
+          });
+          break;
+        case 'settled':
+          recorder.record({
+            message: `${event.item.value} has no children left to compare, so heap order is restored.`,
+            snapshot: working.snapshot(),
+            activeNodeIds: [event.item.id],
+            visitedNodeIds: visited,
+            output,
+          });
+          break;
+        default:
+          break;
+      }
+    });
+
+    if (working.isEmpty()) {
+      recorder.record({
+        message: `${root.value} was the only item. The priority queue is now empty.`,
+        snapshot: working.snapshot(),
+        output,
+      });
+    }
+
+    return this.result(working, recorder, 'success', COMPLEXITY.extract, 'Extract min');
+  }
+
+  peekMin(model: PriorityQueueModel): PriorityQueueResult {
+    const working = model.clone();
+    const recorder = new StepRecorder<PriorityQueueSnapshot>();
+    const root = working.peekMin();
+
+    if (!root) {
+      recorder.record({
+        message: 'The priority queue is empty, so there is no minimum to inspect.',
+        snapshot: working.snapshot(),
+      });
+      return this.result(working, recorder, 'blocked', COMPLEXITY.peek, 'Peek min');
+    }
+
+    recorder.record({
+      message: 'Read the root without removing it.',
+      snapshot: working.snapshot(),
+    });
+    recorder.record({
+      message: `${root.value} is the minimum. The heap remains unchanged.`,
+      snapshot: working.snapshot(),
+      activeNodeIds: [root.id],
+      matchedNodeIds: [root.id],
+      output: [root.value],
+    });
+    return this.result(working, recorder, 'success', COMPLEXITY.peek, 'Peek min');
+  }
+
+  private result(
+    model: PriorityQueueModel,
+    recorder: StepRecorder<PriorityQueueSnapshot>,
+    status: PriorityQueueResult['status'],
+    complexity: ComplexityInfo,
+    operationLabel: string,
+  ): PriorityQueueResult {
+    return Object.freeze({
+      model,
+      steps: recorder.steps(),
+      status,
+      complexity: Object.freeze({ ...complexity }),
+      operationLabel,
+    });
+  }
+}

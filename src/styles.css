@@ -628,6 +628,68 @@ input:disabled {
   font-size: 0.76rem;
 }
 
+.heap-svg {
+  display: block;
+  flex: 0 0 auto;
+}
+
+.heap-scroll {
+  align-items: flex-start;
+}
+
+.heap-edge {
+  stroke: #9a9d94;
+  stroke-width: 2;
+}
+
+.heap-node circle,
+.heap-cell rect {
+  fill: #faf8f0;
+  stroke: #777d73;
+  stroke-width: 2;
+  transition:
+    fill 180ms ease-out,
+    stroke 180ms ease-out;
+}
+
+.heap-value {
+  fill: #22271f;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.heap-node.state-active circle,
+.heap-cell.state-active rect {
+  fill: #dce9ff;
+  stroke: #3b71b4;
+}
+
+.heap-node.state-visited circle,
+.heap-cell.state-visited rect {
+  fill: #f7e5bd;
+  stroke: #9b6b1c;
+}
+
+.heap-node.state-matched circle,
+.heap-cell.state-matched rect {
+  fill: #ccebd9;
+  stroke: #27794c;
+  stroke-width: 3;
+}
+
+.empty-heap {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border: 2px dashed #8a8e85;
+  border-radius: 50%;
+  color: #6e746b;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+}
+
 .empty-canvas {
   min-height: 280px;
   display: grid;
