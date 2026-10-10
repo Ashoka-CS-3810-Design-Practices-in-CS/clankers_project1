@@ -1,0 +1,39 @@
+src/components/BstOperationPanel.tsx
+  s_3eb8e14d84cbd2::t_0b124233daa0bc 32-34
+  s_3eb8e14d84cbd2::t_524f081c7abbce 1-31,35-36,38-92
+  s_3eb8e14d84cbd2::t_1f86448796aa38 37
+src/App.tsx
+  s_3eb8e14d84cbd2::t_cd8faf4f9c3a33 4,9,24
+src/styles.css
+  s_3eb8e14d84cbd2::t_6439198f0c351a 631-727,1086
+  s_3eb8e14d84cbd2::t_ca4e6e5b8b8f05 932,935-936
+src/components/BstCanvas.tsx
+  s_3eb8e14d84cbd2::t_2567a4ab702030 18,77-80
+  s_3eb8e14d84cbd2::t_467bcdd5785df6 20
+  s_3eb8e14d84cbd2::t_0b124233daa0bc 84-88,100-102,153-158
+  s_3eb8e14d84cbd2::t_524f081c7abbce 1-17,19,21-76,81-83,89-99,103-152,159-176
+src/App.test.tsx
+  s_3eb8e14d84cbd2::t_11005737f96685 49-50
+src/workspaces/BstWorkspace.tsx
+  s_3eb8e14d84cbd2::t_cd8faf4f9c3a33 1-157
+src/registry/structures.ts
+  s_3eb8e14d84cbd2::t_cd8faf4f9c3a33 26
+src/components/PlaybackControls.tsx
+  s_3eb8e14d84cbd2::t_ca4e6e5b8b8f05 55-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ea8adb40648c4a0dba458293ad4c59645af9ddcf",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
