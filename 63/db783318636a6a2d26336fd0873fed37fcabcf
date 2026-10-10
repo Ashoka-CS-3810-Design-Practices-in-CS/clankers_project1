@@ -1,0 +1,32 @@
+e2e/linked-list.spec.ts
+  s_3eb8e14d84cbd2::t_a447e140460763 7
+e2e/bst.spec.ts
+  s_af8324b7af09a6::t_318157e9bccc74 11-13
+  s_3eb8e14d84cbd2::t_26f74828a9b416 1-10,14-47
+src/BstWorkspace.test.tsx
+  s_3eb8e14d84cbd2::t_26f74828a9b416 1-90
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "63db783318636a6a2d26336fd0873fed37fcabcf",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    },
+    "s_af8324b7af09a6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "unknown"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
