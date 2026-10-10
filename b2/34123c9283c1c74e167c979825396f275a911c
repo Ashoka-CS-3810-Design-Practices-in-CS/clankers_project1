@@ -1,0 +1,38 @@
+src/domain/integerValidation.ts
+  s_3eb8e14d84cbd2::t_3feb825490af50 1-15
+src/structures/linked-list/linkedListValidation.ts
+  s_3eb8e14d84cbd2::t_3feb825490af50 4
+src/structures/stack/StackOperations.ts
+  s_3eb8e14d84cbd2::t_3feb825490af50 1-153
+src/structures/stack/stackValidation.ts
+  s_3eb8e14d84cbd2::t_3feb825490af50 1-12
+src/structures/stack/StackModel.ts
+  s_3eb8e14d84cbd2::t_3feb825490af50 1-77
+src/structures/stack/StackOperations.test.ts
+  s_3eb8e14d84cbd2::t_3feb825490af50 1-14,21-82
+  s_af8324b7af09a6::t_5cc63cb1053dc3 15-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b234123c9283c1c74e167c979825396f275a911c",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    },
+    "s_af8324b7af09a6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "unknown"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
