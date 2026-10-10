@@ -23,7 +23,7 @@ export const STRUCTURES: readonly StructureDefinition[] = Object.freeze([
     id: 'bst',
     label: 'Binary Search Tree',
     description: 'Trace ordered comparisons.',
-    availability: 'planned',
+    availability: 'available',
   },
   {
     id: 'priority-queue',
