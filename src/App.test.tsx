@@ -46,7 +46,11 @@ describe('App', () => {
     await user.tab();
     expect(screen.getByRole('button', { name: 'Queue, ready' })).toHaveFocus();
     await user.tab();
+<<<<<<< HEAD
+    expect(screen.getByRole('button', { name: 'Priority Queue, ready' })).toHaveFocus();
+=======
     expect(screen.getByRole('button', { name: 'Binary Search Tree, ready' })).toHaveFocus();
+>>>>>>> 571a3dfd33994ec5a8d56bcb5a9477518ef0c8b4
     await user.tab();
     expect(screen.getByLabelText('Node value')).toHaveFocus();
   });

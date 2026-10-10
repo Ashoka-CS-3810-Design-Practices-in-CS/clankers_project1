@@ -1,5 +1,57 @@
 # Project Updates
 
+<<<<<<< HEAD
+## 2026-10-10: Priority Queue vertical slice
+
+### Completed changes
+
+- Added a Priority Queue workspace backed by a binary min-heap, with Insert, Extract min, Peek min, sample data, and reset.
+- Insert narrates placement at the next open leaf and every parent comparison and swap during sift-up.
+- Extract min narrates removing the root, moving the last item into the root, and every smaller-child comparison and swap during sift-down.
+- Added actionable underflow narration for Extract min and Peek min on an empty priority queue.
+- Added a native-SVG view that draws the heap as a tree and as its array, with indices and shared highlight states.
+- Moved Priority Queue from planned to available in the structure registry and extended the keyboard-order test.
+- Added domain, component, desktop, and mobile browser coverage.
+
+### Architecture and design considerations
+
+- `PriorityQueueModel` implements the heap itself rather than adding a dependency, keeping the algorithm visible and testable.
+- The model accepts an optional `HeapObserver` that receives placement, comparison, swap, and settled events. Operations record a snapshot for each event, so narration stays in the operation layer and the sift logic exists in exactly one place.
+- Smaller values have higher priority. Swaps happen only on strictly smaller values, so equal values do not move unnecessarily.
+- `isValidHeap()` is exposed for tests, which assert heap order after every insert and extraction.
+- Tree positions are computed from array indices (level `floor(log2(i + 1))`), the same index arithmetic the heap uses. Binary Search Tree will need a different, value-driven placement.
+
+### UX and accessibility decisions
+
+- The tree and array are drawn together because the array is how heaps are stored, and seeing both explains why a parent at index `i` has children at `2i + 1` and `2i + 2`.
+- The root is labelled "min" in text, not by colour alone.
+- During comparisons the moving item is marked as current and the item it is compared with is marked as compared, so each swap decision is visible before it happens.
+- The screen-reader list gives each index, its value, and its parent index.
+- Extract min and Peek min stay enabled on an empty priority queue so learners receive an underflow explanation.
+
+### Testing and performance evidence
+
+Evidence recorded on 2026-10-10:
+
+- TypeScript, ESLint, and Prettier checks passed; 76 Vitest tests passed; the production build succeeded.
+- Playwright passed 10 browser checks across desktop and mobile, including the full Priority Queue workflow.
+- The production build emitted approximately 279.26 kB of JavaScript (80.68 kB gzip) and 14.27 kB of CSS (3.78 kB gzip).
+
+Insert and Extract min record a constant number of steps per tree level, so a trace holds `O(log n)` snapshots of `O(n)` items each. The 50-item limit keeps the tree at six levels.
+
+### Risks, assumptions, and limitations
+
+- Priority is the value itself. Separate payloads with their own priorities are not modelled.
+- Only a min-heap is offered; a max-heap toggle would need its own narration and tests.
+- The bottom level of a full 50-item tree is wide, so the canvas scrolls horizontally on small screens.
+- Four workspaces are now permanently mounted; this is still cheap at the 50-item limit.
+
+### Next implementation phases
+
+1. Extract a shared single-value operation panel from the Stack, Queue, and Priority Queue panels.
+2. Implement Binary Search Tree with a value-driven tree layout.
+3. Implement Graph traversal with an explicit layout strategy.
+=======
 ## 2026-10-10: Binary Search Tree vertical slice
 
 ### Completed changes
@@ -35,6 +87,7 @@
 1. Implement Priority Queue with a heap-specific model and layout.
 2. Select and test a Graph layout before adding BFS and DFS.
 3. Reassess persistent mounted workspaces and shared operation-panel extraction.
+>>>>>>> 571a3dfd33994ec5a8d56bcb5a9477518ef0c8b4
 
 ## 2026-10-10: Queue vertical slice
 
