@@ -1,0 +1,43 @@
+src/components/OperationPanel.tsx
+  s_3eb8e14d84cbd2::t_fbf75f8db98805 2,18,39,42-43
+src/styles.css
+  s_3eb8e14d84cbd2::t_98d25a6745f12d 533-534
+  s_3eb8e14d84cbd2::t_fbf75f8db98805 520-532,535-580
+src/components/StackCanvas.tsx
+  s_3eb8e14d84cbd2::t_6db632d779857c 1-91
+src/App.test.tsx
+  s_3eb8e14d84cbd2::t_d7aaed6ab095df 45-46
+src/components/Inspector.tsx
+  s_3eb8e14d84cbd2::t_fbf75f8db98805 3,7-10,13-21,33-35,60,68,83
+src/workspaces/LinkedListWorkspace.tsx
+  s_3eb8e14d84cbd2::t_eef882b197284e 1-158
+src/components/StructureNav.tsx
+  s_3eb8e14d84cbd2::t_fbf75f8db98805 2,4-9,24,28-30,33-39
+src/workspaces/StackWorkspace.tsx
+  s_3eb8e14d84cbd2::t_6db632d779857c 1-143
+src/playback/usePlayback.ts
+  s_3eb8e14d84cbd2::t_8b255a2a329828 13
+  s_3eb8e14d84cbd2::t_d8cf051762abdc 1,6-12,23-30
+src/components/StackOperationPanel.tsx
+  s_3eb8e14d84cbd2::t_eef882b197284e 1-82
+src/registry/structures.ts
+  s_3eb8e14d84cbd2::t_fbf75f8db98805 10-15
+src/App.tsx
+  s_3eb8e14d84cbd2::t_5761155b0272c6 1,4-5,7,10,18-20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "21800d7ea3da7312d2068678cc7fdddf1dfcc8d2",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
