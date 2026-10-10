@@ -1,0 +1,26 @@
+src/structures/bst/BstModel.ts
+  s_3eb8e14d84cbd2::t_568dc65a4e9dad 1-222
+src/structures/bst/BstOperations.ts
+  s_3eb8e14d84cbd2::t_568dc65a4e9dad 1-205
+src/structures/bst/bstValidation.ts
+  s_3eb8e14d84cbd2::t_568dc65a4e9dad 1-12
+src/structures/bst/BstOperations.test.ts
+  s_3eb8e14d84cbd2::t_af8d156d68ae79 1-15,22-126
+  s_3eb8e14d84cbd2::t_30dadebf7fa377 16-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "51d086ab0ab8d80f4584b177fc88a8c1adbb4dbf",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
