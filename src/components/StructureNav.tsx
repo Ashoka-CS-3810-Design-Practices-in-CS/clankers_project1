@@ -19,6 +19,7 @@ export function StructureNav() {
             type="button"
             key={structure.id}
             disabled={structure.availability === 'planned'}
+            aria-label={`${structure.label}, ${structure.availability === 'available' ? 'active' : 'planned'}`}
             aria-current={structure.availability === 'available' ? 'page' : undefined}
           >
             <span>{structure.label}</span>

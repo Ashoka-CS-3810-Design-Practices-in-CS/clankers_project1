@@ -44,3 +44,19 @@ test('builds, searches, traverses, deletes, and resets a linked list', async ({ 
   await page.getByRole('button', { name: 'Reset list' }).click();
   await expect(page.getByText('Your list is empty')).toBeVisible();
 });
+
+test('honors the reduced-motion preference', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/');
+
+  const durationInMilliseconds = await page
+    .getByRole('button', { name: 'Insert head' })
+    .evaluate((button) => {
+      const duration = getComputedStyle(button).transitionDuration;
+      return duration.endsWith('ms')
+        ? Number.parseFloat(duration)
+        : Number.parseFloat(duration) * 1000;
+    });
+
+  expect(durationInMilliseconds).toBeLessThanOrEqual(0.01);
+});

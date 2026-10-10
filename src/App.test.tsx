@@ -38,6 +38,8 @@ describe('App', () => {
     const user = userEvent.setup();
     render(<App />);
     await user.tab();
+    expect(screen.getByRole('link', { name: 'Skip to visualizer' })).toHaveFocus();
+    await user.tab();
     expect(screen.getByRole('button', { name: /Linked List/ })).toHaveFocus();
     await user.tab();
     expect(screen.getByLabelText('Node value')).toHaveFocus();
