@@ -52,7 +52,9 @@ export function PlaybackControls({
         </span>
         <div className="step-track" aria-hidden="true">
           <span
-            style={{ width: hasSteps ? `${((state.index + 1) / state.total) * 100}%` : '0%' }}
+            style={{
+              transform: `scaleX(${hasSteps ? (state.index + 1) / state.total : 0})`,
+            }}
           />
         </div>
       </div>

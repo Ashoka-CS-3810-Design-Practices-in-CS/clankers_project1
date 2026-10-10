@@ -628,11 +628,25 @@ input:disabled {
   font-size: 0.76rem;
 }
 
+<<<<<<< HEAD
 .heap-svg {
+=======
+.tree-scroll {
+  min-height: 320px;
+  max-height: 480px;
+  overflow: auto;
+  display: flex;
+  align-items: flex-start;
+  padding: 16px 12px 24px;
+}
+
+.tree-svg {
+>>>>>>> 571a3dfd33994ec5a8d56bcb5a9477518ef0c8b4
   display: block;
   flex: 0 0 auto;
 }
 
+<<<<<<< HEAD
 .heap-scroll {
   align-items: flex-start;
 }
@@ -644,6 +658,14 @@ input:disabled {
 
 .heap-node circle,
 .heap-cell rect {
+=======
+.tree-edges line {
+  stroke: #8b9087;
+  stroke-width: 2;
+}
+
+.tree-node rect {
+>>>>>>> 571a3dfd33994ec5a8d56bcb5a9477518ef0c8b4
   fill: #faf8f0;
   stroke: #777d73;
   stroke-width: 2;
@@ -652,6 +674,7 @@ input:disabled {
     stroke 180ms ease-out;
 }
 
+<<<<<<< HEAD
 .heap-value {
   fill: #22271f;
   font-family: var(--font-mono);
@@ -661,23 +684,54 @@ input:disabled {
 
 .heap-node.state-active circle,
 .heap-cell.state-active rect {
+=======
+.tree-value {
+  fill: #22271f;
+  font-family: var(--font-mono);
+  font-weight: 750;
+}
+
+.tree-count circle {
+  fill: #242923;
+  stroke: #f1efe7;
+  stroke-width: 2;
+}
+
+.tree-count text {
+  fill: #f1efe7;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.tree-node.state-active rect {
+>>>>>>> 571a3dfd33994ec5a8d56bcb5a9477518ef0c8b4
   fill: #dce9ff;
   stroke: #3b71b4;
 }
 
+<<<<<<< HEAD
 .heap-node.state-visited circle,
 .heap-cell.state-visited rect {
+=======
+.tree-node.state-visited rect {
+>>>>>>> 571a3dfd33994ec5a8d56bcb5a9477518ef0c8b4
   fill: #f7e5bd;
   stroke: #9b6b1c;
 }
 
+<<<<<<< HEAD
 .heap-node.state-matched circle,
 .heap-cell.state-matched rect {
+=======
+.tree-node.state-matched rect {
+>>>>>>> 571a3dfd33994ec5a8d56bcb5a9477518ef0c8b4
   fill: #ccebd9;
   stroke: #27794c;
   stroke-width: 3;
 }
 
+<<<<<<< HEAD
 .empty-heap {
   width: 64px;
   height: 64px;
@@ -685,11 +739,45 @@ input:disabled {
   place-items: center;
   border: 2px dashed #8a8e85;
   border-radius: 50%;
+=======
+.empty-tree {
+  position: relative;
+  width: 86px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border: 2px dashed #8a8e85;
+  border-radius: 14px;
+>>>>>>> 571a3dfd33994ec5a8d56bcb5a9477518ef0c8b4
   color: #6e746b;
   font-family: var(--font-mono);
   font-size: 0.76rem;
 }
 
+<<<<<<< HEAD
+=======
+.empty-tree::before,
+.empty-tree::after {
+  content: '';
+  position: absolute;
+  top: 58px;
+  width: 42px;
+  border-top: 2px dashed #8a8e85;
+}
+
+.empty-tree::before {
+  right: 42px;
+  transform: rotate(-28deg);
+  transform-origin: right center;
+}
+
+.empty-tree::after {
+  left: 42px;
+  transform: rotate(28deg);
+  transform-origin: left center;
+}
+
+>>>>>>> 571a3dfd33994ec5a8d56bcb5a9477518ef0c8b4
 .empty-canvas {
   min-height: 280px;
   display: grid;
@@ -894,9 +982,11 @@ input:disabled {
 
 .step-track span {
   display: block;
+  width: 100%;
   height: 100%;
   background: var(--accent);
-  transition: width 180ms ease-out;
+  transform-origin: left center;
+  transition: transform 180ms ease-out;
 }
 
 .speed-control {
@@ -1046,6 +1136,7 @@ input:disabled {
   }
 
   .canvas-scroll,
+  .tree-scroll,
   .empty-canvas {
     min-height: 238px;
   }

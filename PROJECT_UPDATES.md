@@ -1,5 +1,6 @@
 # Project Updates
 
+<<<<<<< HEAD
 ## 2026-10-10: Priority Queue vertical slice
 
 ### Completed changes
@@ -50,6 +51,43 @@ Insert and Extract min record a constant number of steps per tree level, so a tr
 1. Extract a shared single-value operation panel from the Stack, Queue, and Priority Queue panels.
 2. Implement Binary Search Tree with a value-driven tree layout.
 3. Implement Graph traversal with an explicit layout strategy.
+=======
+## 2026-10-10: Binary Search Tree vertical slice
+
+### Completed changes
+
+- Added ordered Insert, Search, Delete, Inorder, Preorder, and Postorder operations with deterministic playback.
+- Added stable `bst-N` identities, duplicate counts, signed safe integers, sample/reset actions, and a 31-node visual limit.
+- Added a responsive native-SVG tree, comparison-path highlights, textual relationships, output, narration, and worst-case complexity.
+- Added domain, component, and desktop/mobile browser coverage; Binary Search Tree is now available in navigation.
+
+### Design decisions
+
+- `BstModel` encapsulates mutable links; operations clone the model and record immutable snapshots before React renders them.
+- Duplicates increment one node's count. Delete decrements that count before changing links.
+- Two-child deletion transplants the inorder successor and preserves its stable ID.
+- Inorder rank sets horizontal position and depth sets vertical position. This avoids a graph-layout dependency and gives deterministic, non-overlapping nodes.
+- Insert, Search, and Delete report worst-case `O(n)` because this is an unbalanced BST. Traversals report `O(n)` time and auxiliary space.
+
+### UX, performance, and limits
+
+- The tree scrolls inside its canvas on narrow screens and exposes an SVG description plus a screen-reader node list.
+- The 31-node limit bounds tree height, canvas size, and full-snapshot playback memory while keeping five-level examples readable.
+- Full snapshots favour clear replay over minimal memory. Skewed trees still require internal scrolling and can demonstrate linear worst-case behavior.
+- Interface review corrected wide-tree clipping and changed playback progress from width animation to transform animation.
+
+### Verification
+
+- `npm run check` passed TypeScript, ESLint, Prettier, 74 Vitest tests, and the production build.
+- Playwright passed 10 desktop/mobile checks, including the complete BST workflow and reduced-motion coverage.
+- Production output is approximately 280.45 kB JavaScript (81.07 kB gzip) and 14.72 kB CSS (3.88 kB gzip).
+
+### Next
+
+1. Implement Priority Queue with a heap-specific model and layout.
+2. Select and test a Graph layout before adding BFS and DFS.
+3. Reassess persistent mounted workspaces and shared operation-panel extraction.
+>>>>>>> 571a3dfd33994ec5a8d56bcb5a9477518ef0c8b4
 
 ## 2026-10-10: Queue vertical slice
 
