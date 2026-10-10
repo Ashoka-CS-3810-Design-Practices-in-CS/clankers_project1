@@ -1,6 +1,6 @@
 # Clankers DSA Visualizer
 
-Clankers is an interactive algorithm lab for learning data structures one operation at a time. The current Assignment 3 application includes complete Linked List and Stack vertical slices: learners can build each structure, inspect deterministic algorithm steps, control playback, and connect every transition to its time and space complexity.
+Clankers is an interactive algorithm lab for learning data structures one operation at a time. The current Assignment 3 application includes complete Linked List, Stack, and Queue vertical slices: learners can build each structure, inspect deterministic algorithm steps, control playback, and connect every transition to its time and space complexity.
 
 ## Current scope
 
@@ -23,7 +23,16 @@ The Stack workspace supports:
 - stable item identities, immutable snapshots, highlighted top/visited states, operation output, and correct complexity metadata;
 - independent state that remains available when switching between Stack and Linked List.
 
-Graph, Binary Search Tree, Priority Queue, and Queue remain visible as planned milestones.
+The Queue workspace supports:
+
+- Enqueue, Dequeue, Peek front, and front-to-rear inspection;
+- clear underflow feedback for Dequeue and Peek front on an empty queue;
+- duplicate values, signed safe integers, sample data, reset, and a 50-item readability limit;
+- a horizontal FIFO view with labelled front and rear, explicit enqueue and dequeue directions, and stable `queue-N` identities;
+- `O(1)` Dequeue backed by a moving front index rather than `Array.prototype.shift`;
+- independent state that remains available when switching between structures.
+
+Graph, Binary Search Tree, and Priority Queue remain visible as planned milestones.
 
 ## Run locally
 
@@ -43,7 +52,7 @@ npm run check
 npm run test:e2e
 ```
 
-`npm run check` runs TypeScript validation, ESLint, Prettier checks, unit/component tests, and a production build. The Playwright command runs complete Linked List and Stack flows at desktop and mobile viewport sizes. On a new machine, install the Playwright browser once with `npx playwright install chromium`.
+`npm run check` runs TypeScript validation, ESLint, Prettier checks, unit/component tests, and a production build. The Playwright command runs complete Linked List, Stack, and Queue flows at desktop and mobile viewport sizes. On a new machine, install the Playwright browser once with `npx playwright install chromium`.
 
 Useful individual commands:
 
@@ -65,6 +74,7 @@ src/
 ├── domain/                    Shared visualization contracts and StepRecorder
 ├── structures/linked-list/    Model, validation, and operation service
 ├── structures/stack/          Stack model, validation, and operation service
+├── structures/queue/          Queue model, validation, and operation service
 ├── playback/                  Framework-independent state machine and React hook
 ├── registry/                  Available and planned structures
 ├── components/                Controls, SVG canvases, navigation, and inspector
@@ -75,8 +85,10 @@ src/
 
 - `LinkedListModel` owns list state and wraps `@datastructures-js/linked-list`.
 - `StackModel` owns native LIFO storage behind a small class API.
+- `QueueModel` owns FIFO storage as an array plus a moving front index, compacting consumed slots so Enqueue and Dequeue stay amortised `O(1)`.
 - `LinkedListOperations` runs algorithms against a cloned model and records their steps.
 - `StackOperations` uses the same result and snapshot contracts for Push, Pop, Peek, and Inspect all.
+- `QueueOperations` follows the same contracts for Enqueue, Dequeue, Peek front, and Inspect all.
 - `StepRecorder` freezes snapshots and step metadata to prevent later mutations from changing history.
 - The playback reducer is independent of React; `usePlayback` only supplies timer lifecycle behavior.
 - Each structure has an independent workspace, while navigation, playback controls, and the generic inspector are shared.
@@ -86,17 +98,16 @@ The UI uses React, native SVG, and ordinary CSS. There is no backend, database, 
 
 ## Testing strategy
 
-- Domain tests cover linked-list insertion/search/deletion/traversal and Stack Push/Pop/Peek/inspection, including duplicates, empty cases, validation, capacity, stable IDs, immutable logs, and complexity metadata.
+- Domain tests cover linked-list insertion/search/deletion/traversal Stack Push/Pop/Peek/inspection, and Queue Enqueue/Dequeue/Peek front/inspection (including FIFO order across compaction), including duplicates, empty cases, validation, capacity, stable IDs, immutable logs, and complexity metadata.
 - Playback tests cover boundaries, restart, completion, speed changes, and timer cleanup.
 - Component tests cover inline validation, synchronized panels, disabled operations, underflow, structure switching, state preservation, automatic playback, and keyboard order.
-- Playwright verifies both main learner flows on desktop and mobile.
+- Playwright verifies all three main learner flows on desktop and mobile.
 
 ## Roadmap
 
-1. Add Queue using the shared workspace, snapshot, inspector, and playback contracts.
-2. Review shared operation-panel patterns after the third structure to avoid premature abstraction.
-3. Add Priority Queue and Binary Search Tree with structure-specific SVG layouts.
-4. Add Graph traversal with an explicit graph-layout strategy.
-5. Expand cross-structure accessibility, performance, and browser evidence.
+1. Review shared operation-panel and workspace patterns now that three structures exist.
+2. Add Priority Queue and Binary Search Tree with structure-specific SVG layouts.
+3. Add Graph traversal with an explicit graph-layout strategy.
+4. Expand cross-structure accessibility, performance, and browser evidence.
 
 See [PROJECT_UPDATES.md](PROJECT_UPDATES.md) for the decision log, evidence, assumptions, and known risks.

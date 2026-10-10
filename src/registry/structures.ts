@@ -13,7 +13,12 @@ export const STRUCTURES: readonly StructureDefinition[] = Object.freeze([
     description: 'Inspect LIFO operations.',
     availability: 'available',
   },
-  { id: 'queue', label: 'Queue', description: 'Inspect FIFO operations.', availability: 'planned' },
+  {
+    id: 'queue',
+    label: 'Queue',
+    description: 'Inspect FIFO operations.',
+    availability: 'available',
+  },
   {
     id: 'bst',
     label: 'Binary Search Tree',
