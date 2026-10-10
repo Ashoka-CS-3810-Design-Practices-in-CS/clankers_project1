@@ -1,5 +1,54 @@
 # Project Updates
 
+## 2026-10-10: Queue vertical slice
+
+### Completed changes
+
+- Added a complete Queue workspace with Enqueue, Dequeue, Peek front, Inspect all, sample data, and reset.
+- Added actionable underflow narration for Dequeue and Peek front on an empty queue.
+- Added stable `queue-N` item IDs, duplicate-value support, signed safe integers, and a 50-item educational limit.
+- Added a horizontal native-SVG Queue view with labelled front and rear positions and explicit enqueue and dequeue directions.
+- Moved Queue from planned to available in the structure registry; all three workspaces keep independent state.
+- Added Queue domain, component, desktop, and mobile browser coverage, and extended the keyboard-order test to include the new navigation item.
+
+### Architecture and design considerations
+
+- `QueueModel` stores items in an array with a moving front index. Dequeue advances the index instead of calling `Array.prototype.shift`, which re-indexes every remaining element. Consumed slots are compacted when they reach half of the backing array, so Enqueue and Dequeue are amortised `O(1)` and the displayed complexity matches the implementation.
+- `QueueOperations` reuses the clone-record-result pattern, `OperationResult`, `StepRecorder`, the playback engine, and the generic inspector without changes to shared code.
+- Snapshots expose items front to rear, so the canvas and Inspect all output need no reordering.
+- The Queue operation panel stays separate from the Stack panel. The two are now structurally almost identical (one value input, one insert action, three read/remove actions, sample and reset), which is the evidence the previous entry asked for before extracting a shared form.
+
+### UX and accessibility decisions
+
+- Front and rear are labelled in text above the items; a single item is labelled "front · rear".
+- Dashed arrows on each side show that items leave on the left and join on the right, so direction is not conveyed by position alone.
+- The SVG has a front-to-rear text description and an ordered screen-reader list.
+- Dequeue and Peek front stay enabled on an empty queue so learners get an underflow explanation rather than a disabled control.
+- The canvas reuses the horizontal scroll container from the Linked List view, so long queues scroll inside the panel without page-level overflow on mobile.
+- Queue uses its own input label ("Queue value") and output heading ("Queue output") so labels stay unique while all workspaces remain mounted.
+
+### Testing and performance evidence
+
+Evidence recorded on 2026-10-10:
+
+- TypeScript, ESLint, and Prettier checks passed; 58 Vitest tests passed; the production build succeeded.
+- Playwright passed 8 browser checks across desktop and mobile, including the full Queue workflow.
+- The production build emitted approximately 266.70 kB of JavaScript (78.38 kB gzip) and 13.49 kB of CSS (3.67 kB gzip).
+
+Enqueue, Dequeue, and Peek front record constant-size traces. Inspect all records a snapshot per visited item, giving approximately `O(n²)` snapshot memory, bounded by the 50-item limit as for Stack.
+
+### Risks, assumptions, and limitations
+
+- Amortised `O(1)` relies on the compaction rule; an individual Dequeue that triggers compaction copies the live items. This cost is not animated.
+- Inspect all is an educational operation rather than part of a minimal queue interface.
+- Three workspaces are now permanently mounted. This is still inexpensive at the 50-item limit but should be revisited before more structures become available.
+
+### Next implementation phases
+
+1. Extract a shared single-value operation panel from the Stack and Queue panels, keeping Linked List separate if its search and delete actions do not fit.
+2. Decide whether inactive workspaces should move to a persisted state store.
+3. Continue with Priority Queue, Binary Search Tree, and Graph.
+
 ## 2026-10-10: Stack vertical slice
 
 ### Completed changes

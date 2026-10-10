@@ -578,6 +578,56 @@ input:disabled {
   font-size: 0.76rem;
 }
 
+.queue-svg {
+  display: block;
+  flex: 0 0 auto;
+  max-height: 180px;
+}
+
+.queue-item rect {
+  fill: #faf8f0;
+  stroke: #777d73;
+  stroke-width: 2;
+  transition:
+    fill 180ms ease-out,
+    stroke 180ms ease-out;
+}
+
+.queue-item.state-active rect {
+  fill: #dce9ff;
+  stroke: #3b71b4;
+}
+
+.queue-item.state-visited rect {
+  fill: #f7e5bd;
+  stroke: #9b6b1c;
+}
+
+.queue-item.state-matched rect {
+  fill: #ccebd9;
+  stroke: #27794c;
+  stroke-width: 3;
+}
+
+.queue-flow {
+  stroke: #697065;
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+
+.empty-queue {
+  width: 132px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border: 2px dashed #8a8e85;
+  border-right: 0;
+  border-left: 0;
+  color: #6e746b;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+}
+
 .empty-canvas {
   min-height: 280px;
   display: grid;

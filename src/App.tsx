@@ -2,9 +2,10 @@ import { useState } from 'react';
 import './styles.css';
 import { StructureNav } from './components/StructureNav';
 import { LinkedListWorkspace } from './workspaces/LinkedListWorkspace';
+import { QueueWorkspace } from './workspaces/QueueWorkspace';
 import { StackWorkspace } from './workspaces/StackWorkspace';
 
-export type AvailableStructureId = 'linked-list' | 'stack';
+export type AvailableStructureId = 'linked-list' | 'stack' | 'queue';
 
 export default function App() {
   const [activeStructure, setActiveStructure] = useState<AvailableStructureId>('linked-list');
@@ -18,6 +19,7 @@ export default function App() {
         <StructureNav activeId={activeStructure} onSelect={setActiveStructure} />
         <LinkedListWorkspace active={activeStructure === 'linked-list'} />
         <StackWorkspace active={activeStructure === 'stack'} />
+        <QueueWorkspace active={activeStructure === 'queue'} />
       </div>
     </>
   );
