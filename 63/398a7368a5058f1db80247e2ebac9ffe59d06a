@@ -1,0 +1,181 @@
+.codex/skills/impeccable/reference/polish.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-105
+.codex/skills/impeccable/scripts/impeccable
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-206
+.codex/skills/impeccable/scripts/impeccable.cmd
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-214
+.codex/skills/impeccable/scripts/live-browser.js
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-13510
+.codex/skills/impeccable/reference/mode-read.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-21
+.codex/skills/impeccable/scripts/data/font-index.json
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1
+.codex/skills/web-design-guidelines/SKILL.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-39
+.prettierrc.json
+  s_3eb8e14d84cbd2::t_2b93c324875191 1-5
+vite.config.ts
+  s_3eb8e14d84cbd2::t_2b93c324875191 1-11
+.codex/skills/impeccable/scripts/live-browser-ignores.js
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-242
+.codex/skills/impeccable/SKILL.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-85
+.gitignore
+  s_3eb8e14d84cbd2::t_2b93c324875191 2
+  s_3eb8e14d84cbd2::t_f6e3ca0791e076 1
+.codex/skills/impeccable/reference/hooks.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-113
+.codex/skills/impeccable/reference/audit.native.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-139
+tsconfig.json
+  s_3eb8e14d84cbd2::t_2b93c324875191 1-7
+.codex/skills/impeccable/agents/impeccable_finish_reviewer.toml
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-41
+.codex/skills/impeccable/reference/degraded/manual-edit-applier.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-92
+.codex/skills/impeccable/agents/impeccable_manual_edit_applier.toml
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-95
+playwright.config.ts
+  s_3eb8e14d84cbd2::t_2b93c324875191 1-21
+.codex/skills/impeccable/agents/openai.yaml
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-4
+.codex/skills/impeccable/scripts/live-browser-session.js
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-148
+.codex/skills/impeccable/reference/visualize.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-46
+.codex/skills/impeccable/reference/distill.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-111
+.codex/skills/impeccable/reference/extract.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-69
+.codex/skills/impeccable/reference/generate.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-101
+.codex/skills/impeccable/reference/degraded/documenter.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-24
+.codex/skills/impeccable/reference/bolder.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-33
+.codex/skills/impeccable/reference/live-setup.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-104
+.codex/skills/impeccable/reference/operate.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-61
+.codex/skills/impeccable/reference/craft.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-5
+.codex/skills/impeccable/reference/android.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-46
+.codex/skills/impeccable/scripts/data/font-index-failures.json
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-121
+package.json
+  s_af8324b7af09a6::t_660110de55653e 16-40
+  s_3eb8e14d84cbd2::t_2b93c324875191 1-15,41-42
+.codex/skills/impeccable/agents/impeccable_documenter.toml
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-27
+.codex/skills/impeccable/scripts/VERSION
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1
+.codex/skills/impeccable/reference/adapt.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-318
+eslint.config.js
+  s_3eb8e14d84cbd2::t_2b93c324875191 1-18
+src/test/setup.ts
+  s_3eb8e14d84cbd2::t_2b93c324875191 1
+.codex/skills/impeccable/reference/shape.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-59
+.codex/skills/impeccable/reference/new-work.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-152
+.codex/skills/impeccable/reference/quieter.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-99
+src/vite-env.d.ts
+  s_3eb8e14d84cbd2::t_2b93c324875191 1
+.codex/skills/impeccable/reference/degraded/asset-producer.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-44
+.codex/skills/impeccable/reference/typeset.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-80
+.codex/skills/impeccable/reference/live.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-327
+.codex/skills/impeccable/scripts/live-browser-dom.js
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-167
+.codex/skills/impeccable/scripts/modern-screenshot.umd.js
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-14
+.codex/skills/impeccable/scripts/command-metadata.json
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-98
+.codex/skills/impeccable/reference/onboard.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-234
+.codex/skills/impeccable/reference/init.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-131
+.codex/skills/impeccable/reference/degraded/finish-reviewer.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-38
+tsconfig.node.json
+  s_3eb8e14d84cbd2::t_2b93c324875191 1-16
+.codex/skills/impeccable/reference/doctor.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-54
+.codex/skills/impeccable/reference/optimize.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-258
+.codex/skills/impeccable/reference/animate.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-89
+.codex/skills/impeccable/reference/mode-operate.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-21
+.codex/skills/impeccable/reference/layout.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-84
+.codex/skills/impeccable/reference/routing.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-24
+.codex/skills/taste-skill/SKILL.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-1206
+.codex/skills/impeccable/reference/ios.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-51
+.codex/skills/impeccable/agents/impeccable_asset_producer.toml
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-47
+.codex/skills/impeccable/reference/clarify.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-94
+.codex/skills/impeccable/reference/colorize.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-86
+.codex/skills/impeccable/reference/audit.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-137
+.codex/skills/impeccable/reference/adapt.native.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-58
+.codex/skills/impeccable/reference/overdrive.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-127
+.codex/skills/impeccable/reference/delight.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-70
+.codex/skills/impeccable/reference/critique.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-828
+.codex/skills/impeccable/reference/harden.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-345
+tsconfig.app.json
+  s_3eb8e14d84cbd2::t_2b93c324875191 1-22
+.codex/skills/impeccable/reference/region-map.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-26
+.codex/skills/impeccable/reference/document.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-416
+index.html
+  s_3eb8e14d84cbd2::t_2b93c324875191 1-16
+.codex/skills/impeccable/reference/component-review.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-63
+.codex/skills/impeccable/reference/craft-floor.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-50
+.codex/skills/impeccable/reference/mode-persuade.md
+  s_af8324b7af09a6::t_0a6feaf4309d9b 1-19
+package-lock.json
+  s_af8324b7af09a6::t_f920ef3944feca 1-3859
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "63398a7368a5058f1db80247e2ebac9ffe59d06a",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    },
+    "s_af8324b7af09a6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "unknown"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
