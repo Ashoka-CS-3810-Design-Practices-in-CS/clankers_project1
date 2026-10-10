@@ -50,6 +50,8 @@ describe('App', () => {
     await user.tab();
     expect(screen.getByRole('button', { name: 'Priority Queue, ready' })).toHaveFocus();
     await user.tab();
+    expect(screen.getByRole('button', { name: 'Graph, ready' })).toHaveFocus();
+    await user.tab();
     expect(screen.getByLabelText('Node value')).toHaveFocus();
   });
 

@@ -2,12 +2,14 @@ import { useState } from 'react';
 import './styles.css';
 import { StructureNav } from './components/StructureNav';
 import { BstWorkspace } from './workspaces/BstWorkspace';
+import { GraphWorkspace } from './workspaces/GraphWorkspace';
 import { LinkedListWorkspace } from './workspaces/LinkedListWorkspace';
 import { PriorityQueueWorkspace } from './workspaces/PriorityQueueWorkspace';
 import { QueueWorkspace } from './workspaces/QueueWorkspace';
 import { StackWorkspace } from './workspaces/StackWorkspace';
 
-export type AvailableStructureId = 'linked-list' | 'stack' | 'queue' | 'bst' | 'priority-queue';
+export type AvailableStructureId =
+  'linked-list' | 'stack' | 'queue' | 'bst' | 'priority-queue' | 'graph';
 
 export default function App() {
   const [activeStructure, setActiveStructure] = useState<AvailableStructureId>('linked-list');
@@ -24,6 +26,7 @@ export default function App() {
         <QueueWorkspace active={activeStructure === 'queue'} />
         <BstWorkspace active={activeStructure === 'bst'} />
         <PriorityQueueWorkspace active={activeStructure === 'priority-queue'} />
+        <GraphWorkspace active={activeStructure === 'graph'} />
       </div>
     </>
   );

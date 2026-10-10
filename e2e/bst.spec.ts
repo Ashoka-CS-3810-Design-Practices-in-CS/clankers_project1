@@ -38,7 +38,7 @@ test('inserts, traverses, searches, deletes, switches, and resets a tree', async
   await finishOperation(page);
   await expect(page.getByLabel('Current tree contains 6 nodes')).toBeVisible();
 
-  await page.getByRole('button', { name: 'Queue, ready' }).click();
+  await page.getByRole('button', { name: 'Queue, ready', exact: true }).click();
   await page.getByRole('button', { name: 'Binary Search Tree, ready' }).click();
   await expect(page.getByLabel('Current tree contains 6 nodes')).toBeVisible();
 
