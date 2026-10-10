@@ -87,69 +87,74 @@ export default function App() {
   }
 
   return (
-    <div className="app-shell">
-      <StructureNav />
-      <main className="workspace">
-        <header className="workspace-header">
-          <div>
-            <h1>Linked List</h1>
-            <p>See how values and next references change, one operation at a time.</p>
-          </div>
-          <div className="model-status" aria-label={`Current list contains ${nodeSummary}`}>
-            <strong>{displayedSnapshot.nodes.length}</strong>
-            <span>{displayedSnapshot.nodes.length === 1 ? 'node' : 'nodes'}</span>
-          </div>
-        </header>
-
-        <OperationPanel
-          value={input}
-          onValueChange={(value) => {
-            setInput(value);
-            setError('');
-          }}
-          onInsertHead={() => runValueOperation('insert-head')}
-          onInsertTail={() => runValueOperation('insert-tail')}
-          onSearch={() => runValueOperation('search')}
-          onDelete={() => runValueOperation('delete')}
-          onTraverse={() => begin(operations.traverse(model))}
-          onSample={loadSample}
-          onReset={resetList}
-          disabled={playbackActive}
-          error={error}
-        />
-
-        <div className="visualizer-grid">
-          <section className="canvas-panel" aria-labelledby="canvas-heading">
-            <div className="canvas-heading">
-              <div>
-                <h2 id="canvas-heading">Pointer view</h2>
-                <p>Each node stores a value and a reference to the next node.</p>
-              </div>
-              <span className={`phase-label phase-${playback.state.phase}`}>
-                {playback.state.phase}
-              </span>
+    <>
+      <a className="skip-link" href="#main-content">
+        Skip to visualizer
+      </a>
+      <div className="app-shell">
+        <StructureNav />
+        <main className="workspace" id="main-content">
+          <header className="workspace-header">
+            <div>
+              <h1>Linked List</h1>
+              <p>See how values and next references change, one operation at a time.</p>
             </div>
-            <LinkedListCanvas snapshot={displayedSnapshot} step={currentStep} />
-          </section>
-          <Inspector
-            operationLabel={result?.operationLabel}
-            complexity={result?.complexity}
-            status={result?.status}
-            step={currentStep}
-          />
-        </div>
+            <div className="model-status" aria-label={`Current list contains ${nodeSummary}`}>
+              <strong>{displayedSnapshot.nodes.length}</strong>
+              <span>{displayedSnapshot.nodes.length === 1 ? 'node' : 'nodes'}</span>
+            </div>
+          </header>
 
-        <PlaybackControls
-          state={playback.state}
-          hasSteps={hasSteps}
-          onPlay={playback.play}
-          onPause={playback.pause}
-          onPrevious={playback.previous}
-          onNext={playback.next}
-          onRestart={playback.restart}
-          onSpeedChange={(speed: PlaybackSpeed) => playback.setSpeed(speed)}
-        />
-      </main>
-    </div>
+          <OperationPanel
+            value={input}
+            onValueChange={(value) => {
+              setInput(value);
+              setError('');
+            }}
+            onInsertHead={() => runValueOperation('insert-head')}
+            onInsertTail={() => runValueOperation('insert-tail')}
+            onSearch={() => runValueOperation('search')}
+            onDelete={() => runValueOperation('delete')}
+            onTraverse={() => begin(operations.traverse(model))}
+            onSample={loadSample}
+            onReset={resetList}
+            disabled={playbackActive}
+            error={error}
+          />
+
+          <div className="visualizer-grid">
+            <section className="canvas-panel" aria-labelledby="canvas-heading">
+              <div className="canvas-heading">
+                <div>
+                  <h2 id="canvas-heading">Pointer view</h2>
+                  <p>Each node stores a value and a reference to the next node.</p>
+                </div>
+                <span className={`phase-label phase-${playback.state.phase}`}>
+                  {playback.state.phase}
+                </span>
+              </div>
+              <LinkedListCanvas snapshot={displayedSnapshot} step={currentStep} />
+            </section>
+            <Inspector
+              operationLabel={result?.operationLabel}
+              complexity={result?.complexity}
+              status={result?.status}
+              step={currentStep}
+            />
+          </div>
+
+          <PlaybackControls
+            state={playback.state}
+            hasSteps={hasSteps}
+            onPlay={playback.play}
+            onPause={playback.pause}
+            onPrevious={playback.previous}
+            onNext={playback.next}
+            onRestart={playback.restart}
+            onSpeedChange={(speed: PlaybackSpeed) => playback.setSpeed(speed)}
+          />
+        </main>
+      </div>
+    </>
   );
 }

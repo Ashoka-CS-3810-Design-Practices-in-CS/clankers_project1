@@ -38,16 +38,19 @@ export function OperationPanel(props: OperationPanelProps) {
         <div className="value-row">
           <input
             id="node-value"
+            name="node-value"
             inputMode="numeric"
+            autoComplete="off"
+            spellCheck={false}
             value={value}
             onChange={(event) => onValueChange(event.target.value)}
-            placeholder="e.g. 21"
+            placeholder="Example: 21…"
             disabled={disabled}
             aria-describedby={error ? 'input-error' : 'input-hint'}
             aria-invalid={Boolean(error)}
           />
           <span id="input-hint" className="input-hint">
-            Signed safe integers
+            Signed safe integers, for example 21 or -8
           </span>
         </div>
         <div className="action-grid">
