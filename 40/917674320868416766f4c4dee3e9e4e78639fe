@@ -1,0 +1,24 @@
+src/components/Inspector.tsx
+  s_3eb8e14d84cbd2::t_ffb21e676b84d4 62
+e2e/stack.spec.ts
+  s_3eb8e14d84cbd2::t_658656c0974034 1-10,12-46
+  s_3eb8e14d84cbd2::t_3c6475a762eae7 11
+src/StackWorkspace.test.tsx
+  s_3eb8e14d84cbd2::t_658656c0974034 1-79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "40917674320868416766f4c4dee3e9e4e78639fe",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
