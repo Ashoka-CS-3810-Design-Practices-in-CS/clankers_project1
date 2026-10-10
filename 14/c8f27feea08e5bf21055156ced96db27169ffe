@@ -1,0 +1,35 @@
+src/structures/linked-list/LinkedListOperations.ts
+  s_3eb8e14d84cbd2::t_c745eeee64f622 1-187
+src/registry/structures.ts
+  s_3eb8e14d84cbd2::t_c745eeee64f622 1-15
+src/structures/linked-list/LinkedListModel.ts
+  s_3eb8e14d84cbd2::t_c745eeee64f622 1-88
+src/playback/usePlayback.ts
+  s_3eb8e14d84cbd2::t_c745eeee64f622 1-28
+src/domain/visualization.ts
+  s_3eb8e14d84cbd2::t_c745eeee64f622 1-44
+src/domain/StepRecorder.ts
+  s_3eb8e14d84cbd2::t_c745eeee64f622 1-32
+src/structures/linked-list/linkedListValidation.ts
+  s_3eb8e14d84cbd2::t_c745eeee64f622 1-26
+src/playback/playback.ts
+  s_3eb8e14d84cbd2::t_c745eeee64f622 1-50
+vite.config.ts
+  s_3eb8e14d84cbd2::t_1996d62370e754 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "14c8f27feea08e5bf21055156ced96db27169ffe",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
