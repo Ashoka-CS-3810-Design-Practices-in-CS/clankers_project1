@@ -59,7 +59,7 @@ export function Inspector<TSnapshot>({
       <section className="inspector-section">
         <h2>{outputHeading}</h2>
         {step?.output.length ? (
-          <output className="traversal-output" aria-label="Traversal output">
+          <output className="traversal-output" aria-label={outputHeading}>
             {step.output.map((value, index) => (
               <span key={`${value}-${index}`}>{value}</span>
             ))}
