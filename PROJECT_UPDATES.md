@@ -1,5 +1,63 @@
 # Project Updates
 
+## 2026-10-10: Stack vertical slice
+
+### Completed changes
+
+- Added a complete Stack workspace with Push, Pop, Peek, Inspect all, sample data, and reset.
+- Added actionable underflow narration for empty Pop and Peek operations.
+- Added stable Stack item IDs, duplicate-value support, signed safe integers, and a 50-item educational limit.
+- Added a vertical native-SVG Stack view with explicit top, current, visited, and top-item states.
+- Made Linked List and Stack independently stateful so learners can switch structures without losing either model or operation trace.
+- Generalized the operation inspector for structure-specific output headings, empty-state guidance, and result labels.
+- Made playback actions stable React callbacks and automatically paused playback when its workspace becomes inactive.
+- Added Stack domain, component, desktop, and mobile browser coverage.
+
+### Architecture and design considerations
+
+- `StackModel` encapsulates native array storage instead of adding another runtime dependency. The public API exposes only stack operations and immutable snapshots.
+- `StackOperations` follows the existing clone-record-result pattern, proving that `OperationResult`, `VisualizationStep`, `StepRecorder`, and the playback engine are reusable without a common model base class.
+- Values and identities remain separate. Duplicate values are safe because visual state targets stable `stack-N` IDs.
+- Stack items are stored bottom-to-top internally and reversed only for top-to-bottom visualization and inspection output.
+- Structure-specific React orchestration moved into persistent workspace components. This keeps domain types narrow while allowing navigation and shared presentation components to stay generic.
+- The Stack operation panel remains separate from the Linked List panel because their actions and instructional copy differ. A generic form abstraction is deferred until Queue shows which patterns are actually shared.
+- Stack uses the established algorithm-lab visual system. The canvas changes orientation to express LIFO behavior without changing the shell, semantic colors, focus behavior, or playback language.
+
+### UX and accessibility decisions
+
+- The top item is labeled textually and spatially, not by color alone.
+- SVG includes a top-to-bottom text description and an ordered screen-reader equivalent.
+- Pop and Peek remain enabled on an empty stack so learners receive an explanation of underflow instead of an unexplained disabled control.
+- The Stack canvas scrolls vertically for larger examples and scales to the mobile content width without causing page-level horizontal overflow.
+- Switching structures pauses active playback and preserves the current model, step, speed, and narration for both workspaces.
+- Operation output adapts to Peek, Pop, and Inspect all rather than reusing linked-list traversal terminology.
+
+### Testing and performance evidence
+
+Evidence recorded on 2026-10-10:
+
+- `npm run check` passed TypeScript, ESLint, Prettier, 39 Vitest tests, and the production build.
+- `npm run test:e2e` passed 6 browser checks across desktop and mobile, including full Linked List and Stack workflows plus reduced-motion behavior.
+- The Impeccable detector returned no findings after the responsive interface review.
+- The production build emitted approximately 255.91 kB of JavaScript (77.09 kB gzip) and 12.88 kB of CSS (3.60 kB gzip).
+
+Push, Pop, and Peek record constant-size traces and retain `O(1)` operation complexity. Inspect all records a snapshot per visited item, so its trace uses approximately `O(n²)` snapshot memory. The 50-item interface limit bounds this deliberate educational tradeoff.
+
+### Risks, assumptions, and limitations
+
+- The visualizer models a conventional array-backed stack; resizing cost is abstracted by JavaScript arrays and not animated.
+- Inspect all is an educational operation rather than a mutation normally exposed by minimal stack interfaces.
+- Both workspaces remain mounted to preserve state. This is inexpensive for 2 bounded structures but should be revisited as more structures become available.
+- A paused trace remains incomplete when the learner returns to a structure, so mutations stay locked until the trace is completed or restarted.
+- Large values are valid safe integers but may need more horizontal room than short classroom examples inside SVG items.
+
+### Next implementation phases
+
+1. Implement Queue as the third complete vertical slice.
+2. Compare Linked List, Stack, and Queue operation panels before extracting any shared form abstraction.
+3. Decide whether inactive workspaces should move to a persisted state store as the available structure count grows.
+4. Continue with Priority Queue, Binary Search Tree, and Graph using structure-specific layout strategies.
+
 ## 2026-10-10: Assignment 3 application foundation
 
 ### Completed changes
