@@ -4,7 +4,7 @@ test('builds, searches, traverses, deletes, and resets a linked list', async ({ 
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'Linked List' })).toBeVisible();
 
-  const input = page.getByLabel('Node value');
+  const input = page.getByLabel('Node value', { exact: true });
   await input.fill('13');
   await page.getByRole('button', { name: 'Insert head' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
