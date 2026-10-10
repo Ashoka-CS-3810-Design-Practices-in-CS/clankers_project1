@@ -7,7 +7,12 @@ export const STRUCTURES: readonly StructureDefinition[] = Object.freeze([
     description: 'Follow nodes and references from the head.',
     availability: 'available',
   },
-  { id: 'stack', label: 'Stack', description: 'Inspect LIFO operations.', availability: 'planned' },
+  {
+    id: 'stack',
+    label: 'Stack',
+    description: 'Inspect LIFO operations.',
+    availability: 'available',
+  },
   { id: 'queue', label: 'Queue', description: 'Inspect FIFO operations.', availability: 'planned' },
   {
     id: 'bst',

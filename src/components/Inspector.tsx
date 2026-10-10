@@ -1,14 +1,24 @@
 import type { ComplexityInfo, OperationStatus, VisualizationStep } from '../domain/visualization';
-import type { LinkedListSnapshot } from '../structures/linked-list/LinkedListModel';
 
-interface InspectorProps {
+interface InspectorProps<TSnapshot> {
   readonly operationLabel?: string;
   readonly complexity?: ComplexityInfo;
   readonly status?: OperationStatus;
-  readonly step?: VisualizationStep<LinkedListSnapshot>;
+  readonly step?: VisualizationStep<TSnapshot>;
+  readonly outputHeading: string;
+  readonly emptyOutputCopy: string;
+  readonly matchedLabel?: string;
 }
 
-export function Inspector({ operationLabel, complexity, status, step }: InspectorProps) {
+export function Inspector<TSnapshot>({
+  operationLabel,
+  complexity,
+  status,
+  step,
+  outputHeading,
+  emptyOutputCopy,
+  matchedLabel = 'Matched',
+}: InspectorProps<TSnapshot>) {
   return (
     <aside className="inspector" aria-label="Operation inspector">
       <section className="inspector-section current-step">
@@ -20,6 +30,9 @@ export function Inspector({ operationLabel, complexity, status, step }: Inspecto
           {step?.message ?? 'Choose an operation to generate a trace.'}
         </p>
         {status === 'not-found' && step && <p className="status-note">Result: target not found</p>}
+        {status === 'blocked' && step && (
+          <p className="status-note">Result: operation unavailable</p>
+        )}
       </section>
 
       <section className="inspector-section">
@@ -44,7 +57,7 @@ export function Inspector({ operationLabel, complexity, status, step }: Inspecto
       </section>
 
       <section className="inspector-section">
-        <h2>Traversal output</h2>
+        <h2>{outputHeading}</h2>
         {step?.output.length ? (
           <output className="traversal-output" aria-label="Traversal output">
             {step.output.map((value, index) => (
@@ -52,7 +65,7 @@ export function Inspector({ operationLabel, complexity, status, step }: Inspecto
             ))}
           </output>
         ) : (
-          <p className="muted-copy">Run Traverse to collect values from head to null.</p>
+          <p className="muted-copy">{emptyOutputCopy}</p>
         )}
       </section>
 
@@ -67,7 +80,7 @@ export function Inspector({ operationLabel, complexity, status, step }: Inspecto
         </span>
         <span>
           <i className="legend-swatch matched" />
-          Matched
+          {matchedLabel}
         </span>
       </section>
     </aside>

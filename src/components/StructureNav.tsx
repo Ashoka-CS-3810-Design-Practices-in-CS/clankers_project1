@@ -1,6 +1,12 @@
 import { STRUCTURES } from '../registry/structures';
+import type { AvailableStructureId } from '../App';
 
-export function StructureNav() {
+interface StructureNavProps {
+  readonly activeId: AvailableStructureId;
+  readonly onSelect: (id: AvailableStructureId) => void;
+}
+
+export function StructureNav({ activeId, onSelect }: StructureNavProps) {
   return (
     <nav className="structure-nav" aria-label="Data structures">
       <div className="nav-heading">
@@ -15,15 +21,22 @@ export function StructureNav() {
       <div className="structure-list">
         {STRUCTURES.map((structure) => (
           <button
-            className={`structure-item ${structure.availability === 'available' ? 'is-active' : ''}`}
+            className={`structure-item ${structure.id === activeId ? 'is-active' : ''}`}
             type="button"
             key={structure.id}
             disabled={structure.availability === 'planned'}
-            aria-label={`${structure.label}, ${structure.availability === 'available' ? 'active' : 'planned'}`}
-            aria-current={structure.availability === 'available' ? 'page' : undefined}
+            onClick={() => onSelect(structure.id as AvailableStructureId)}
+            aria-label={`${structure.label}, ${structure.id === activeId ? 'active' : structure.availability === 'available' ? 'ready' : 'planned'}`}
+            aria-current={structure.id === activeId ? 'page' : undefined}
           >
             <span>{structure.label}</span>
-            <small>{structure.availability === 'available' ? 'Active' : 'Planned'}</small>
+            <small>
+              {structure.id === activeId
+                ? 'Active'
+                : structure.availability === 'available'
+                  ? 'Ready'
+                  : 'Planned'}
+            </small>
           </button>
         ))}
       </div>
