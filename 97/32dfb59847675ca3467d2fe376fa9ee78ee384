@@ -1,0 +1,14 @@
+.gitignore
+  h_419a80373e9856 8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9732dfb59847675ca3467d2fe376fa9ee78ee384",
+  "prompts": {},
+  "humans": {
+    "h_419a80373e9856": {
+      "author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
