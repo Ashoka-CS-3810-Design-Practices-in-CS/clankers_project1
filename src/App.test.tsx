@@ -42,6 +42,8 @@ describe('App', () => {
     await user.tab();
     expect(screen.getByRole('button', { name: /Linked List/ })).toHaveFocus();
     await user.tab();
+    expect(screen.getByRole('button', { name: /Stack/ })).toHaveFocus();
+    await user.tab();
     expect(screen.getByLabelText('Node value')).toHaveFocus();
   });
 

@@ -1,4 +1,5 @@
 interface OperationPanelProps {
+  readonly inputId?: string;
   readonly value: string;
   readonly onValueChange: (value: string) => void;
   readonly onInsertHead: () => void;
@@ -14,6 +15,7 @@ interface OperationPanelProps {
 
 export function OperationPanel(props: OperationPanelProps) {
   const {
+    inputId = 'node-value',
     value,
     onValueChange,
     onInsertHead,
@@ -34,11 +36,11 @@ export function OperationPanel(props: OperationPanelProps) {
         <p>Integer values may repeat. Search and delete stop at the first match.</p>
       </div>
       <div className="operation-form">
-        <label htmlFor="node-value">Node value</label>
+        <label htmlFor={inputId}>Node value</label>
         <div className="value-row">
           <input
-            id="node-value"
-            name="node-value"
+            id={inputId}
+            name={inputId}
             inputMode="numeric"
             autoComplete="off"
             spellCheck={false}

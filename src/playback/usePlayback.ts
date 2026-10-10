@@ -1,8 +1,16 @@
-import { useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 import { initialPlaybackState, playbackReducer, type PlaybackSpeed } from './playback';
 
 export function usePlayback() {
   const [state, dispatch] = useReducer(playbackReducer, initialPlaybackState);
+  const load = useCallback((total: number) => dispatch({ type: 'load', total }), []);
+  const play = useCallback(() => dispatch({ type: 'play' }), []);
+  const pause = useCallback(() => dispatch({ type: 'pause' }), []);
+  const next = useCallback(() => dispatch({ type: 'next' }), []);
+  const previous = useCallback(() => dispatch({ type: 'previous' }), []);
+  const restart = useCallback(() => dispatch({ type: 'restart' }), []);
+  const clear = useCallback(() => dispatch({ type: 'clear' }), []);
+  const setSpeed = useCallback((speed: PlaybackSpeed) => dispatch({ type: 'speed', speed }), []);
 
   useEffect(() => {
     if (state.phase !== 'playing') return;
@@ -12,13 +20,13 @@ export function usePlayback() {
 
   return {
     state,
-    load: (total: number) => dispatch({ type: 'load', total }),
-    play: () => dispatch({ type: 'play' }),
-    pause: () => dispatch({ type: 'pause' }),
-    next: () => dispatch({ type: 'next' }),
-    previous: () => dispatch({ type: 'previous' }),
-    restart: () => dispatch({ type: 'restart' }),
-    clear: () => dispatch({ type: 'clear' }),
-    setSpeed: (speed: PlaybackSpeed) => dispatch({ type: 'speed', speed }),
+    load,
+    play,
+    pause,
+    next,
+    previous,
+    restart,
+    clear,
+    setSpeed,
   };
 }

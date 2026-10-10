@@ -1,6 +1,6 @@
 # Clankers DSA Visualizer
 
-Clankers is an interactive algorithm lab for learning data structures one operation at a time. The current milestone delivers a complete linked-list vertical slice for Assignment 3: learners can build a list, inspect deterministic algorithm steps, control playback, and connect each transition to its time and space complexity.
+Clankers is an interactive algorithm lab for learning data structures one operation at a time. The current Assignment 3 application includes complete Linked List and Stack vertical slices: learners can build each structure, inspect deterministic algorithm steps, control playback, and connect every transition to its time and space complexity.
 
 ## Current scope
 
@@ -15,7 +15,15 @@ The Linked List workspace supports:
 - immutable snapshots, stable node identities, narration, visited/active states, and per-operation complexity;
 - keyboard access, screen-reader status updates, reduced-motion preferences, and responsive desktop/mobile layouts.
 
-Graph, Binary Search Tree, Priority Queue, Stack, and Queue are visible in the structure registry as planned milestones. They are intentionally not implemented yet.
+The Stack workspace supports:
+
+- Push, Pop, Peek, and top-to-bottom inspection;
+- clear underflow feedback for Pop and Peek on an empty stack;
+- duplicate values, signed safe integers, sample data, reset, and a 50-item readability limit;
+- stable item identities, immutable snapshots, highlighted top/visited states, operation output, and correct complexity metadata;
+- independent state that remains available when switching between Stack and Linked List.
+
+Graph, Binary Search Tree, Priority Queue, and Queue remain visible as planned milestones.
 
 ## Run locally
 
@@ -35,7 +43,7 @@ npm run check
 npm run test:e2e
 ```
 
-`npm run check` runs TypeScript validation, ESLint, Prettier checks, unit/component tests, and a production build. The Playwright command runs the complete linked-list smoke flow at desktop and mobile viewport sizes. On a new machine, install the Playwright browser once with `npx playwright install chromium`.
+`npm run check` runs TypeScript validation, ESLint, Prettier checks, unit/component tests, and a production build. The Playwright command runs complete Linked List and Stack flows at desktop and mobile viewport sizes. On a new machine, install the Playwright browser once with `npx playwright install chromium`.
 
 Useful individual commands:
 
@@ -56,32 +64,37 @@ The code separates algorithm behavior from rendering so the same deterministic s
 src/
 ├── domain/                    Shared visualization contracts and StepRecorder
 ├── structures/linked-list/    Model, validation, and operation service
+├── structures/stack/          Stack model, validation, and operation service
 ├── playback/                  Framework-independent state machine and React hook
 ├── registry/                  Available and planned structures
-├── components/                Controls, SVG canvas, navigation, and inspector
-├── App.tsx                    Workspace orchestration
+├── components/                Controls, SVG canvases, navigation, and inspector
+├── workspaces/                Structure-specific React orchestration
+├── App.tsx                    Structure selection and persistent workspaces
 └── styles.css                 Design tokens and responsive application shell
 ```
 
 - `LinkedListModel` owns list state and wraps `@datastructures-js/linked-list`.
+- `StackModel` owns native LIFO storage behind a small class API.
 - `LinkedListOperations` runs algorithms against a cloned model and records their steps.
+- `StackOperations` uses the same result and snapshot contracts for Push, Pop, Peek, and Inspect all.
 - `StepRecorder` freezes snapshots and step metadata to prevent later mutations from changing history.
 - The playback reducer is independent of React; `usePlayback` only supplies timer lifecycle behavior.
-- `StructureDefinition` provides a consistent registration point for later data structures.
+- Each structure has an independent workspace, while navigation, playback controls, and the generic inspector are shared.
+- `StructureDefinition` provides a consistent registration point for available and planned data structures.
 
 The UI uses React, native SVG, and ordinary CSS. There is no backend, database, global state library, animation library, graph-layout library, or utility-CSS framework in this milestone.
 
 ## Testing strategy
 
-- Domain tests cover insertion, duplicate handling, first-match search/deletion, empty and missing cases, validation, capacity, traversal, stable IDs, immutable logs, and complexity metadata.
+- Domain tests cover linked-list insertion/search/deletion/traversal and Stack Push/Pop/Peek/inspection, including duplicates, empty cases, validation, capacity, stable IDs, immutable logs, and complexity metadata.
 - Playback tests cover boundaries, restart, completion, speed changes, and timer cleanup.
-- Component tests cover inline validation, synchronized panels, disabled operations, automatic playback, and keyboard order.
-- Playwright verifies the main learner flow on desktop and mobile.
+- Component tests cover inline validation, synchronized panels, disabled operations, underflow, structure switching, state preservation, automatic playback, and keyboard order.
+- Playwright verifies both main learner flows on desktop and mobile.
 
 ## Roadmap
 
-1. Extract the shared visualizer shell after validating it with a second structure.
-2. Add Stack and Queue using the shared contracts and playback engine.
+1. Add Queue using the shared workspace, snapshot, inspector, and playback contracts.
+2. Review shared operation-panel patterns after the third structure to avoid premature abstraction.
 3. Add Priority Queue and Binary Search Tree with structure-specific SVG layouts.
 4. Add Graph traversal with an explicit graph-layout strategy.
 5. Expand cross-structure accessibility, performance, and browser evidence.
