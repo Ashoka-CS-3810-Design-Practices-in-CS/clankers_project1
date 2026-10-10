@@ -26,15 +26,26 @@ export const initialPlaybackState: PlaybackState = Object.freeze({
 export function playbackReducer(state: PlaybackState, action: PlaybackAction): PlaybackState {
   switch (action.type) {
     case 'load':
-      return { ...state, phase: action.total <= 1 ? 'complete' : 'paused', index: 0, total: action.total };
+      return {
+        ...state,
+        phase: action.total <= 1 ? 'complete' : 'paused',
+        index: 0,
+        total: action.total,
+      };
     case 'play':
-      return state.total > 1 && state.index < state.total - 1 ? { ...state, phase: 'playing' } : state;
+      return state.total > 1 && state.index < state.total - 1
+        ? { ...state, phase: 'playing' }
+        : state;
     case 'pause':
       return state.phase === 'playing' ? { ...state, phase: 'paused' } : state;
     case 'next':
     case 'tick': {
       const nextIndex = Math.min(state.index + 1, Math.max(state.total - 1, 0));
-      return { ...state, index: nextIndex, phase: nextIndex === state.total - 1 ? 'complete' : state.phase };
+      return {
+        ...state,
+        index: nextIndex,
+        phase: nextIndex === state.total - 1 ? 'complete' : state.phase,
+      };
     }
     case 'previous': {
       const previousIndex = Math.max(state.index - 1, 0);

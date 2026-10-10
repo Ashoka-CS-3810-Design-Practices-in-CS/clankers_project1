@@ -13,7 +13,8 @@ const COMPLEXITY = {
   insertTail: {
     time: 'O(n)',
     space: 'O(1)',
-    explanation: 'The selected library walks from the head because it does not store a tail pointer.',
+    explanation:
+      'The selected library walks from the head because it does not store a tail pointer.',
   },
   search: {
     time: 'O(n)',
@@ -28,7 +29,8 @@ const COMPLEXITY = {
   traverse: {
     time: 'O(n)',
     space: 'O(n)',
-    explanation: 'Every node is visited and its value is retained in the displayed traversal output.',
+    explanation:
+      'Every node is visited and its value is retained in the displayed traversal output.',
   },
 } satisfies Record<string, ComplexityInfo>;
 
@@ -36,7 +38,10 @@ export class LinkedListOperations {
   insertHead(model: LinkedListModel, value: number): LinkedListResult {
     const working = model.clone();
     const recorder = new StepRecorder<LinkedListSnapshot>();
-    recorder.record({ message: `Prepare to insert ${value} before the current head.`, snapshot: working.snapshot() });
+    recorder.record({
+      message: `Prepare to insert ${value} before the current head.`,
+      snapshot: working.snapshot(),
+    });
     const inserted = working.insertFirst(value);
     recorder.record({
       message: `${value} is now the head. Its next reference points to the previous first node.`,
@@ -52,12 +57,18 @@ export class LinkedListOperations {
     const recorder = new StepRecorder<LinkedListSnapshot>();
     const existing = working.items();
     const visited: string[] = [];
-    recorder.record({ message: `Find the final node before appending ${value}.`, snapshot: working.snapshot() });
+    recorder.record({
+      message: `Find the final node before appending ${value}.`,
+      snapshot: working.snapshot(),
+    });
 
     existing.forEach((item) => {
       visited.push(item.id);
       recorder.record({
-        message: item === existing.at(-1) ? `${item.value} is the current tail.` : `${item.value} has a next node. Continue.`,
+        message:
+          item === existing.at(-1)
+            ? `${item.value} is the current tail.`
+            : `${item.value} has a next node. Continue.`,
         snapshot: working.snapshot(),
         activeNodeIds: [item.id],
         visitedNodeIds: visited,
@@ -66,7 +77,10 @@ export class LinkedListOperations {
 
     const inserted = working.insertLast(value);
     recorder.record({
-      message: existing.length === 0 ? `${value} becomes the head and tail.` : `Link the previous tail to ${value}.`,
+      message:
+        existing.length === 0
+          ? `${value} becomes the head and tail.`
+          : `Link the previous tail to ${value}.`,
       snapshot: working.snapshot(),
       activeNodeIds: [inserted.id],
       visitedNodeIds: [...visited, inserted.id],
@@ -79,13 +93,18 @@ export class LinkedListOperations {
     const recorder = new StepRecorder<LinkedListSnapshot>();
     const visited: string[] = [];
     const items = working.items();
-    recorder.record({ message: `Search from the head for the first node containing ${value}.`, snapshot: working.snapshot() });
+    recorder.record({
+      message: `Search from the head for the first node containing ${value}.`,
+      snapshot: working.snapshot(),
+    });
 
     for (const item of items) {
       visited.push(item.id);
       const matched = item.value === value;
       recorder.record({
-        message: matched ? `Found ${value}. The search stops at the first match.` : `${item.value} does not match ${value}.`,
+        message: matched
+          ? `Found ${value}. The search stops at the first match.`
+          : `${item.value} does not match ${value}.`,
         snapshot: working.snapshot(),
         activeNodeIds: [item.id],
         visitedNodeIds: visited,
@@ -109,13 +128,18 @@ export class LinkedListOperations {
     const recorder = new StepRecorder<LinkedListSnapshot>();
     const visited: string[] = [];
     const items = working.items();
-    recorder.record({ message: `Locate the first node containing ${value}.`, snapshot: working.snapshot() });
+    recorder.record({
+      message: `Locate the first node containing ${value}.`,
+      snapshot: working.snapshot(),
+    });
 
     for (const [index, item] of items.entries()) {
       visited.push(item.id);
       const matched = item.value === value;
       recorder.record({
-        message: matched ? `Found ${value}. Redirect the previous link around this node.` : `${item.value} is not the target.`,
+        message: matched
+          ? `Found ${value}. Redirect the previous link around this node.`
+          : `${item.value} is not the target.`,
         snapshot: working.snapshot(),
         activeNodeIds: [item.id],
         visitedNodeIds: visited,
@@ -146,7 +170,10 @@ export class LinkedListOperations {
     const visited: string[] = [];
     const output: number[] = [];
     const items = working.items();
-    recorder.record({ message: 'Begin at the head and follow each next reference.', snapshot: working.snapshot() });
+    recorder.record({
+      message: 'Begin at the head and follow each next reference.',
+      snapshot: working.snapshot(),
+    });
 
     items.forEach((item) => {
       visited.push(item.id);
@@ -161,7 +188,10 @@ export class LinkedListOperations {
     });
 
     recorder.record({
-      message: items.length === 0 ? 'The list is empty, so traversal finishes immediately.' : 'The final next reference is null. Traversal is complete.',
+      message:
+        items.length === 0
+          ? 'The list is empty, so traversal finishes immediately.'
+          : 'The final next reference is null. Traversal is complete.',
       snapshot: working.snapshot(),
       visitedNodeIds: visited,
       output,

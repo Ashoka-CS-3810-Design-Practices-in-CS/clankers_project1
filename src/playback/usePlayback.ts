@@ -1,9 +1,5 @@
 import { useEffect, useReducer } from 'react';
-import {
-  initialPlaybackState,
-  playbackReducer,
-  type PlaybackSpeed,
-} from './playback';
+import { initialPlaybackState, playbackReducer, type PlaybackSpeed } from './playback';
 
 export function usePlayback() {
   const [state, dispatch] = useReducer(playbackReducer, initialPlaybackState);
