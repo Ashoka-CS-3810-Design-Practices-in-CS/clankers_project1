@@ -31,5 +31,5 @@ export const STRUCTURES: readonly StructureDefinition[] = Object.freeze([
     description: 'Watch heap ordering.',
     availability: 'available',
   },
-  { id: 'graph', label: 'Graph', description: 'Explore BFS and DFS.', availability: 'planned' },
+  { id: 'graph', label: 'Graph', description: 'Explore BFS and DFS.', availability: 'available' },
 ]);

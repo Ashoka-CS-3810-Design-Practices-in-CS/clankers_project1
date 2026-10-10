@@ -1,5 +1,58 @@
 # Project Updates
 
+## 2026-10-10: Graph vertical slice
+
+### Completed changes
+
+- Added a Graph workspace for undirected, unweighted graphs with Add vertex, Remove vertex, Add edge, Remove edge, BFS, DFS, sample data, and reset.
+- BFS narrates each dequeue, each newly discovered neighbour, and each neighbour skipped because it was already discovered.
+- DFS narrates each visit, each edge followed deeper, each already-visited neighbour skipped, each backtrack, and each pop from the call stack.
+- The current BFS queue or DFS call stack is drawn under the graph at every step, and the inspector shows the visit order.
+- Traversals report how many vertices are unreachable from the chosen start.
+- Moved Graph from planned to available; all six structures are now implemented.
+- Added domain, component, desktop, and mobile browser coverage, and extended the keyboard-order test.
+- Fixed the Binary Search Tree browser test, which matched the "Queue, ready" button by substring and so also matched "Priority Queue, ready".
+
+### Architecture and design considerations
+
+- `GraphModel` stores adjacency lists keyed by stable `vertex-N` IDs. Labels are unique integers, because a graph vertex is identified by its label rather than by insertion position.
+- Adjacency lists are kept sorted by label, so BFS and DFS explore neighbours in ascending order and every trace is reproducible.
+- Edge IDs are derived from both vertex IDs in a fixed order, so an undirected edge has one ID however it is referenced. Steps highlight edges by putting those IDs into the existing `activeNodeIds` and `visitedNodeIds` arrays, so no shared contract changed.
+- The BFS queue and DFS call stack are stored in the snapshot as an optional `frontier`. Each step therefore carries the algorithm's working state as well as the graph.
+- DFS is recursive, matching the textbook definition; recursion depth is bounded by the 12-vertex limit.
+- Layout is a circle in insertion order, which needs no graph-layout dependency and keeps vertex positions stable while edges change. The circle grows with the vertex count.
+
+### UX and accessibility decisions
+
+- One field drives vertex operations and traversal starts, and a second field is used only for edges, so most operations need a single input.
+- Validation explains duplicate labels, missing vertices, self-loops, existing or missing edges, the label range, and the vertex limit inline.
+- The queue or stack is shown as text in order (front to rear, or bottom to top), not only as highlights.
+- Vertex and edge states use the shared current, visited, and queued colours; the screen-reader list gives each vertex's neighbours.
+- The SVG scales to the panel width, so the full graph stays visible on mobile without horizontal scrolling.
+
+### Testing and performance evidence
+
+Evidence recorded on 2026-10-10:
+
+- TypeScript, ESLint, and Prettier checks passed; 113 Vitest tests passed; the production build succeeded.
+- Playwright passed 14 browser checks across desktop and mobile, covering all six structures.
+- The production build emitted approximately 311.00 kB of JavaScript (88.14 kB gzip) and 17.73 kB of CSS (4.39 kB gzip).
+
+BFS and DFS run in `O(V + E)` time with `O(V)` auxiliary space. Their traces record a constant number of steps per vertex and per edge end, each holding a full snapshot, so trace memory is `O((V + E) × (V + E))`; the 12-vertex limit (at most 66 edges) bounds this.
+
+### Risks, assumptions, and limitations
+
+- Graphs are undirected and unweighted; there are no self-loops or parallel edges.
+- Add edge and Remove edge report `O(V)` because sorted adjacency lists are scanned. A hash-set representation would be faster but would lose the deterministic neighbour order the traces rely on.
+- The circular layout can produce crossing edges in dense graphs; positions do not adapt to reduce crossings.
+- Component tests for full traversals advance 20 to 40 steps by real clicks, so that test file allows a 20-second timeout.
+
+### Next implementation phases
+
+1. Extract shared operation-panel and workspace patterns now that all six structures exist.
+2. Consider directed and weighted graphs with shortest-path algorithms.
+3. Collect cross-browser and assistive-technology evidence for all six structures.
+
 ## 2026-10-10: Priority Queue vertical slice
 
 ### Completed changes

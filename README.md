@@ -1,6 +1,6 @@
 # Clankers DSA Visualizer
 
-Clankers is an interactive algorithm lab for learning data structures one operation at a time. The current Assignment 3 application includes complete Linked List, Stack, Queue, Binary Search Tree, and Priority Queue vertical slices: learners can build each structure, inspect deterministic algorithm steps, control playback, and connect every transition to its time and space complexity.
+Clankers is an interactive algorithm lab for learning data structures one operation at a time. The current Assignment 3 application includes complete Linked List, Stack, Queue, Binary Search Tree, Priority Queue, and Graph vertical slices: learners can build each structure, inspect deterministic algorithm steps, control playback, and connect every transition to its time and space complexity.
 
 ## Current scope
 
@@ -50,7 +50,16 @@ The Priority Queue workspace supports:
 - a tree view and the underlying heap array drawn together, with matching highlights and array indices;
 - `O(log n)` Insert and Extract min and `O(1)` Peek min, matching the implementation.
 
-Graph remains visible as a planned milestone.
+The Graph workspace supports:
+
+- an undirected, unweighted graph with unique integer vertex labels;
+- Add vertex, Remove vertex (which also removes its edges), Add edge, and Remove edge;
+- breadth-first search with a visible queue and depth-first search with a visible call stack, both from any start vertex;
+- neighbours explored in ascending label order, so every trace is deterministic;
+- traversal-tree edges, the current edge, and queued or stacked vertices highlighted, plus a visit-order output and a note when some vertices are unreachable;
+- a circular layout that grows with the vertex count, a 12-vertex readability limit, and a screen-reader list of each vertex's neighbours.
+
+All six planned structures are now available.
 
 ## Run locally
 
@@ -70,7 +79,7 @@ npm run check
 npm run test:e2e
 ```
 
-`npm run check` runs TypeScript validation, ESLint, Prettier checks, unit/component tests, and a production build. The Playwright command runs complete Linked List, Stack, Queue, Binary Search Tree, and Priority Queue flows at desktop and mobile viewport sizes. On a new machine, install the Playwright browser once with `npx playwright install chromium`.
+`npm run check` runs TypeScript validation, ESLint, Prettier checks, unit/component tests, and a production build. The Playwright command runs complete Linked List, Stack, Queue, Binary Search Tree, Priority Queue, and Graph flows at desktop and mobile viewport sizes. On a new machine, install the Playwright browser once with `npx playwright install chromium`.
 
 Useful individual commands:
 
@@ -95,6 +104,7 @@ src/
 ├── structures/queue/          Queue model, validation, and operation service
 ├── structures/bst/            Tree model, validation, and operation service
 ├── structures/priority-queue/ Min-heap model, validation, and operation service
+├── structures/graph/          Adjacency-list model, validation, and BFS/DFS service
 ├── playback/                  Framework-independent state machine and React hook
 ├── registry/                  Available and planned structures
 ├── components/                Controls, SVG canvases, navigation, and inspector
@@ -112,6 +122,7 @@ src/
 - `QueueOperations` follows the same contracts for Enqueue, Dequeue, Peek front, and Inspect all.
 - `BstOperations` records ordered comparisons, structural deletion, and three traversal strategies.
 - `PriorityQueueModel` owns the binary min-heap and reports each comparison and swap to an optional observer; `PriorityQueueOperations` turns those events into narrated steps without duplicating the heap algorithm.
+- `GraphModel` stores sorted adjacency lists and stable vertex IDs; `GraphOperations` records BFS and DFS with the queue or call stack captured in each snapshot.
 - `StepRecorder` freezes snapshots and step metadata to prevent later mutations from changing history.
 - The playback reducer is independent of React; `usePlayback` only supplies timer lifecycle behavior.
 - Each structure has an independent workspace, while navigation, playback controls, and the generic inspector are shared.
@@ -121,15 +132,15 @@ The UI uses React, native SVG, and ordinary CSS. There is no backend, database, 
 
 ## Testing strategy
 
-- Domain tests cover all five structures, including duplicates, empty and missing cases, validation, capacity, stable IDs, FIFO order across queue compaction, BST deletion shapes and traversal orders, heap order after every priority-queue change, immutable logs, and complexity metadata.
+- Domain tests cover all six structures, including duplicates, empty and missing cases, validation, capacity, stable IDs, FIFO order across queue compaction, BST deletion shapes and traversal orders, heap order after every priority-queue change, BFS and DFS visit orders including unreachable vertices, immutable logs, and complexity metadata.
 - Playback tests cover boundaries, restart, completion, speed changes, and timer cleanup.
 - Component tests cover inline validation, synchronized panels, disabled operations, underflow, structure switching, state preservation, automatic playback, and keyboard order.
-- Playwright verifies all five main learner flows on desktop and mobile.
+- Playwright verifies all six main learner flows on desktop and mobile.
 
 ## Roadmap
 
-1. Review shared operation-panel and workspace patterns now that five structures exist.
-2. Add Graph traversal with an explicit graph-layout strategy.
+1. Review shared operation-panel and workspace patterns now that all six structures exist.
+2. Consider weighted and directed graphs, and shortest-path algorithms, as extensions to Graph.
 3. Expand cross-structure accessibility, performance, and browser evidence.
 
 See [PROJECT_UPDATES.md](PROJECT_UPDATES.md) for the decision log, evidence, assumptions, and known risks.
