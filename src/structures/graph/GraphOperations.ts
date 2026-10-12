@@ -140,10 +140,14 @@ export class GraphOperations {
     const visited: string[] = [];
     const treeEdges: string[] = [];
     const output: number[] = [];
+    // The queue is an array with a moving head index, so each dequeue is O(1).
+    // Array.prototype.shift would re-index every remaining entry.
     const queue: GraphVertex[] = [start];
+    let head = 0;
+    const waiting = () => queue.slice(head);
     const frontier = (): GraphFrontier => ({
       kind: 'queue',
-      values: queue.map((vertex) => vertex.value),
+      values: waiting().map((vertex) => vertex.value),
     });
 
     recorder.record({
@@ -152,8 +156,9 @@ export class GraphOperations {
       matchedNodeIds: [start.id],
     });
 
-    while (queue.length > 0) {
-      const current = queue.shift() as GraphVertex;
+    while (head < queue.length) {
+      const current = queue[head];
+      head += 1;
       visited.push(current.id);
       output.push(current.value);
       recorder.record({
@@ -161,7 +166,7 @@ export class GraphOperations {
         snapshot: working.snapshot(frontier()),
         activeNodeIds: [current.id],
         visitedNodeIds: [...visited, ...treeEdges],
-        matchedNodeIds: queue.map((vertex) => vertex.id),
+        matchedNodeIds: waiting().map((vertex) => vertex.id),
         output,
       });
 
@@ -173,7 +178,7 @@ export class GraphOperations {
             snapshot: working.snapshot(frontier()),
             activeNodeIds: [current.id, edge],
             visitedNodeIds: [...visited, ...treeEdges],
-            matchedNodeIds: queue.map((vertex) => vertex.id),
+            matchedNodeIds: waiting().map((vertex) => vertex.id),
             output,
           });
           return;
@@ -186,7 +191,7 @@ export class GraphOperations {
           snapshot: working.snapshot(frontier()),
           activeNodeIds: [current.id, edge],
           visitedNodeIds: [...visited, ...treeEdges],
-          matchedNodeIds: queue.map((vertex) => vertex.id),
+          matchedNodeIds: waiting().map((vertex) => vertex.id),
           output,
         });
       });
