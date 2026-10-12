@@ -7,7 +7,7 @@ async function finishOperation(page: import('@playwright/test').Page) {
 
 test('inserts, traverses, searches, deletes, switches, and resets a tree', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Binary Search Tree, ready' }).click();
+  await page.getByRole('button', { name: 'Open Binary Search Tree workspace' }).click();
   await expect(
     page.getByRole('heading', { name: 'Binary Search Tree', exact: true }),
   ).toBeVisible();

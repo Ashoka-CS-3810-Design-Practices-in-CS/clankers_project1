@@ -6,7 +6,7 @@ import App from './App';
 async function openBst() {
   const user = userEvent.setup();
   render(<App />);
-  await user.click(screen.getByRole('button', { name: 'Binary Search Tree, ready' }));
+  await user.click(screen.getByRole('button', { name: 'Open Binary Search Tree workspace' }));
   return user;
 }
 

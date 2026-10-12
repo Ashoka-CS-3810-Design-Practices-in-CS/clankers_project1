@@ -7,7 +7,7 @@ async function finishOperation(page: import('@playwright/test').Page) {
 
 test('inserts, peeks, extracts, switches, and resets a priority queue', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Priority Queue, ready' }).click();
+  await page.getByRole('button', { name: 'Open Priority Queue workspace' }).click();
   await expect(page.getByRole('heading', { name: 'Priority Queue', exact: true })).toBeVisible();
 
   const input = page.getByLabel('Priority value');

@@ -6,7 +6,7 @@ import App from './App';
 async function openPriorityQueue() {
   const user = userEvent.setup();
   render(<App />);
-  await user.click(screen.getByRole('button', { name: 'Priority Queue, ready' }));
+  await user.click(screen.getByRole('button', { name: 'Open Priority Queue workspace' }));
   return user;
 }
 

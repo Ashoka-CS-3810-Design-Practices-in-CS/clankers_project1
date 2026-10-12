@@ -6,7 +6,7 @@ import App from './App';
 async function openGraph() {
   const user = userEvent.setup();
   render(<App />);
-  await user.click(screen.getByRole('button', { name: 'Graph, ready' }));
+  await user.click(screen.getByRole('button', { name: 'Open Graph workspace' }));
   return user;
 }
 
