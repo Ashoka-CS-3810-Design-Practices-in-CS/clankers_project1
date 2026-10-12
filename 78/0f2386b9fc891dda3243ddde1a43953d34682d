@@ -1,0 +1,64 @@
+e2e/accessibility.spec.ts
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 1-31,35-48
+  s_3eb8e14d84cbd2::t_4ef0be58228f6a 32-34
+README.md
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 82,138-139
+src/components/PriorityQueueCanvas.tsx
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 6,35,55-70,73
+src/styles.css
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 428,573,623,699,782,902,979
+src/performance/traceBudget.test.ts
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 1-41
+.github/workflows/ci.yml
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 1-24
+package.json
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 23
+src/components/useKeepInView.ts
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 1-24
+src/domain/integerValidation.ts
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 3-5,12-19,25
+src/structures/graph/GraphModel.ts
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 46-54,63,112-113,151-154,156-157,178-179,194-196,212,224,236-241
+src/components/BstCanvas.tsx
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 3,63-67,90
+src/domain/integerValidation.test.ts
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 1-34
+src/performance/worstCaseTraces.ts
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 1-77
+src/structures/graph/GraphOperations.test.ts
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 61-91
+src/structures/graph/GraphOperations.ts
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 143-144,146-147,150,159-161,169,181,194
+e2e/keep-in-view.spec.ts
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 1-12,14-46
+  s_3eb8e14d84cbd2::t_4ef0be58228f6a 13
+PROJECT_UPDATES.md
+  s_af8324b7af09a6::t_ccbc1fd3ec634b 9-52
+  s_af8324b7af09a6::t_0da73bcb78e350 53
+package-lock.json
+  s_af8324b7af09a6::t_1d173c5c15dd2c 16,95-107,1677-1686
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "780f2386b9fc891dda3243ddde1a43953d34682d",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    },
+    "s_af8324b7af09a6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "unknown"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
