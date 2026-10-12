@@ -1,5 +1,6 @@
 import type { VisualizationStep } from '../domain/visualization';
 import type { BstNodeSnapshot, BstSnapshot } from '../structures/bst/BstModel';
+import { useKeepInView } from './useKeepInView';
 
 interface BstCanvasProps {
   readonly snapshot: BstSnapshot;
@@ -59,6 +60,11 @@ function valueFontSize(value: number): number {
 }
 
 export function BstCanvas({ snapshot, step }: BstCanvasProps) {
+  const positioned = snapshot.rootId ? layoutTree(snapshot) : [];
+  const focusId = step?.activeNodeIds[0] ?? step?.matchedNodeIds[0] ?? snapshot.rootId;
+  const focus = positioned.find((item) => item.node.id === focusId);
+  const scrollRef = useKeepInView<HTMLDivElement>(focus ? focus.x + NODE_WIDTH / 2 : null);
+
   if (!snapshot.rootId) {
     return (
       <div className="empty-canvas">
@@ -71,7 +77,6 @@ export function BstCanvas({ snapshot, step }: BstCanvasProps) {
     );
   }
 
-  const positioned = layoutTree(snapshot);
   const byId = new Map(positioned.map((item) => [item.node.id, item]));
   const maxDepth = Math.max(...positioned.map((item) => item.depth));
   const contentWidth = Math.max(
@@ -82,6 +87,7 @@ export function BstCanvas({ snapshot, step }: BstCanvasProps) {
 
   return (
     <div
+      ref={scrollRef}
       className="tree-scroll"
       tabIndex={0}
       aria-label="Scrollable binary search tree visualization"

@@ -1,5 +1,50 @@
 # Project Updates
 
+## 2026-10-10: Assignment 3 verification and hardening
+
+### Completed changes
+
+- Added a worst-case trace benchmark (`src/performance/`) that generates the most expensive trace each structure allows at its interface limit and fails if any median exceeds one 16 ms frame.
+- The benchmark found that Graph BFS and DFS on the complete graph K12 took about 15 ms and 16 ms per trace, close to a full frame. `GraphModel` now shares one frozen vertex list and edge list between snapshots until the graph changes, which brought both under 1 ms.
+- `GraphModel` now finds vertices through maps instead of scanning the vertex list, and BFS dequeues with a moving head index instead of `Array.prototype.shift`, so the code matches the displayed `O(V + E)`.
+- Integer input is now parsed strictly: an optional sign followed by decimal digits. Inputs such as `1e3`, `0x10`, and `2.5`, which `Number()` used to accept or round, are rejected with a specific message.
+- Added an automated WCAG 2.1 A/AA audit with axe-core for every workspace, at desktop and mobile sizes, empty and part-way through a trace.
+- The audit found three text colours just below the 4.5:1 contrast minimum (the idle phase label and the empty-state placeholders). They were darkened, and a full sweep of six workspaces in four states at two viewport sizes now reports zero violations.
+- Screenshot review showed that on a phone the Binary Search Tree opened scrolled to its left edge, hiding the root and the node being compared; a full heap had the same problem. Both canvases now keep the current node (or the root) in view through a small `useKeepInView` hook, covered by a new Playwright test.
+- Added a GitHub Actions workflow that runs `npm run check` and the Playwright suite on every push to `main` and every pull request.
+
+### Worst-case trace measurements
+
+Medians of 31 runs in Node 22 (Vitest), after a warm-up. Snapshot entries count every array element across all recorded snapshots, so shared lists are counted once per step.
+
+| Worst case                               | Steps | Snapshot entries | Median (ms) |
+| ---------------------------------------- | ----- | ---------------- | ----------- |
+| Linked List: insert tail at 49 nodes     | 51    | 2,500            | 0.51        |
+| Linked List: traverse 49 nodes           | 51    | 2,499            | 0.51        |
+| Stack: inspect all 50 items              | 52    | 2,600            | 0.37        |
+| Queue: inspect all 50 items              | 52    | 2,600            | 0.37        |
+| BST: insert into 30-node skewed tree     | 32    | 961              | 0.15        |
+| BST: inorder traversal of 31 nodes       | 33    | 1,023            | 0.14        |
+| Priority Queue: insert new minimum at 49 | 13    | 649              | 0.14        |
+| Priority Queue: extract min at 50        | 13    | 638              | 0.14        |
+| Graph: BFS on complete graph K12         | 146   | 12,115           | 0.76        |
+| Graph: DFS on complete graph K12         | 158   | 13,315           | 0.51        |
+
+Before the snapshot-sharing change, the two graph traversals took 15.19 ms and 16.20 ms.
+
+### Testing evidence
+
+Evidence recorded on 2026-10-10:
+
+- TypeScript, ESLint, and Prettier checks passed; 142 Vitest tests in 15 files passed; the production build succeeded.
+- Playwright passed 30 checks: 15 tests (six learner flows, one reduced-motion check, six accessibility audits, and two keep-in-view checks) on desktop Chrome and a Pixel 7 profile.
+- The production build emitted approximately 311.99 kB of JavaScript (88.56 kB gzip) and 17.73 kB of CSS (4.39 kB gzip).
+
+### Remaining limitations
+
+- Automated accessibility checks cover only part of WCAG. A manual screen-reader pass (VoiceOver and NVDA) has not been recorded.
+- Only Chromium is tested. Firefox and WebKit projects can be added to `playwright.config.ts` when CI time allows.
+
 ## 2026-10-10: Graph vertical slice
 
 ### Completed changes

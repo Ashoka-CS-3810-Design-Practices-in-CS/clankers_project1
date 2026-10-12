@@ -428,7 +428,7 @@ input:disabled {
 }
 
 .phase-idle {
-  color: #667064;
+  color: #5f655c;
 }
 .phase-paused {
   color: #8a6429;
@@ -573,7 +573,7 @@ input:disabled {
   border: 2px dashed #8a8e85;
   border-top: 0;
   border-radius: 0 0 12px 12px;
-  color: #6e746b;
+  color: #5f655c;
   font-family: var(--font-mono);
   font-size: 0.76rem;
 }
@@ -623,7 +623,7 @@ input:disabled {
   border: 2px dashed #8a8e85;
   border-right: 0;
   border-left: 0;
-  color: #6e746b;
+  color: #5f655c;
   font-family: var(--font-mono);
   font-size: 0.76rem;
 }
@@ -699,7 +699,7 @@ input:disabled {
   place-items: center;
   border: 2px dashed #8a8e85;
   border-radius: 14px;
-  color: #6e746b;
+  color: #5f655c;
   font-family: var(--font-mono);
   font-size: 0.76rem;
 }
@@ -782,7 +782,7 @@ input:disabled {
   place-items: center;
   border: 2px dashed #8a8e85;
   border-radius: 50%;
-  color: #6e746b;
+  color: #5f655c;
   font-family: var(--font-mono);
   font-size: 0.76rem;
 }
@@ -902,7 +902,7 @@ input:disabled {
   border-style: dashed;
   border-color: #8a8e85;
   background: transparent;
-  color: #6e746b;
+  color: #5f655c;
   font-weight: 400;
 }
 
@@ -979,7 +979,7 @@ input:disabled {
   place-items: center;
   border: 2px dashed #8a8e85;
   border-radius: 12px;
-  color: #6e746b;
+  color: #5f655c;
   font-family: var(--font-mono);
   font-size: 0.76rem;
 }

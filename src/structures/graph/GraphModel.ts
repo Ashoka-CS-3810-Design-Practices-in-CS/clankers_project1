@@ -43,6 +43,15 @@ export function edgeId(firstId: string, secondId: string): string {
 export class GraphModel {
   private readonly vertexList: GraphVertex[];
   private readonly adjacency: Map<string, string[]>;
+  /** Constant-time lookups so traversal cost matches the displayed O(V + E). */
+  private readonly vertexById = new Map<string, GraphVertex>();
+  private readonly idByLabel = new Map<number, string>();
+  /**
+   * Frozen vertex and edge lists shared by every snapshot until the graph changes.
+   * BFS and DFS record a snapshot per step without changing the graph, so sharing these
+   * lists avoids rebuilding O(V + E) objects at every step.
+   */
+  private structure: Pick<GraphSnapshot, 'vertices' | 'edges'> | null = null;
   private nextVertexNumber: number;
 
   constructor(
@@ -51,6 +60,7 @@ export class GraphModel {
     nextVertexNumber?: number,
   ) {
     this.vertexList = vertices.map((vertex) => ({ ...vertex }));
+    this.vertexList.forEach((vertex) => this.index(vertex));
     this.adjacency = new Map(
       this.vertexList.map((vertex) => [vertex.id, [...(adjacency.get(vertex.id) ?? [])]]),
     );
@@ -99,8 +109,8 @@ export class GraphModel {
   }
 
   vertex(label: number): GraphVertex | null {
-    const found = this.vertexList.find((vertex) => vertex.value === label);
-    return found ? { ...found } : null;
+    const id = this.idByLabel.get(label);
+    return id === undefined ? null : { ...this.byId(id) };
   }
 
   hasVertex(label: number): boolean {
@@ -138,11 +148,13 @@ export class GraphModel {
   }
 
   snapshot(frontier?: GraphFrontier): GraphSnapshot {
-    const vertices = Object.freeze(this.vertices().map((vertex) => Object.freeze({ ...vertex })));
-    const edges = Object.freeze(this.edges().map((edge) => Object.freeze({ ...edge })));
+    this.structure ??= {
+      vertices: Object.freeze(this.vertices().map((vertex) => Object.freeze({ ...vertex }))),
+      edges: Object.freeze(this.edges().map((edge) => Object.freeze({ ...edge }))),
+    };
     return Object.freeze({
-      vertices,
-      edges,
+      vertices: this.structure.vertices,
+      edges: this.structure.edges,
       ...(frontier
         ? {
             frontier: Object.freeze({
@@ -163,6 +175,8 @@ export class GraphModel {
     const vertex = Object.freeze({ id: `vertex-${this.nextVertexNumber}`, value: label });
     this.nextVertexNumber += 1;
     this.vertexList.push(vertex);
+    this.index(vertex);
+    this.structure = null;
     this.adjacency.set(vertex.id, []);
     return { ...vertex };
   }
@@ -177,6 +191,9 @@ export class GraphModel {
       return edgeId(vertex.id, neighbourId);
     });
     this.adjacency.delete(vertex.id);
+    this.vertexById.delete(vertex.id);
+    this.idByLabel.delete(vertex.value);
+    this.structure = null;
     this.vertexList.splice(
       this.vertexList.findIndex((candidate) => candidate.id === vertex.id),
       1,
@@ -192,6 +209,7 @@ export class GraphModel {
     if (this.hasEdge(firstLabel, secondLabel)) throw new Error('That edge already exists.');
     this.insertSorted(first.id, second.id);
     this.insertSorted(second.id, first.id);
+    this.structure = null;
     return { id: edgeId(first.id, second.id), from: first.id, to: second.id };
   }
 
@@ -203,6 +221,7 @@ export class GraphModel {
     const secondList = this.adjacency.get(second.id) as string[];
     firstList.splice(firstList.indexOf(second.id), 1);
     secondList.splice(secondList.indexOf(first.id), 1);
+    this.structure = null;
     return true;
   }
 
@@ -214,7 +233,12 @@ export class GraphModel {
   }
 
   private byId(id: string): GraphVertex {
-    return this.vertexList.find((vertex) => vertex.id === id) as GraphVertex;
+    return this.vertexById.get(id) as GraphVertex;
+  }
+
+  private index(vertex: GraphVertex): void {
+    this.vertexById.set(vertex.id, vertex);
+    this.idByLabel.set(vertex.value, vertex.id);
   }
 
   private inferNextVertexNumber(vertices: readonly GraphVertex[]): number {
