@@ -58,6 +58,37 @@ describe('GraphModel', () => {
     expect(() => model.addEdge(2, 1)).toThrow();
   });
 
+  it('shares unchanged vertex and edge lists between snapshots', () => {
+    const model = GraphModel.sample();
+    const first = model.snapshot();
+    const second = model.snapshot({ kind: 'stack', values: [1] });
+    expect(second.edges).toBe(first.edges);
+    expect(second.vertices).toBe(first.vertices);
+
+    model.addVertex(9);
+    const changed = model.snapshot();
+    expect(changed.vertices).not.toBe(first.vertices);
+    expect(first.vertices).toHaveLength(6);
+    expect(changed.vertices).toHaveLength(7);
+  });
+
+  it('invalidates shared lists after every kind of change', () => {
+    const model = GraphModel.sample();
+    let previous = model.snapshot();
+    const changes = [
+      () => model.addEdge(1, 6),
+      () => model.removeEdge(1, 2),
+      () => model.removeVertex(4),
+      () => model.addVertex(10),
+    ];
+    changes.forEach((change) => {
+      change();
+      const next = model.snapshot();
+      expect(next.edges === previous.edges && next.vertices === previous.vertices).toBe(false);
+      previous = next;
+    });
+  });
+
   it('returns deeply immutable snapshots', () => {
     const snapshot = GraphModel.sample().snapshot({ kind: 'queue', values: [1] });
     expect(Object.isFrozen(snapshot)).toBe(true);

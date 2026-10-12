@@ -79,7 +79,7 @@ npm run check
 npm run test:e2e
 ```
 
-`npm run check` runs TypeScript validation, ESLint, Prettier checks, unit/component tests, and a production build. The Playwright command runs complete Linked List, Stack, Queue, Binary Search Tree, Priority Queue, and Graph flows at desktop and mobile viewport sizes. On a new machine, install the Playwright browser once with `npx playwright install chromium`.
+`npm run check` runs TypeScript validation, ESLint, Prettier checks, unit/component tests (including the worst-case performance budget), and a production build. GitHub Actions runs it and the Playwright suite on every push to `main` and every pull request. The Playwright command runs complete Linked List, Stack, Queue, Binary Search Tree, Priority Queue, and Graph flows at desktop and mobile viewport sizes. On a new machine, install the Playwright browser once with `npx playwright install chromium`.
 
 Useful individual commands:
 
@@ -135,7 +135,8 @@ The UI uses React, native SVG, and ordinary CSS. There is no backend, database, 
 - Domain tests cover all six structures, including duplicates, empty and missing cases, validation, capacity, stable IDs, FIFO order across queue compaction, BST deletion shapes and traversal orders, heap order after every priority-queue change, BFS and DFS visit orders including unreachable vertices, immutable logs, and complexity metadata.
 - Playback tests cover boundaries, restart, completion, speed changes, and timer cleanup.
 - Component tests cover inline validation, synchronized panels, disabled operations, underflow, structure switching, state preservation, automatic playback, and keyboard order.
-- Playwright verifies all six main learner flows on desktop and mobile.
+- Playwright verifies all six main learner flows on desktop and mobile, and runs an axe-core WCAG 2.1 A/AA audit of every workspace.
+- A performance test generates each structure's worst-case trace at its interface limit and fails if the median exceeds one 16 ms frame.
 
 ## Roadmap
 

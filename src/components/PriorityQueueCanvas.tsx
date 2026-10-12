@@ -3,6 +3,7 @@ import {
   parentIndex,
   type PriorityQueueSnapshot,
 } from '../structures/priority-queue/PriorityQueueModel';
+import { useKeepInView } from './useKeepInView';
 
 interface PriorityQueueCanvasProps {
   readonly snapshot: PriorityQueueSnapshot;
@@ -31,19 +32,7 @@ function levelOf(index: number): number {
 export function PriorityQueueCanvas({ snapshot, step }: PriorityQueueCanvasProps) {
   const { items } = snapshot;
 
-  if (items.length === 0) {
-    return (
-      <div className="empty-canvas">
-        <div className="empty-heap" aria-hidden="true">
-          root
-        </div>
-        <h2>Your priority queue is empty</h2>
-        <p>Enter an integer and insert it. Smaller values have higher priority.</p>
-      </div>
-    );
-  }
-
-  const levels = levelOf(items.length - 1) + 1;
+  const levels = levelOf(Math.max(items.length, 1) - 1) + 1;
   const treeWidth = Math.max(MIN_WIDTH, 2 ** (levels - 1) * SLOT_WIDTH);
   const arrayWidth = items.length * CELL_WIDTH + 80;
   const contentWidth = Math.max(treeWidth, arrayWidth);
@@ -63,8 +52,25 @@ export function PriorityQueueCanvas({ snapshot, step }: PriorityQueueCanvasProps
     };
   };
 
+  const focusId = step?.activeNodeIds[0] ?? items[0]?.id;
+  const focusIndex = items.findIndex((item) => item.id === focusId);
+  const scrollRef = useKeepInView<HTMLDivElement>(focusIndex >= 0 ? position(focusIndex).x : null);
+
+  if (items.length === 0) {
+    return (
+      <div className="empty-canvas">
+        <div className="empty-heap" aria-hidden="true">
+          root
+        </div>
+        <h2>Your priority queue is empty</h2>
+        <p>Enter an integer and insert it. Smaller values have higher priority.</p>
+      </div>
+    );
+  }
+
   return (
     <div
+      ref={scrollRef}
       className="canvas-scroll heap-scroll"
       tabIndex={0}
       aria-label="Scrollable heap visualization"
