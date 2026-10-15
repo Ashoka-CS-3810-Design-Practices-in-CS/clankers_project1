@@ -1,11 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
+import { PracticeBar } from '../components/PracticeBar';
+import { PracticePanel } from '../components/PracticePanel';
 import { StackCanvas } from '../components/StackCanvas';
 import { StackOperationPanel } from '../components/StackOperationPanel';
 import { parseIntegerInput } from '../domain/integerValidation';
 import type { PlaybackSpeed } from '../playback/playback';
 import { usePlayback } from '../playback/usePlayback';
+import {
+  containerPractice,
+  STACK_WORDS,
+  type ContainerOperation,
+} from '../practice/containerPractice';
+import { usePractice } from '../practice/usePractice';
 import { StackModel } from '../structures/stack/StackModel';
 import { StackOperations, type StackResult } from '../structures/stack/StackOperations';
 import { validateStackCapacity } from '../structures/stack/stackValidation';
@@ -21,6 +29,7 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
   const [result, setResult] = useState<StackResult | null>(null);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
+  const practice = usePractice();
   const playback = usePlayback();
   const { pause } = playback;
 
@@ -28,6 +37,7 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
   const displayedSnapshot = currentStep?.snapshot ?? model.snapshot();
   const playbackActive = Boolean(result && playback.state.phase !== 'complete');
   const hasSteps = Boolean(result?.steps.length);
+  const activeQuestion = practice.questionAt(playback.state.phase, playback.state.index);
   const itemSummary = useMemo(
     () =>
       `${displayedSnapshot.items.length} ${displayedSnapshot.items.length === 1 ? 'item' : 'items'}`,
@@ -38,11 +48,20 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
     if (!active) pause();
   }, [active, pause]);
 
-  function begin(nextResult: StackResult) {
+  function begin(nextResult: StackResult, operation: ContainerOperation, value?: number) {
+    const checkpoints = practice.prepare(() =>
+      containerPractice(STACK_WORDS, operation, value, nextResult.steps),
+    );
     setModel(nextResult.model);
     setResult(nextResult);
-    playback.load(nextResult.steps.length);
+    playback.load(nextResult.steps.length, checkpoints);
     setError('');
+  }
+
+  function continueAfterAnswer(correct: boolean) {
+    practice.record(correct);
+    playback.resolve();
+    playback.next();
   }
 
   function push() {
@@ -56,7 +75,7 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
       setError(capacity.message ?? 'The stack is at capacity.');
       return;
     }
-    begin(operations.push(model, validation.value));
+    begin(operations.push(model, validation.value), 'add', validation.value);
   }
 
   function loadSample() {
@@ -95,13 +114,21 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
           setError('');
         }}
         onPush={push}
-        onPop={() => begin(operations.pop(model))}
-        onPeek={() => begin(operations.peek(model))}
-        onInspect={() => begin(operations.inspect(model))}
+        onPop={() => begin(operations.pop(model), 'remove')}
+        onPeek={() => begin(operations.peek(model), 'peek')}
+        onInspect={() => begin(operations.inspect(model), 'inspect')}
         onSample={loadSample}
         onReset={resetStack}
         disabled={playbackActive}
         error={error}
+      />
+
+      <PracticeBar
+        idPrefix="stack"
+        enabled={practice.enabled}
+        onToggle={practice.setEnabled}
+        disabled={playbackActive}
+        score={practice.score}
       />
 
       <div className="visualizer-grid">
@@ -127,6 +154,15 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
           matchedLabel="Top item"
         />
       </div>
+
+      {activeQuestion && (
+        <PracticePanel
+          idPrefix="stack"
+          key={activeQuestion.stepIndex}
+          question={activeQuestion}
+          onContinue={continueAfterAnswer}
+        />
+      )}
 
       <PlaybackControls
         state={playback.state}

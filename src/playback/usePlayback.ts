@@ -3,7 +3,12 @@ import { initialPlaybackState, playbackReducer, type PlaybackSpeed } from './pla
 
 export function usePlayback() {
   const [state, dispatch] = useReducer(playbackReducer, initialPlaybackState);
-  const load = useCallback((total: number) => dispatch({ type: 'load', total }), []);
+  const load = useCallback(
+    (total: number, checkpoints?: readonly number[]) =>
+      dispatch({ type: 'load', total, checkpoints }),
+    [],
+  );
+  const resolve = useCallback(() => dispatch({ type: 'resolve' }), []);
   const play = useCallback(() => dispatch({ type: 'play' }), []);
   const pause = useCallback(() => dispatch({ type: 'pause' }), []);
   const next = useCallback(() => dispatch({ type: 'next' }), []);
@@ -21,6 +26,7 @@ export function usePlayback() {
   return {
     state,
     load,
+    resolve,
     play,
     pause,
     next,

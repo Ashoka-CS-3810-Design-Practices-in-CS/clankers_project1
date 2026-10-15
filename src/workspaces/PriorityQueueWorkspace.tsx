@@ -1,11 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
+import { PracticeBar } from '../components/PracticeBar';
+import { PracticePanel } from '../components/PracticePanel';
 import { PriorityQueueCanvas } from '../components/PriorityQueueCanvas';
 import { PriorityQueueOperationPanel } from '../components/PriorityQueueOperationPanel';
 import { parseIntegerInput } from '../domain/integerValidation';
 import type { PlaybackSpeed } from '../playback/playback';
 import { usePlayback } from '../playback/usePlayback';
+import { usePractice } from '../practice/usePractice';
+import {
+  priorityQueuePractice,
+  type PriorityQueuePracticeOperation,
+} from '../structures/priority-queue/PriorityQueuePractice';
 import { PriorityQueueModel } from '../structures/priority-queue/PriorityQueueModel';
 import {
   PriorityQueueOperations,
@@ -24,6 +31,7 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
   const [result, setResult] = useState<PriorityQueueResult | null>(null);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
+  const practice = usePractice();
   const playback = usePlayback();
   const { pause } = playback;
 
@@ -31,6 +39,7 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
   const displayedSnapshot = currentStep?.snapshot ?? model.snapshot();
   const playbackActive = Boolean(result && playback.state.phase !== 'complete');
   const hasSteps = Boolean(result?.steps.length);
+  const activeQuestion = practice.questionAt(playback.state.phase, playback.state.index);
   const itemSummary = useMemo(
     () =>
       `${displayedSnapshot.items.length} ${displayedSnapshot.items.length === 1 ? 'item' : 'items'}`,
@@ -41,11 +50,22 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
     if (!active) pause();
   }, [active, pause]);
 
-  function begin(nextResult: PriorityQueueResult) {
+  function begin(
+    nextResult: PriorityQueueResult,
+    operation: PriorityQueuePracticeOperation,
+    value?: number,
+  ) {
+    const checkpoints = practice.prepare(() => priorityQueuePractice(operation, value, nextResult));
     setModel(nextResult.model);
     setResult(nextResult);
-    playback.load(nextResult.steps.length);
+    playback.load(nextResult.steps.length, checkpoints);
     setError('');
+  }
+
+  function continueAfterAnswer(correct: boolean) {
+    practice.record(correct);
+    playback.resolve();
+    playback.next();
   }
 
   function insert() {
@@ -59,7 +79,7 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
       setError(capacity.message ?? 'The priority queue is at capacity.');
       return;
     }
-    begin(operations.insert(model, validation.value));
+    begin(operations.insert(model, validation.value), 'insert', validation.value);
   }
 
   function loadSample() {
@@ -98,12 +118,20 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
           setError('');
         }}
         onInsert={insert}
-        onExtract={() => begin(operations.extractMin(model))}
-        onPeek={() => begin(operations.peekMin(model))}
+        onExtract={() => begin(operations.extractMin(model), 'extract')}
+        onPeek={() => begin(operations.peekMin(model), 'peek')}
         onSample={loadSample}
         onReset={resetPriorityQueue}
         disabled={playbackActive}
         error={error}
+      />
+
+      <PracticeBar
+        idPrefix="priority-queue"
+        enabled={practice.enabled}
+        onToggle={practice.setEnabled}
+        disabled={playbackActive}
+        score={practice.score}
       />
 
       <div className="visualizer-grid">
@@ -131,6 +159,15 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
           matchedLabel="Compared / minimum"
         />
       </div>
+
+      {activeQuestion && (
+        <PracticePanel
+          idPrefix="priority-queue"
+          key={activeQuestion.stepIndex}
+          question={activeQuestion}
+          onContinue={continueAfterAnswer}
+        />
+      )}
 
       <PlaybackControls
         state={playback.state}

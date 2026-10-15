@@ -23,6 +23,7 @@ export function PlaybackControls({
 }: PlaybackControlsProps) {
   const atStart = state.index === 0;
   const atEnd = !hasSteps || state.index >= state.total - 1;
+  const awaitingAnswer = state.phase === 'question';
 
   return (
     <section className="playback" aria-label="Playback controls">
@@ -38,17 +39,23 @@ export function PlaybackControls({
             Pause
           </button>
         ) : (
-          <button type="button" className="primary-button" onClick={onPlay} disabled={atEnd}>
+          <button
+            type="button"
+            className="primary-button"
+            onClick={onPlay}
+            disabled={atEnd || awaitingAnswer}
+          >
             Play
           </button>
         )}
-        <button type="button" onClick={onNext} disabled={atEnd}>
+        <button type="button" onClick={onNext} disabled={atEnd || awaitingAnswer}>
           Next
         </button>
       </div>
       <div className="playback-progress" aria-live="polite">
         <span>
           {hasSteps ? `Step ${state.index + 1} of ${state.total}` : 'No operation loaded'}
+          {awaitingAnswer && ' · answer the question to continue'}
         </span>
         <div className="step-track" aria-hidden="true">
           <span

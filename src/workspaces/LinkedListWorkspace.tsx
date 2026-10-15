@@ -3,14 +3,21 @@ import { Inspector } from '../components/Inspector';
 import { LinkedListCanvas } from '../components/LinkedListCanvas';
 import { OperationPanel } from '../components/OperationPanel';
 import { PlaybackControls } from '../components/PlaybackControls';
+import { PracticeBar } from '../components/PracticeBar';
+import { PracticePanel } from '../components/PracticePanel';
 import { parseIntegerInput } from '../domain/integerValidation';
 import type { PlaybackSpeed } from '../playback/playback';
 import { usePlayback } from '../playback/usePlayback';
+import { usePractice } from '../practice/usePractice';
 import { LinkedListModel } from '../structures/linked-list/LinkedListModel';
 import {
   LinkedListOperations,
   type LinkedListResult,
 } from '../structures/linked-list/LinkedListOperations';
+import {
+  linkedListPractice,
+  type LinkedListPracticeOperation,
+} from '../structures/linked-list/LinkedListPractice';
 import { validateInsertionCapacity } from '../structures/linked-list/linkedListValidation';
 
 const operations = new LinkedListOperations();
@@ -25,6 +32,7 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
   const [result, setResult] = useState<LinkedListResult | null>(null);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
+  const practice = usePractice();
   const playback = usePlayback();
   const { pause } = playback;
 
@@ -32,6 +40,7 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
   const displayedSnapshot = currentStep?.snapshot ?? model.snapshot();
   const playbackActive = Boolean(result && playback.state.phase !== 'complete');
   const hasSteps = Boolean(result?.steps.length);
+  const activeQuestion = practice.questionAt(playback.state.phase, playback.state.index);
   const nodeSummary = useMemo(
     () =>
       `${displayedSnapshot.nodes.length} ${displayedSnapshot.nodes.length === 1 ? 'node' : 'nodes'}`,
@@ -42,11 +51,22 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
     if (!active) pause();
   }, [active, pause]);
 
-  function begin(nextResult: LinkedListResult) {
+  function begin(
+    nextResult: LinkedListResult,
+    operation: LinkedListPracticeOperation,
+    value?: number,
+  ) {
+    const checkpoints = practice.prepare(() => linkedListPractice(operation, value, nextResult));
     setModel(nextResult.model);
     setResult(nextResult);
-    playback.load(nextResult.steps.length);
+    playback.load(nextResult.steps.length, checkpoints);
     setError('');
+  }
+
+  function continueAfterAnswer(correct: boolean) {
+    practice.record(correct);
+    playback.resolve();
+    playback.next();
   }
 
   function runValueOperation(operation: ValueOperation) {
@@ -70,7 +90,7 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
       search: () => operations.search(model, value),
       delete: () => operations.deleteFirstMatch(model, value),
     }[operation]();
-    begin(nextResult);
+    begin(nextResult, operation, value);
   }
 
   function loadSample() {
@@ -113,11 +133,19 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
         onInsertTail={() => runValueOperation('insert-tail')}
         onSearch={() => runValueOperation('search')}
         onDelete={() => runValueOperation('delete')}
-        onTraverse={() => begin(operations.traverse(model))}
+        onTraverse={() => begin(operations.traverse(model), 'traverse')}
         onSample={loadSample}
         onReset={resetList}
         disabled={playbackActive}
         error={error}
+      />
+
+      <PracticeBar
+        idPrefix="linked-list"
+        enabled={practice.enabled}
+        onToggle={practice.setEnabled}
+        disabled={playbackActive}
+        score={practice.score}
       />
 
       <div className="visualizer-grid">
@@ -142,6 +170,15 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
           emptyOutputCopy="Run Traverse to collect values from head to null."
         />
       </div>
+
+      {activeQuestion && (
+        <PracticePanel
+          idPrefix="linked-list"
+          key={activeQuestion.stepIndex}
+          question={activeQuestion}
+          onContinue={continueAfterAnswer}
+        />
+      )}
 
       <PlaybackControls
         state={playback.state}
