@@ -7,7 +7,7 @@ async function finishOperation(page: import('@playwright/test').Page) {
 
 test('builds a graph, runs BFS and DFS, edits it, and resets', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Graph, ready', exact: true }).click();
+  await page.getByRole('button', { name: 'Open Graph workspace' }).click();
   await expect(page.getByRole('heading', { name: 'Graph', exact: true })).toBeVisible();
 
   const vertex = page.getByLabel('Vertex', { exact: true });

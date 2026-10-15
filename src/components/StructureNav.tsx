@@ -4,20 +4,24 @@ import type { AvailableStructureId } from '../App';
 interface StructureNavProps {
   readonly activeId: AvailableStructureId;
   readonly onSelect: (id: AvailableStructureId) => void;
+  readonly onGoHome?: () => void;
 }
 
-export function StructureNav({ activeId, onSelect }: StructureNavProps) {
+export function StructureNav({ activeId, onSelect, onGoHome }: StructureNavProps) {
   return (
     <nav className="structure-nav" aria-label="Data structures">
-      <div className="nav-heading">
-        <span className="brand-mark" aria-hidden="true">
-          C
-        </span>
+      <button
+        className="nav-heading nav-home-button"
+        type="button"
+        onClick={onGoHome}
+        aria-label="Return to home page"
+      >
+        <img className="brand-logo" src="/clankers-logo.png" alt="" aria-hidden="true" />
         <div>
           <strong>Clankers</strong>
           <span>DSA Visualizer</span>
         </div>
-      </div>
+      </button>
       <div className="structure-list">
         {STRUCTURES.map((structure) => (
           <button

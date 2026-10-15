@@ -29,8 +29,9 @@ async function audit(page: Page) {
 for (const workspace of WORKSPACES) {
   test(`${workspace.button} has no detectable WCAG A/AA violations`, async ({ page }) => {
     await page.goto('/');
-    const nav = page.getByRole('navigation', { name: 'Data structures' });
-    await nav.getByRole('button', { name: new RegExp(`^${workspace.button},`) }).click();
+    await page
+      .getByRole('button', { name: `Open ${workspace.button} workspace`, exact: true })
+      .click();
     const main = page.locator('main:not([hidden])');
 
     expect(await audit(page)).toEqual([]);

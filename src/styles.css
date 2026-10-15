@@ -133,15 +133,12 @@ input:disabled {
   border-bottom: 1px solid var(--line);
 }
 
-.brand-mark {
+.brand-logo {
   width: 38px;
   height: 38px;
-  display: grid;
-  place-items: center;
   border-radius: 11px;
-  background: var(--accent);
-  color: var(--accent-ink);
-  font-weight: 800;
+  object-fit: cover;
+  flex: 0 0 auto;
 }
 
 .nav-heading strong,
@@ -1356,6 +1353,310 @@ input:disabled {
 
   .speed-control {
     justify-self: end;
+  }
+}
+
+/* ── Nav home button ─────────────────────────────────────────── */
+
+.nav-home-button {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 160ms ease-out;
+}
+
+.nav-home-button:hover {
+  opacity: 0.8;
+}
+
+/* ── Landing page ────────────────────────────────────────────── */
+
+.landing {
+  min-height: 100vh;
+  background: var(--shell);
+  color: var(--text);
+}
+
+.landing-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 80px clamp(20px, 5vw, 64px) 56px;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(214, 243, 106, 0.08) 0%, transparent 70%),
+    var(--shell);
+}
+
+.landing-logo {
+  display: block;
+  width: clamp(190px, 22vw, 280px);
+  height: auto;
+  margin: -24px 0 24px;
+  object-fit: contain;
+}
+
+.landing-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--panel-raised);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 28px;
+}
+
+.landing-title {
+  margin: 0;
+  font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  max-width: 14ch;
+}
+
+.landing-title-accent {
+  display: block;
+  background: linear-gradient(135deg, var(--accent) 0%, #a8d64a 50%, #77a9ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.landing-subtitle {
+  max-width: 52ch;
+  margin: 20px 0 0;
+  color: var(--text-muted);
+  font-size: clamp(0.95rem, 1.6vw, 1.12rem);
+  line-height: 1.6;
+}
+
+.landing-stats {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 40px;
+  padding: 18px 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--panel);
+}
+
+.landing-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.landing-stat strong {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+}
+
+.landing-stat span {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.landing-stat-divider {
+  width: 1px;
+  height: 32px;
+  background: var(--line);
+}
+
+/* ── Structure cards ─────────────────────────────────────────── */
+
+.landing-structures {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 64px) 56px;
+}
+
+.landing-section-heading {
+  margin: 0 0 24px;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.landing-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+.landing-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 16px;
+  padding: 22px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--panel);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease-out,
+    background-color 180ms ease-out,
+    transform 180ms ease-out,
+    box-shadow 180ms ease-out;
+}
+
+.landing-card:hover {
+  border-color: var(--accent);
+  background: var(--panel-raised);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.landing-card:active {
+  transform: translateY(0);
+}
+
+.landing-card-icon {
+  font-size: 1.7rem;
+  line-height: 1;
+  margin-top: 2px;
+}
+
+.landing-card-body h3 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.landing-card-body p {
+  margin: 5px 0 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.landing-card-features {
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.landing-card-features li {
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--shell);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  white-space: nowrap;
+}
+
+.landing-card:hover .landing-card-features li {
+  border-color: var(--line-strong);
+}
+
+.landing-card-arrow {
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  margin-top: 4px;
+  transition:
+    transform 180ms ease-out,
+    color 180ms ease-out;
+}
+
+.landing-card:hover .landing-card-arrow {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+/* ── How it works ────────────────────────────────────────────── */
+
+.landing-how {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 64px) 80px;
+}
+
+.landing-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.landing-steps li {
+  display: flex;
+  gap: 14px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--panel);
+}
+
+.landing-step-num {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 800;
+  font-size: 0.88rem;
+}
+
+.landing-steps strong {
+  display: block;
+  font-size: 0.9rem;
+  letter-spacing: -0.01em;
+}
+
+.landing-steps p {
+  margin: 5px 0 0;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+/* ── Landing responsive ──────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .landing-hero {
+    padding: 48px 20px 36px;
+  }
+
+  .landing-logo {
+    width: min(220px, 72vw);
+    margin-top: -16px;
+  }
+
+  .landing-stats {
+    gap: 16px;
+    padding: 14px 20px;
+  }
+
+  .landing-card-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .landing-steps {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

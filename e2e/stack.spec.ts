@@ -7,7 +7,7 @@ async function finishOperation(page: import('@playwright/test').Page) {
 
 test('pushes, peeks, inspects, pops, switches, and resets a stack', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Stack, ready' }).click();
+  await page.getByRole('button', { name: 'Open Stack workspace' }).click();
   await expect(page.getByRole('heading', { name: 'Stack', exact: true })).toBeVisible();
 
   const input = page.getByLabel('Item value');

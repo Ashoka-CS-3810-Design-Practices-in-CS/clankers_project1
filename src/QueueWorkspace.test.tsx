@@ -6,7 +6,7 @@ import App from './App';
 async function openQueue() {
   const user = userEvent.setup();
   render(<App />);
-  await user.click(screen.getByRole('button', { name: 'Queue, ready' }));
+  await user.click(screen.getByRole('button', { name: 'Open Queue workspace' }));
   return user;
 }
 

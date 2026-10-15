@@ -6,7 +6,7 @@ import App from './App';
 async function openStack() {
   const user = userEvent.setup();
   render(<App />);
-  await user.click(screen.getByRole('button', { name: 'Stack, ready' }));
+  await user.click(screen.getByRole('button', { name: 'Open Stack workspace' }));
   return user;
 }
 
