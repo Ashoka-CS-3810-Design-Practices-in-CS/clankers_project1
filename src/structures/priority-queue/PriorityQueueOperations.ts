@@ -28,6 +28,29 @@ const COMPLEXITY = {
   },
 } satisfies Record<string, ComplexityInfo>;
 
+const PSEUDOCODE = {
+  insert: [
+    'i ← size; heap[i] ← value  // next open leaf',
+    'while i > 0:',
+    '  p ← parent(i)',
+    '  if heap[i] ≥ heap[p]: break',
+    '  swap(heap[i], heap[p])',
+    '  i ← p',
+  ],
+  extract: [
+    'if size = 0: report underflow',
+    'min ← heap[0]',
+    'heap[0] ← heap[last]; remove last',
+    'i ← 0',
+    'while i has a child:',
+    '  c ← smaller child of i',
+    '  if heap[i] ≤ heap[c]: break',
+    '  swap(heap[i], heap[c]); i ← c',
+    'return min',
+  ],
+  peek: ['if size = 0: report underflow', 'return heap[0]'],
+} satisfies Record<string, readonly string[]>;
+
 export class PriorityQueueOperations {
   insert(model: PriorityQueueModel, value: number): PriorityQueueResult {
     const working = model.clone();
@@ -39,6 +62,7 @@ export class PriorityQueueOperations {
         ? `The heap is empty, so ${value} will become the root.`
         : `Prepare to add ${value} at the next open position so the tree stays complete.`,
       snapshot: working.snapshot(),
+      line: 1,
     });
 
     working.insert(value, (event: HeapEvent) => {
@@ -50,6 +74,7 @@ export class PriorityQueueOperations {
             snapshot: working.snapshot(),
             activeNodeIds: [event.item.id],
             visitedNodeIds: visited,
+            line: 1,
           });
           break;
         case 'compare':
@@ -61,6 +86,7 @@ export class PriorityQueueOperations {
             activeNodeIds: [event.item.id],
             visitedNodeIds: visited,
             matchedNodeIds: [event.other.id],
+            line: 4,
           });
           break;
         case 'swap':
@@ -69,6 +95,7 @@ export class PriorityQueueOperations {
             snapshot: working.snapshot(),
             activeNodeIds: [event.item.id],
             visitedNodeIds: visited,
+            line: 5,
           });
           break;
         case 'settled':
@@ -77,6 +104,7 @@ export class PriorityQueueOperations {
             snapshot: working.snapshot(),
             activeNodeIds: [event.item.id],
             visitedNodeIds: visited,
+            line: 2,
           });
           break;
         default:
@@ -84,7 +112,14 @@ export class PriorityQueueOperations {
       }
     });
 
-    return this.result(working, recorder, 'success', COMPLEXITY.insert, 'Insert');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      COMPLEXITY.insert,
+      'Insert',
+      PSEUDOCODE.insert,
+    );
   }
 
   extractMin(model: PriorityQueueModel): PriorityQueueResult {
@@ -96,8 +131,16 @@ export class PriorityQueueOperations {
       recorder.record({
         message: 'The priority queue is empty, so there is no minimum to remove.',
         snapshot: working.snapshot(),
+        line: 1,
       });
-      return this.result(working, recorder, 'blocked', COMPLEXITY.extract, 'Extract min');
+      return this.result(
+        working,
+        recorder,
+        'blocked',
+        COMPLEXITY.extract,
+        'Extract min',
+        PSEUDOCODE.extract,
+      );
     }
 
     recorder.record({
@@ -105,6 +148,7 @@ export class PriorityQueueOperations {
       snapshot: working.snapshot(),
       activeNodeIds: [root.id],
       matchedNodeIds: [root.id],
+      line: 2,
     });
 
     const visited: string[] = [];
@@ -120,6 +164,7 @@ export class PriorityQueueOperations {
             activeNodeIds: [event.moved.id],
             visitedNodeIds: visited,
             output,
+            line: 3,
           });
           break;
         case 'compare':
@@ -132,6 +177,7 @@ export class PriorityQueueOperations {
             visitedNodeIds: visited,
             matchedNodeIds: [event.other.id],
             output,
+            line: 7,
           });
           break;
         case 'swap':
@@ -141,6 +187,7 @@ export class PriorityQueueOperations {
             activeNodeIds: [event.item.id],
             visitedNodeIds: visited,
             output,
+            line: 8,
           });
           break;
         case 'settled':
@@ -150,6 +197,7 @@ export class PriorityQueueOperations {
             activeNodeIds: [event.item.id],
             visitedNodeIds: visited,
             output,
+            line: 5,
           });
           break;
         default:
@@ -162,10 +210,18 @@ export class PriorityQueueOperations {
         message: `${root.value} was the only item. The priority queue is now empty.`,
         snapshot: working.snapshot(),
         output,
+        line: 9,
       });
     }
 
-    return this.result(working, recorder, 'success', COMPLEXITY.extract, 'Extract min');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      COMPLEXITY.extract,
+      'Extract min',
+      PSEUDOCODE.extract,
+    );
   }
 
   peekMin(model: PriorityQueueModel): PriorityQueueResult {
@@ -177,13 +233,22 @@ export class PriorityQueueOperations {
       recorder.record({
         message: 'The priority queue is empty, so there is no minimum to inspect.',
         snapshot: working.snapshot(),
+        line: 1,
       });
-      return this.result(working, recorder, 'blocked', COMPLEXITY.peek, 'Peek min');
+      return this.result(
+        working,
+        recorder,
+        'blocked',
+        COMPLEXITY.peek,
+        'Peek min',
+        PSEUDOCODE.peek,
+      );
     }
 
     recorder.record({
       message: 'Read the root without removing it.',
       snapshot: working.snapshot(),
+      line: 1,
     });
     recorder.record({
       message: `${root.value} is the minimum. The heap remains unchanged.`,
@@ -191,8 +256,9 @@ export class PriorityQueueOperations {
       activeNodeIds: [root.id],
       matchedNodeIds: [root.id],
       output: [root.value],
+      line: 2,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.peek, 'Peek min');
+    return this.result(working, recorder, 'success', COMPLEXITY.peek, 'Peek min', PSEUDOCODE.peek);
   }
 
   private result(
@@ -201,6 +267,7 @@ export class PriorityQueueOperations {
     status: PriorityQueueResult['status'],
     complexity: ComplexityInfo,
     operationLabel: string,
+    pseudocode: readonly string[],
   ): PriorityQueueResult {
     return Object.freeze({
       model,
@@ -208,6 +275,7 @@ export class PriorityQueueOperations {
       status,
       complexity: Object.freeze({ ...complexity }),
       operationLabel,
+      pseudocode: Object.freeze([...pseudocode]),
     });
   }
 }

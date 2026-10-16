@@ -14,6 +14,7 @@ export interface PlaybackState {
 export type PlaybackAction =
   | { readonly type: 'load'; readonly total: number; readonly checkpoints?: readonly number[] }
   | { readonly type: 'resolve' }
+  | { readonly type: 'seek'; readonly index: number }
   | { readonly type: 'play' }
   | { readonly type: 'pause' }
   | { readonly type: 'next' | 'previous' | 'restart' | 'tick' | 'clear' }
@@ -76,6 +77,11 @@ export function playbackReducer(state: PlaybackState, action: PlaybackAction): P
     }
     case 'restart':
       return { ...state, index: 0, phase: state.total <= 1 ? 'complete' : 'paused' };
+    case 'seek': {
+      if (state.total === 0) return state;
+      const index = Math.min(Math.max(action.index, 0), state.total - 1);
+      return { ...state, index, phase: index === state.total - 1 ? 'complete' : 'paused' };
+    }
     case 'speed':
       return { ...state, speed: action.speed };
     case 'clear':

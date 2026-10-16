@@ -14,6 +14,8 @@ export interface VisualizationStep<TSnapshot> {
   readonly visitedNodeIds: readonly string[];
   readonly matchedNodeIds: readonly string[];
   readonly output: readonly number[];
+  /** 1-based line of the operation's pseudocode that produced this step. */
+  readonly line?: number;
 }
 
 export interface OperationResult<TModel, TSnapshot> {
@@ -22,6 +24,8 @@ export interface OperationResult<TModel, TSnapshot> {
   readonly status: OperationStatus;
   readonly complexity: ComplexityInfo;
   readonly operationLabel: string;
+  /** Short pseudocode for the operation; steps point into it with `line`. */
+  readonly pseudocode?: readonly string[];
 }
 
 export interface StructureOperation<TModel, TSnapshot, TInput = void> {

@@ -3,12 +3,15 @@ import { BstCanvas } from '../components/BstCanvas';
 import { BstOperationPanel } from '../components/BstOperationPanel';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
+import { BugHuntPanel } from '../components/BugHuntPanel';
 import { PracticeBar } from '../components/PracticeBar';
 import { PracticePanel } from '../components/PracticePanel';
 import { parseIntegerInput } from '../domain/integerValidation';
 import type { PlaybackSpeed } from '../playback/playback';
 import { usePlayback } from '../playback/usePlayback';
+import { useBugHunt } from '../practice/useBugHunt';
 import { usePractice } from '../practice/usePractice';
+import { BST_BUGS } from '../structures/bst/BstBugs';
 import { BstModel, type TraversalOrder } from '../structures/bst/BstModel';
 import { BstOperations, type BstResult } from '../structures/bst/BstOperations';
 import { bstPractice, type BstPracticeOperation } from '../structures/bst/BstPractice';
@@ -28,12 +31,15 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
   const [error, setError] = useState('');
   const practice = usePractice();
   const playback = usePlayback();
+  const bugHunt = useBugHunt(BST_BUGS, playback, practice.record);
+  /** The trace on screen: a spot-the-bug run while one is active, otherwise the learner's own. */
+  const shown = bugHunt.displayed ?? result;
   const { pause } = playback;
 
-  const currentStep = result?.steps[playback.state.index];
+  const currentStep = shown?.steps[playback.state.index];
   const displayedSnapshot = currentStep?.snapshot ?? model.snapshot();
-  const playbackActive = Boolean(result && playback.state.phase !== 'complete');
-  const hasSteps = Boolean(result?.steps.length);
+  const playbackActive = bugHunt.active || Boolean(result && playback.state.phase !== 'complete');
+  const hasSteps = Boolean(shown?.steps.length);
   const activeQuestion = practice.questionAt(playback.state.phase, playback.state.index);
   const nodeSummary = useMemo(
     () =>
@@ -137,6 +143,8 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
         onToggle={practice.setEnabled}
         disabled={playbackActive}
         score={practice.score}
+        onSpotBug={bugHunt.start}
+        spotBugDisabled={playbackActive}
       />
 
       <div className="visualizer-grid">
@@ -153,15 +161,35 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
           <BstCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
         <Inspector
-          operationLabel={result?.operationLabel}
-          complexity={result?.complexity}
-          status={result?.status}
+          operationLabel={shown?.operationLabel}
+          complexity={shown?.complexity}
+          pseudocode={shown?.pseudocode}
+          buggyLine={bugHunt.revealedBuggyLine}
+          status={shown?.status}
           step={currentStep}
           outputHeading="Traversal and result output"
           emptyOutputCopy="Search, Delete, or choose a traversal to expose values."
           matchedLabel="Matched node"
         />
       </div>
+
+      {bugHunt.challenge && (
+        <BugHuntPanel
+          idPrefix="bst"
+          challenge={bugHunt.challenge}
+          currentIndex={playback.state.index}
+          flagged={bugHunt.flagged}
+          verdict={bugHunt.verdict}
+          view={bugHunt.view}
+          onFlag={bugHunt.flag}
+          onShow={bugHunt.show}
+          onNext={bugHunt.start}
+          onExit={() => {
+            bugHunt.exit();
+            setResult(null);
+          }}
+        />
+      )}
 
       {activeQuestion && (
         <PracticePanel

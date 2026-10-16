@@ -1,5 +1,31 @@
 # Project Updates
 
+## 2026-10-16: Pseudocode panel and Spot the bug
+
+### Completed changes
+
+- Every operation on all six structures now carries short pseudocode (2–10 lines), shown in a new **Pseudocode** section of the inspector. Each recorded step names the line that produced it, and that line is highlighted as playback moves (`aria-current="step"` for screen readers). Branches are honest: a BST insert highlights the left or right branch it actually took, a delete highlights the leaf, one-child, two-child, or count case that ran.
+- Added **Spot the bug** to every workspace (button in the practice bar). It plays a deliberately broken version of an operation, with the broken line visible in the pseudocode. The learner steps through and flags the first step that goes wrong, then sees whether they were right, early or late, an explanation, the buggy and fixed lines side by side, and can switch between the buggy and correct runs at the point they split. Answers count towards the practice score.
+- Twelve bugs, two per structure: delete that unlinks two nodes and search that skips the head (Linked List); pop from the bottom and push to the bottom (Stack); dequeue from the rear and enqueue at the front (Queue); insert with the comparison reversed and a two-child delete that drops the right subtree (BST); sift-down with the larger child and sift-up that stops after one swap (Priority Queue); BFS that marks vertices only when dequeued, so they are queued twice, and DFS that ends at the first dead end instead of backtracking (Graph).
+- `playbackReducer` gained a `seek` action, used to jump both runs to the step where they split.
+
+### Architectural decisions
+
+- `VisualizationStep` gained an optional `line`, and `OperationResult` an optional `pseudocode`; `StepRecorder` passes `line` through. Nothing else in the shared contract changed, and steps without a line still render.
+- Grading needs no answer key. `firstDivergence` compares the correct and buggy traces step by step on what the learner can see (structure, highlights, output) and the line that ran, ignoring narration, because buggy code narrates itself as if it were correct. The first difference is the answer.
+- A `BugScenario` names the buggy line and its wrong code; the buggy pseudocode is the correct pseudocode with exactly that line replaced, so the fixed line is always the real one. Buggy traces reuse the correct trace's steps up to the bug wherever possible.
+- Bugs run on a fixed starting structure (usually the sample) so the bug always shows. The learner's own structure is never changed: the workspace shows the challenge trace instead of its own while a challenge is active and locks its operations.
+
+### Testing evidence
+
+- A coverage test runs 48 operation scenarios (every operation, on sample and empty data, including each delete case) and checks that every step points at a real pseudocode line.
+- Every bug scenario is checked for its expected divergence step, exactly one changed pseudocode line, valid line numbers, and a final state that really is wrong. Component tests cover the pseudocode highlight and the full Spot the bug flow (correct flag, too-early flag, comparing runs, next bug, exit). A Playwright test runs the DFS bug on desktop and mobile and audits the revealed state with axe-core (no violations).
+
+### Limitations
+
+- Bugs use fixed scenarios, not the learner's own data, because many bugs only show on particular shapes (a heap where the larger child is not the smaller one, a graph with a second path to a vertex).
+- Pseudocode is a teaching summary, not the TypeScript itself; the step-to-line mapping is maintained by hand in each operations file and guarded by the coverage test.
+
 ## 2026-10-15: Practice mode on all six structures
 
 ### Completed changes

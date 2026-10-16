@@ -8,6 +8,9 @@ interface InspectorProps<TSnapshot> {
   readonly outputHeading: string;
   readonly emptyOutputCopy: string;
   readonly matchedLabel?: string;
+  readonly pseudocode?: readonly string[];
+  /** Marks a line as the bug once a spot-the-bug answer is revealed. */
+  readonly buggyLine?: number;
 }
 
 export function Inspector<TSnapshot>({
@@ -18,6 +21,8 @@ export function Inspector<TSnapshot>({
   outputHeading,
   emptyOutputCopy,
   matchedLabel = 'Matched',
+  pseudocode,
+  buggyLine,
 }: InspectorProps<TSnapshot>) {
   return (
     <aside className="inspector" aria-label="Operation inspector">
@@ -34,6 +39,33 @@ export function Inspector<TSnapshot>({
           <p className="status-note">Result: operation unavailable</p>
         )}
       </section>
+
+      {pseudocode && pseudocode.length > 0 && (
+        <section
+          className="inspector-section pseudocode-section"
+          aria-labelledby="pseudocode-heading"
+        >
+          <h2 id="pseudocode-heading">Pseudocode</h2>
+          <ol className="pseudocode">
+            {pseudocode.map((line, index) => {
+              const current = step?.line === index + 1;
+              const buggy = buggyLine === index + 1;
+              const className = [current && 'is-current', buggy && 'is-buggy']
+                .filter(Boolean)
+                .join(' ');
+              return (
+                <li
+                  key={`${index}-${line}`}
+                  className={className || undefined}
+                  aria-current={current ? 'step' : undefined}
+                >
+                  <code>{line}</code>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      )}
 
       <section className="inspector-section">
         <h2>Complexity</h2>

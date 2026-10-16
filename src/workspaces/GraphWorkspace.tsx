@@ -3,12 +3,15 @@ import { GraphCanvas } from '../components/GraphCanvas';
 import { GraphOperationPanel } from '../components/GraphOperationPanel';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
+import { BugHuntPanel } from '../components/BugHuntPanel';
 import { PracticeBar } from '../components/PracticeBar';
 import { PracticePanel } from '../components/PracticePanel';
 import type { ValidationResult } from '../domain/visualization';
 import type { PlaybackSpeed } from '../playback/playback';
 import { usePlayback } from '../playback/usePlayback';
+import { useBugHunt } from '../practice/useBugHunt';
 import { usePractice } from '../practice/usePractice';
+import { GRAPH_BUGS } from '../structures/graph/GraphBugs';
 import { graphPractice } from '../structures/graph/GraphPractice';
 import { GraphModel } from '../structures/graph/GraphModel';
 import { GraphOperations, type GraphResult } from '../structures/graph/GraphOperations';
@@ -35,12 +38,15 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
   const [error, setError] = useState('');
   const practice = usePractice();
   const playback = usePlayback();
+  const bugHunt = useBugHunt(GRAPH_BUGS, playback, practice.record);
+  /** The trace on screen: a spot-the-bug run while one is active, otherwise the learner's own. */
+  const shown = bugHunt.displayed ?? result;
   const { pause } = playback;
 
-  const currentStep = result?.steps[playback.state.index];
+  const currentStep = shown?.steps[playback.state.index];
   const displayedSnapshot = currentStep?.snapshot ?? model.snapshot();
-  const playbackActive = Boolean(result && playback.state.phase !== 'complete');
-  const hasSteps = Boolean(result?.steps.length);
+  const playbackActive = bugHunt.active || Boolean(result && playback.state.phase !== 'complete');
+  const hasSteps = Boolean(shown?.steps.length);
   const activeQuestion = practice.questionAt(playback.state.phase, playback.state.index);
   const vertexCount = displayedSnapshot.vertices.length;
   const edgeCount = displayedSnapshot.edges.length;
@@ -181,6 +187,8 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
         onToggle={practice.setEnabled}
         disabled={playbackActive}
         score={practice.score}
+        onSpotBug={bugHunt.start}
+        spotBugDisabled={playbackActive}
       />
 
       <div className="visualizer-grid">
@@ -197,15 +205,35 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
           <GraphCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
         <Inspector
-          operationLabel={result?.operationLabel}
-          complexity={result?.complexity}
-          status={result?.status}
+          operationLabel={shown?.operationLabel}
+          complexity={shown?.complexity}
+          pseudocode={shown?.pseudocode}
+          buggyLine={bugHunt.revealedBuggyLine}
+          status={shown?.status}
           step={currentStep}
           outputHeading="Visit order"
           emptyOutputCopy="Run BFS or DFS from the vertex in the first field to see the visit order."
           matchedLabel="Queued / on stack"
         />
       </div>
+
+      {bugHunt.challenge && (
+        <BugHuntPanel
+          idPrefix="graph"
+          challenge={bugHunt.challenge}
+          currentIndex={playback.state.index}
+          flagged={bugHunt.flagged}
+          verdict={bugHunt.verdict}
+          view={bugHunt.view}
+          onFlag={bugHunt.flag}
+          onShow={bugHunt.show}
+          onNext={bugHunt.start}
+          onExit={() => {
+            bugHunt.exit();
+            setResult(null);
+          }}
+        />
+      )}
 
       {activeQuestion && (
         <PracticePanel

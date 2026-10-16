@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
+import { BugHuntPanel } from '../components/BugHuntPanel';
 import { PracticeBar } from '../components/PracticeBar';
 import { PracticePanel } from '../components/PracticePanel';
 import { StackCanvas } from '../components/StackCanvas';
@@ -13,7 +14,9 @@ import {
   STACK_WORDS,
   type ContainerOperation,
 } from '../practice/containerPractice';
+import { useBugHunt } from '../practice/useBugHunt';
 import { usePractice } from '../practice/usePractice';
+import { STACK_BUGS } from '../practice/containerBugs';
 import { StackModel } from '../structures/stack/StackModel';
 import { StackOperations, type StackResult } from '../structures/stack/StackOperations';
 import { validateStackCapacity } from '../structures/stack/stackValidation';
@@ -31,12 +34,15 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
   const [error, setError] = useState('');
   const practice = usePractice();
   const playback = usePlayback();
+  const bugHunt = useBugHunt(STACK_BUGS, playback, practice.record);
+  /** The trace on screen: a spot-the-bug run while one is active, otherwise the learner's own. */
+  const shown = bugHunt.displayed ?? result;
   const { pause } = playback;
 
-  const currentStep = result?.steps[playback.state.index];
+  const currentStep = shown?.steps[playback.state.index];
   const displayedSnapshot = currentStep?.snapshot ?? model.snapshot();
-  const playbackActive = Boolean(result && playback.state.phase !== 'complete');
-  const hasSteps = Boolean(result?.steps.length);
+  const playbackActive = bugHunt.active || Boolean(result && playback.state.phase !== 'complete');
+  const hasSteps = Boolean(shown?.steps.length);
   const activeQuestion = practice.questionAt(playback.state.phase, playback.state.index);
   const itemSummary = useMemo(
     () =>
@@ -129,6 +135,8 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
         onToggle={practice.setEnabled}
         disabled={playbackActive}
         score={practice.score}
+        onSpotBug={bugHunt.start}
+        spotBugDisabled={playbackActive}
       />
 
       <div className="visualizer-grid">
@@ -145,15 +153,35 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
           <StackCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
         <Inspector
-          operationLabel={result?.operationLabel}
-          complexity={result?.complexity}
-          status={result?.status}
+          operationLabel={shown?.operationLabel}
+          complexity={shown?.complexity}
+          pseudocode={shown?.pseudocode}
+          buggyLine={bugHunt.revealedBuggyLine}
+          status={shown?.status}
           step={currentStep}
           outputHeading="Operation output"
           emptyOutputCopy="Pop, Peek, or Inspect all to expose values from the top."
           matchedLabel="Top item"
         />
       </div>
+
+      {bugHunt.challenge && (
+        <BugHuntPanel
+          idPrefix="stack"
+          challenge={bugHunt.challenge}
+          currentIndex={playback.state.index}
+          flagged={bugHunt.flagged}
+          verdict={bugHunt.verdict}
+          view={bugHunt.view}
+          onFlag={bugHunt.flag}
+          onShow={bugHunt.show}
+          onNext={bugHunt.start}
+          onExit={() => {
+            bugHunt.exit();
+            setResult(null);
+          }}
+        />
+      )}
 
       {activeQuestion && (
         <PracticePanel

@@ -48,6 +48,30 @@ const COMPLEXITY = {
   },
 } satisfies Record<string, ComplexityInfo>;
 
+const PSEUDOCODE = {
+  addVertex: ['if label already exists: report error', 'adj[label] ← empty list'],
+  removeVertex: ['for each neighbour n of v: remove v from adj[n]', 'delete adj[v]'],
+  addEdge: ['insert v into adj[u]  // kept sorted', 'insert u into adj[v]  // kept sorted'],
+  removeEdge: ['remove v from adj[u]', 'remove u from adj[v]'],
+  bfs: [
+    'mark start discovered; queue ← [start]',
+    'while queue is not empty:',
+    '  v ← dequeue(); visit(v)',
+    '  for each neighbour n of v, in label order:',
+    '    if n is not discovered:',
+    '      mark n discovered; enqueue(n)',
+    'done: the queue is empty',
+  ],
+  dfs: [
+    'dfs(start)',
+    'function dfs(v):',
+    '  mark v visited; push v; visit(v)',
+    '  for each neighbour n of v, in label order:',
+    '    if n is not visited: dfs(n)',
+    '  pop v  // backtrack',
+  ],
+} satisfies Record<string, readonly string[]>;
+
 export class GraphOperations {
   addVertex(model: GraphModel, label: number): GraphResult {
     const working = model.clone();
@@ -55,6 +79,7 @@ export class GraphOperations {
     recorder.record({
       message: `Check that no vertex is already labelled ${label}.`,
       snapshot: working.snapshot(),
+      line: 1,
     });
     const vertex = working.addVertex(label);
     recorder.record({
@@ -62,8 +87,9 @@ export class GraphOperations {
       snapshot: working.snapshot(),
       activeNodeIds: [vertex.id],
       visitedNodeIds: [vertex.id],
+      line: 2,
     });
-    return this.result(working, recorder, COMPLEXITY.addVertex, 'Add vertex');
+    return this.result(working, recorder, COMPLEXITY.addVertex, 'Add vertex', PSEUDOCODE.addVertex);
   }
 
   removeVertex(model: GraphModel, label: number): GraphResult {
@@ -80,14 +106,22 @@ export class GraphOperations {
           : `Vertex ${label} touches ${neighbours.length} ${neighbours.length === 1 ? 'edge' : 'edges'} (to ${listLabels(neighbours)}). Those edges are removed with it.`,
       snapshot: working.snapshot(),
       activeNodeIds: [vertex.id, ...incident],
+      line: 1,
     });
     working.removeVertex(label);
     recorder.record({
       message: `Vertex ${label} has been removed from the graph.`,
       snapshot: working.snapshot(),
       output: [label],
+      line: 2,
     });
-    return this.result(working, recorder, COMPLEXITY.removeVertex, 'Remove vertex');
+    return this.result(
+      working,
+      recorder,
+      COMPLEXITY.removeVertex,
+      'Remove vertex',
+      PSEUDOCODE.removeVertex,
+    );
   }
 
   addEdge(model: GraphModel, from: number, to: number): GraphResult {
@@ -100,6 +134,7 @@ export class GraphOperations {
       message: `Connect ${from} and ${to}. The graph is undirected, so each joins the other’s adjacency list.`,
       snapshot: working.snapshot(),
       activeNodeIds: [first.id, second.id],
+      line: 1,
     });
     const edge = working.addEdge(from, to);
     recorder.record({
@@ -107,8 +142,9 @@ export class GraphOperations {
       snapshot: working.snapshot(),
       activeNodeIds: [first.id, second.id, edge.id],
       visitedNodeIds: [edge.id],
+      line: 2,
     });
-    return this.result(working, recorder, COMPLEXITY.addEdge, 'Add edge');
+    return this.result(working, recorder, COMPLEXITY.addEdge, 'Add edge', PSEUDOCODE.addEdge);
   }
 
   removeEdge(model: GraphModel, from: number, to: number): GraphResult {
@@ -122,14 +158,22 @@ export class GraphOperations {
       message: `Find edge ${from}–${to} in both adjacency lists.`,
       snapshot: working.snapshot(),
       activeNodeIds: [first.id, second.id, id],
+      line: 1,
     });
     working.removeEdge(from, to);
     recorder.record({
       message: `Edge ${from}–${to} is removed. Both vertices stay in the graph.`,
       snapshot: working.snapshot(),
       activeNodeIds: [first.id, second.id],
+      line: 2,
     });
-    return this.result(working, recorder, COMPLEXITY.removeEdge, 'Remove edge');
+    return this.result(
+      working,
+      recorder,
+      COMPLEXITY.removeEdge,
+      'Remove edge',
+      PSEUDOCODE.removeEdge,
+    );
   }
 
   bfs(model: GraphModel, startLabel: number): GraphResult {
@@ -154,6 +198,7 @@ export class GraphOperations {
       message: `Start BFS at ${startLabel}: mark it discovered and enqueue it.`,
       snapshot: working.snapshot(frontier()),
       matchedNodeIds: [start.id],
+      line: 1,
     });
 
     while (head < queue.length) {
@@ -168,6 +213,7 @@ export class GraphOperations {
         visitedNodeIds: [...visited, ...treeEdges],
         matchedNodeIds: waiting().map((vertex) => vertex.id),
         output,
+        line: 3,
       });
 
       working.neighbours(current.id).forEach((neighbour) => {
@@ -180,6 +226,7 @@ export class GraphOperations {
             visitedNodeIds: [...visited, ...treeEdges],
             matchedNodeIds: waiting().map((vertex) => vertex.id),
             output,
+            line: 5,
           });
           return;
         }
@@ -193,6 +240,7 @@ export class GraphOperations {
           visitedNodeIds: [...visited, ...treeEdges],
           matchedNodeIds: waiting().map((vertex) => vertex.id),
           output,
+          line: 6,
         });
       });
     }
@@ -202,8 +250,9 @@ export class GraphOperations {
       snapshot: working.snapshot(frontier()),
       visitedNodeIds: [...visited, ...treeEdges],
       output,
+      line: 7,
     });
-    return this.result(working, recorder, COMPLEXITY.bfs, 'Breadth-first search');
+    return this.result(working, recorder, COMPLEXITY.bfs, 'Breadth-first search', PSEUDOCODE.bfs);
   }
 
   dfs(model: GraphModel, startLabel: number): GraphResult {
@@ -228,6 +277,7 @@ export class GraphOperations {
     recorder.record({
       message: `Start DFS at ${startLabel}. Each call goes as deep as possible before backtracking.`,
       snapshot: working.snapshot(frontier()),
+      line: 1,
     });
 
     const visit = (current: GraphVertex, parent: GraphVertex | null) => {
@@ -240,6 +290,7 @@ export class GraphOperations {
         snapshot: working.snapshot(frontier()),
         activeNodeIds: [current.id],
         ...highlight(),
+        line: 3,
       });
 
       working.neighbours(current.id).forEach((neighbour) => {
@@ -251,6 +302,7 @@ export class GraphOperations {
             snapshot: working.snapshot(frontier()),
             activeNodeIds: [current.id, edge],
             ...highlight(),
+            line: 5,
           });
           return;
         }
@@ -260,6 +312,7 @@ export class GraphOperations {
           snapshot: working.snapshot(frontier()),
           activeNodeIds: [current.id, edge],
           ...highlight(),
+          line: 5,
         });
         visit(neighbour, current);
         recorder.record({
@@ -267,6 +320,7 @@ export class GraphOperations {
           snapshot: working.snapshot(frontier()),
           activeNodeIds: [current.id],
           ...highlight(),
+          line: 4,
         });
       });
 
@@ -276,6 +330,7 @@ export class GraphOperations {
         snapshot: working.snapshot(frontier()),
         activeNodeIds: [current.id],
         ...highlight(),
+        line: 6,
       });
     };
 
@@ -286,8 +341,9 @@ export class GraphOperations {
       snapshot: working.snapshot(frontier()),
       visitedNodeIds: [...visited, ...treeEdges],
       output,
+      line: 1,
     });
-    return this.result(working, recorder, COMPLEXITY.dfs, 'Depth-first search');
+    return this.result(working, recorder, COMPLEXITY.dfs, 'Depth-first search', PSEUDOCODE.dfs);
   }
 
   private finishMessage(
@@ -307,6 +363,7 @@ export class GraphOperations {
     recorder: StepRecorder<GraphSnapshot>,
     complexity: ComplexityInfo,
     operationLabel: string,
+    pseudocode: readonly string[],
   ): GraphResult {
     return Object.freeze({
       model,
@@ -314,6 +371,7 @@ export class GraphOperations {
       status: 'success' as const,
       complexity: Object.freeze({ ...complexity }),
       operationLabel,
+      pseudocode: Object.freeze([...pseudocode]),
     });
   }
 }

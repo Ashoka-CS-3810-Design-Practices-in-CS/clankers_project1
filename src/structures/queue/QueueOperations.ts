@@ -28,6 +28,18 @@ const COMPLEXITY = {
   },
 } satisfies Record<string, ComplexityInfo>;
 
+const PSEUDOCODE = {
+  enqueue: ['rear ← rear + 1', 'items[rear] ← value'],
+  dequeue: [
+    'if front > rear: report underflow',
+    'value ← items[front]',
+    'front ← front + 1  // nothing shifts',
+    'return value',
+  ],
+  peek: ['if front > rear: report underflow', 'return items[front]'],
+  inspect: ['i ← front', 'while i ≤ rear:', '  output(items[i])', '  i ← i + 1', 'return output'],
+} satisfies Record<string, readonly string[]>;
+
 export class QueueOperations {
   enqueue(model: QueueModel, value: number): QueueResult {
     const working = model.clone();
@@ -40,6 +52,7 @@ export class QueueOperations {
         : `The queue is empty, so ${value} will become both the front and the rear.`,
       snapshot: working.snapshot(),
       activeNodeIds: previousRear ? [previousRear.id] : [],
+      line: 1,
     });
     const added = working.enqueue(value);
     recorder.record({
@@ -47,8 +60,16 @@ export class QueueOperations {
       snapshot: working.snapshot(),
       activeNodeIds: [added.id],
       visitedNodeIds: [added.id],
+      line: 2,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.enqueue, 'Enqueue');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      COMPLEXITY.enqueue,
+      'Enqueue',
+      PSEUDOCODE.enqueue,
+    );
   }
 
   dequeue(model: QueueModel): QueueResult {
@@ -60,8 +81,16 @@ export class QueueOperations {
       recorder.record({
         message: 'The queue is empty, so there is no front item to remove.',
         snapshot: working.snapshot(),
+        line: 1,
       });
-      return this.result(working, recorder, 'blocked', COMPLEXITY.dequeue, 'Dequeue');
+      return this.result(
+        working,
+        recorder,
+        'blocked',
+        COMPLEXITY.dequeue,
+        'Dequeue',
+        PSEUDOCODE.dequeue,
+      );
     }
 
     recorder.record({
@@ -69,6 +98,7 @@ export class QueueOperations {
       snapshot: working.snapshot(),
       activeNodeIds: [front.id],
       matchedNodeIds: [front.id],
+      line: 2,
     });
     working.dequeue();
     recorder.record({
@@ -77,8 +107,16 @@ export class QueueOperations {
         : `${front.value} was dequeued. The next item becomes the new front.`,
       snapshot: working.snapshot(),
       output: [front.value],
+      line: 3,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.dequeue, 'Dequeue');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      COMPLEXITY.dequeue,
+      'Dequeue',
+      PSEUDOCODE.dequeue,
+    );
   }
 
   peek(model: QueueModel): QueueResult {
@@ -90,13 +128,22 @@ export class QueueOperations {
       recorder.record({
         message: 'The queue is empty, so there is no front item to inspect.',
         snapshot: working.snapshot(),
+        line: 1,
       });
-      return this.result(working, recorder, 'blocked', COMPLEXITY.peek, 'Peek front');
+      return this.result(
+        working,
+        recorder,
+        'blocked',
+        COMPLEXITY.peek,
+        'Peek front',
+        PSEUDOCODE.peek,
+      );
     }
 
     recorder.record({
       message: 'Read the item at the front without removing it.',
       snapshot: working.snapshot(),
+      line: 1,
     });
     recorder.record({
       message: `${front.value} is at the front. The queue remains unchanged.`,
@@ -104,8 +151,16 @@ export class QueueOperations {
       activeNodeIds: [front.id],
       matchedNodeIds: [front.id],
       output: [front.value],
+      line: 2,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.peek, 'Peek front');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      COMPLEXITY.peek,
+      'Peek front',
+      PSEUDOCODE.peek,
+    );
   }
 
   inspect(model: QueueModel): QueueResult {
@@ -117,6 +172,7 @@ export class QueueOperations {
     recorder.record({
       message: 'Begin at the front and inspect each item toward the rear.',
       snapshot: working.snapshot(),
+      line: 1,
     });
 
     items.forEach((item) => {
@@ -128,6 +184,7 @@ export class QueueOperations {
         activeNodeIds: [item.id],
         visitedNodeIds: visited,
         output,
+        line: 3,
       });
     });
 
@@ -139,8 +196,16 @@ export class QueueOperations {
       snapshot: working.snapshot(),
       visitedNodeIds: visited,
       output,
+      line: 5,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.inspect, 'Inspect all');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      COMPLEXITY.inspect,
+      'Inspect all',
+      PSEUDOCODE.inspect,
+    );
   }
 
   private result(
@@ -149,6 +214,7 @@ export class QueueOperations {
     status: QueueResult['status'],
     complexity: ComplexityInfo,
     operationLabel: string,
+    pseudocode: readonly string[],
   ): QueueResult {
     return Object.freeze({
       model,
@@ -156,6 +222,7 @@ export class QueueOperations {
       status,
       complexity: Object.freeze({ ...complexity }),
       operationLabel,
+      pseudocode: Object.freeze([...pseudocode]),
     });
   }
 }

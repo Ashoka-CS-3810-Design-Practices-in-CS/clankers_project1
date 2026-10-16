@@ -7,6 +7,7 @@ interface StepInput<TSnapshot> {
   readonly visitedNodeIds?: readonly string[];
   readonly matchedNodeIds?: readonly string[];
   readonly output?: readonly number[];
+  readonly line?: number;
 }
 
 export class StepRecorder<TSnapshot> {
@@ -21,6 +22,7 @@ export class StepRecorder<TSnapshot> {
       visitedNodeIds: Object.freeze([...(input.visitedNodeIds ?? [])]),
       matchedNodeIds: Object.freeze([...(input.matchedNodeIds ?? [])]),
       output: Object.freeze([...(input.output ?? [])]),
+      ...(input.line === undefined ? {} : { line: input.line }),
     });
 
     this.recordedSteps.push(step);

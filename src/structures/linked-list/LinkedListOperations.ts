@@ -34,6 +34,40 @@ const COMPLEXITY = {
   },
 } satisfies Record<string, ComplexityInfo>;
 
+const PSEUDOCODE = {
+  insertHead: ['node ← new Node(value)', 'node.next ← head', 'head ← node'],
+  insertTail: [
+    'node ← new Node(value)',
+    'if head = null: head ← node; return',
+    'current ← head',
+    'while current.next ≠ null:',
+    '  current ← current.next',
+    'current.next ← node',
+  ],
+  search: [
+    'current ← head',
+    'while current ≠ null:',
+    '  if current.value = target: return current',
+    '  current ← current.next',
+    'return not found',
+  ],
+  delete: [
+    'prev ← null; current ← head',
+    'while current ≠ null and current.value ≠ target:',
+    '  prev ← current; current ← current.next',
+    'if current = null: return  // not found',
+    'if prev = null: head ← current.next',
+    'else: prev.next ← current.next',
+  ],
+  traverse: [
+    'current ← head',
+    'while current ≠ null:',
+    '  output(current.value)',
+    '  current ← current.next',
+    'return output',
+  ],
+} satisfies Record<string, readonly string[]>;
+
 export class LinkedListOperations {
   insertHead(model: LinkedListModel, value: number): LinkedListResult {
     const working = model.clone();
@@ -41,6 +75,7 @@ export class LinkedListOperations {
     recorder.record({
       message: `Prepare to insert ${value} before the current head.`,
       snapshot: working.snapshot(),
+      line: 1,
     });
     const inserted = working.insertFirst(value);
     recorder.record({
@@ -48,8 +83,16 @@ export class LinkedListOperations {
       snapshot: working.snapshot(),
       activeNodeIds: [inserted.id],
       visitedNodeIds: [inserted.id],
+      line: 3,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.insertHead, 'Insert at head');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      COMPLEXITY.insertHead,
+      'Insert at head',
+      PSEUDOCODE.insertHead,
+    );
   }
 
   insertTail(model: LinkedListModel, value: number): LinkedListResult {
@@ -60,9 +103,10 @@ export class LinkedListOperations {
     recorder.record({
       message: `Find the final node before appending ${value}.`,
       snapshot: working.snapshot(),
+      line: 1,
     });
 
-    existing.forEach((item) => {
+    existing.forEach((item, index) => {
       visited.push(item.id);
       recorder.record({
         message:
@@ -72,6 +116,7 @@ export class LinkedListOperations {
         snapshot: working.snapshot(),
         activeNodeIds: [item.id],
         visitedNodeIds: visited,
+        line: index === 0 ? 3 : 5,
       });
     });
 
@@ -84,8 +129,16 @@ export class LinkedListOperations {
       snapshot: working.snapshot(),
       activeNodeIds: [inserted.id],
       visitedNodeIds: [...visited, inserted.id],
+      line: existing.length === 0 ? 2 : 6,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.insertTail, 'Insert at tail');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      COMPLEXITY.insertTail,
+      'Insert at tail',
+      PSEUDOCODE.insertTail,
+    );
   }
 
   search(model: LinkedListModel, value: number): LinkedListResult {
@@ -96,6 +149,7 @@ export class LinkedListOperations {
     recorder.record({
       message: `Search from the head for the first node containing ${value}.`,
       snapshot: working.snapshot(),
+      line: 1,
     });
 
     for (const item of items) {
@@ -109,9 +163,17 @@ export class LinkedListOperations {
         activeNodeIds: [item.id],
         visitedNodeIds: visited,
         matchedNodeIds: matched ? [item.id] : [],
+        line: 3,
       });
       if (matched) {
-        return this.result(working, recorder, 'success', COMPLEXITY.search, 'Search');
+        return this.result(
+          working,
+          recorder,
+          'success',
+          COMPLEXITY.search,
+          'Search',
+          PSEUDOCODE.search,
+        );
       }
     }
 
@@ -119,8 +181,16 @@ export class LinkedListOperations {
       message: `No node contains ${value}. The list is unchanged.`,
       snapshot: working.snapshot(),
       visitedNodeIds: visited,
+      line: 5,
     });
-    return this.result(working, recorder, 'not-found', COMPLEXITY.search, 'Search');
+    return this.result(
+      working,
+      recorder,
+      'not-found',
+      COMPLEXITY.search,
+      'Search',
+      PSEUDOCODE.search,
+    );
   }
 
   deleteFirstMatch(model: LinkedListModel, value: number): LinkedListResult {
@@ -131,6 +201,7 @@ export class LinkedListOperations {
     recorder.record({
       message: `Locate the first node containing ${value}.`,
       snapshot: working.snapshot(),
+      line: 1,
     });
 
     for (const [index, item] of items.entries()) {
@@ -144,6 +215,7 @@ export class LinkedListOperations {
         activeNodeIds: [item.id],
         visitedNodeIds: visited,
         matchedNodeIds: matched ? [item.id] : [],
+        line: 2,
       });
       if (matched) {
         working.removeAt(index);
@@ -151,8 +223,16 @@ export class LinkedListOperations {
           message: `${value} was removed. The remaining nodes stay in order.`,
           snapshot: working.snapshot(),
           visitedNodeIds: visited.filter((id) => id !== item.id),
+          line: index === 0 ? 5 : 6,
         });
-        return this.result(working, recorder, 'success', COMPLEXITY.delete, 'Delete first match');
+        return this.result(
+          working,
+          recorder,
+          'success',
+          COMPLEXITY.delete,
+          'Delete first match',
+          PSEUDOCODE.delete,
+        );
       }
     }
 
@@ -160,8 +240,16 @@ export class LinkedListOperations {
       message: `No node contains ${value}, so nothing was removed.`,
       snapshot: working.snapshot(),
       visitedNodeIds: visited,
+      line: 4,
     });
-    return this.result(working, recorder, 'not-found', COMPLEXITY.delete, 'Delete first match');
+    return this.result(
+      working,
+      recorder,
+      'not-found',
+      COMPLEXITY.delete,
+      'Delete first match',
+      PSEUDOCODE.delete,
+    );
   }
 
   traverse(model: LinkedListModel): LinkedListResult {
@@ -173,6 +261,7 @@ export class LinkedListOperations {
     recorder.record({
       message: 'Begin at the head and follow each next reference.',
       snapshot: working.snapshot(),
+      line: 1,
     });
 
     items.forEach((item) => {
@@ -184,6 +273,7 @@ export class LinkedListOperations {
         activeNodeIds: [item.id],
         visitedNodeIds: visited,
         output,
+        line: 3,
       });
     });
 
@@ -195,8 +285,16 @@ export class LinkedListOperations {
       snapshot: working.snapshot(),
       visitedNodeIds: visited,
       output,
+      line: 5,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.traverse, 'Traverse');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      COMPLEXITY.traverse,
+      'Traverse',
+      PSEUDOCODE.traverse,
+    );
   }
 
   private result(
@@ -205,6 +303,7 @@ export class LinkedListOperations {
     status: LinkedListResult['status'],
     complexity: ComplexityInfo,
     operationLabel: string,
+    pseudocode: readonly string[],
   ): LinkedListResult {
     return Object.freeze({
       model,
@@ -212,6 +311,7 @@ export class LinkedListOperations {
       status,
       complexity: Object.freeze({ ...complexity }),
       operationLabel,
+      pseudocode: Object.freeze([...pseudocode]),
     });
   }
 }

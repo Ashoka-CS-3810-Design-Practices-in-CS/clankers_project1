@@ -1201,6 +1201,116 @@ input:disabled {
   border: 0;
 }
 
+/* Pseudocode */
+.pseudocode {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: line;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.pseudocode li {
+  display: grid;
+  grid-template-columns: 2.2ch 1fr;
+  gap: 8px;
+  padding: 2px 8px 2px 6px;
+  border-left: 2px solid transparent;
+  border-radius: 0 4px 4px 0;
+  color: var(--text-muted);
+  counter-increment: line;
+}
+
+.pseudocode li::before {
+  content: counter(line);
+  color: #8f998b;
+  text-align: right;
+}
+
+.pseudocode code {
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.pseudocode li.is-current {
+  border-left-color: var(--accent);
+  background: #2b3320;
+  color: var(--text);
+}
+
+.pseudocode li.is-buggy {
+  border-left-color: var(--danger);
+  background: #4a2523;
+  color: var(--text);
+}
+
+/* Spot the bug */
+.practice-bar .spot-bug {
+  min-height: 32px;
+  padding: 5px 12px;
+  font-size: 0.74rem;
+}
+
+.practice-card.bug-card {
+  border-color: var(--danger);
+}
+
+.bug-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.bug-actions .practice-continue {
+  margin-top: 0;
+}
+
+.bug-diff {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+  margin: 14px 0 0;
+}
+
+.bug-diff div {
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--panel);
+}
+
+.bug-diff div:first-child {
+  border-color: var(--danger);
+}
+
+.bug-diff div:last-child {
+  border-color: var(--matched);
+}
+
+.bug-diff dt {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+.bug-diff dd {
+  margin: 4px 0 0;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  overflow-wrap: anywhere;
+}
+
+.bug-view-note {
+  margin: 10px 0 0;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+}
+
 /* Practice mode */
 .phase-question {
   color: #8f3fa8;

@@ -88,3 +88,33 @@ test('practice mode asks three BFS questions and scores them', async ({ page }) 
   await expect(main.getByText('The queue is empty. BFS visited 1, 2, 3, 4, 5, 6.')).toBeVisible();
   await expect(main.getByText(/Score: \d of 3 correct/)).toBeVisible();
 });
+
+test('spot the bug: DFS that stops at a dead end', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Open Graph workspace' }).click();
+  const main = page.locator('main:not([hidden])');
+  await main.getByRole('button', { name: 'Spot the bug' }).click();
+
+  // First scenario is BFS; skip to the DFS one.
+  await main.getByRole('button', { name: /Flag step 1/ }).click();
+  await main.getByRole('button', { name: 'Next bug' }).click();
+  await expect(main.getByText(/Run DFS from 1 on the sample graph/)).toBeVisible();
+  await expect(main.getByRole('heading', { name: 'Pseudocode' })).toBeVisible();
+
+  for (let step = 1; step < 12; step += 1) await main.getByRole('button', { name: 'Next' }).click();
+  await main.getByRole('button', { name: 'Flag step 12 as the first wrong step' }).click();
+  await expect(main.getByText('Correct.')).toBeVisible();
+  await expect(main.locator('.pseudocode li.is-buggy')).toContainText('end the whole search');
+
+  const audit = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze();
+  expect(audit.violations.map((violation) => violation.id)).toEqual([]);
+
+  await main.getByRole('button', { name: 'Show the correct run' }).click();
+  await expect(
+    main.getByText('3 has no unvisited neighbours left, so pop it off the stack.'),
+  ).toBeVisible();
+  await main.getByRole('button', { name: 'Done' }).click();
+  await expect(main.getByRole('heading', { name: 'Spot the bug' })).toHaveCount(0);
+});

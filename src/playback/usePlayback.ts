@@ -9,6 +9,7 @@ export function usePlayback() {
     [],
   );
   const resolve = useCallback(() => dispatch({ type: 'resolve' }), []);
+  const seek = useCallback((index: number) => dispatch({ type: 'seek', index }), []);
   const play = useCallback(() => dispatch({ type: 'play' }), []);
   const pause = useCallback(() => dispatch({ type: 'pause' }), []);
   const next = useCallback(() => dispatch({ type: 'next' }), []);
@@ -27,6 +28,7 @@ export function usePlayback() {
     state,
     load,
     resolve,
+    seek,
     play,
     pause,
     next,

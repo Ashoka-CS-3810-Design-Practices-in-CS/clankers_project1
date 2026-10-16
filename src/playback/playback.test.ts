@@ -95,4 +95,23 @@ describe('playbackReducer', () => {
       expect(playbackReducer(loaded, { type: 'resolve' })).toBe(loaded);
     });
   });
+
+  describe('seek', () => {
+    it('jumps to a step, clamps to the trace, and pauses', () => {
+      const loaded = playbackReducer(initialPlaybackState, { type: 'load', total: 5 });
+      const playing = playbackReducer(loaded, { type: 'play' });
+      expect(playbackReducer(playing, { type: 'seek', index: 2 })).toMatchObject({
+        index: 2,
+        phase: 'paused',
+      });
+      expect(playbackReducer(loaded, { type: 'seek', index: 99 })).toMatchObject({
+        index: 4,
+        phase: 'complete',
+      });
+      expect(playbackReducer(loaded, { type: 'seek', index: -3 }).index).toBe(0);
+      expect(playbackReducer(initialPlaybackState, { type: 'seek', index: 2 })).toBe(
+        initialPlaybackState,
+      );
+    });
+  });
 });
