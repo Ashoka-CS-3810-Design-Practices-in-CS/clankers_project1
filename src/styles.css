@@ -77,37 +77,37 @@
   --danger-soft: #f7d8d5;
 }
 
-.theme-toolbar {
-  position: sticky;
-  z-index: 20;
-  top: 0;
-  display: flex;
-  justify-content: flex-end;
-  padding: 10px clamp(16px, 3vw, 48px);
-  background: var(--rail);
-  border-bottom: 1px solid var(--line);
-}
-
 .theme-toggle {
-  display: flex;
+  position: fixed;
+  z-index: 30;
+  top: 16px;
+  right: 16px;
+  display: grid;
+  width: 44px;
+  height: 44px;
   align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 8px 14px;
+  justify-items: center;
+  padding: 0;
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius-sm);
+  border-radius: 50%;
   background: var(--panel);
-  color: var(--text);
-  font-size: 0.8rem;
+  color: var(--accent);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 18%);
 }
 
 .theme-toggle:hover {
   background: var(--panel-raised);
+  border-color: var(--accent);
 }
 
-.theme-toggle span {
-  color: var(--accent);
-  font-weight: 700;
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
 }
 
 :root[data-theme='light'] .landing-title-accent {
@@ -193,15 +193,15 @@ input:disabled {
 }
 
 .app-shell {
-  min-height: calc(100vh - 65px);
+  min-height: 100vh;
   display: grid;
   grid-template-columns: 224px minmax(0, 1fr);
 }
 
 .structure-nav {
   position: sticky;
-  top: 65px;
-  height: calc(100vh - 65px);
+  top: 0;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   padding: 24px 18px;
@@ -1603,7 +1603,7 @@ input:disabled {
 /* ── Landing page ────────────────────────────────────────────── */
 
 .landing {
-  min-height: calc(100vh - 65px);
+  min-height: 100vh;
   background: var(--shell);
   color: var(--text);
 }
