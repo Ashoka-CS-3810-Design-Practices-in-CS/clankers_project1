@@ -11,6 +11,7 @@ describe('App', () => {
   it('shows actionable validation without changing the list', async () => {
     const user = userEvent.setup();
     render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Open Linked List workspace' }));
     await user.click(screen.getByRole('button', { name: 'Insert head' }));
     expect(screen.getByRole('alert')).toHaveTextContent('Enter an integer');
     expect(screen.getByLabelText('Current list contains 0 nodes')).toBeInTheDocument();
@@ -19,6 +20,7 @@ describe('App', () => {
   it('keeps the canvas, narration, and complexity synchronized', async () => {
     const user = userEvent.setup();
     render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Open Linked List workspace' }));
     await user.type(screen.getByLabelText('Node value'), '21');
     await user.click(screen.getByRole('button', { name: 'Insert head' }));
 
@@ -37,8 +39,11 @@ describe('App', () => {
   it('supports keyboard navigation through the operation controls', async () => {
     const user = userEvent.setup();
     render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Open Linked List workspace' }));
     await user.tab();
     expect(screen.getByRole('link', { name: 'Skip to visualizer' })).toHaveFocus();
+    await user.tab();
+    expect(screen.getByRole('button', { name: 'Return to home page' })).toHaveFocus();
     await user.tab();
     expect(screen.getByRole('button', { name: /Linked List/ })).toHaveFocus();
     await user.tab();
@@ -58,6 +63,7 @@ describe('App', () => {
   it('advances playback automatically and cleans up timers', async () => {
     vi.useFakeTimers();
     const { unmount } = render(<App />);
+    fireEvent.click(screen.getByRole('button', { name: 'Open Linked List workspace' }));
     fireEvent.click(screen.getByRole('button', { name: 'Load sample' }));
     fireEvent.click(screen.getByRole('button', { name: 'Traverse' }));
     fireEvent.click(screen.getByRole('button', { name: 'Play' }));

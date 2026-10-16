@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './styles.css';
+import { LandingPage } from './components/LandingPage';
 import { StructureNav } from './components/StructureNav';
 import { BstWorkspace } from './workspaces/BstWorkspace';
 import { GraphWorkspace } from './workspaces/GraphWorkspace';
@@ -11,8 +12,24 @@ import { StackWorkspace } from './workspaces/StackWorkspace';
 export type AvailableStructureId =
   'linked-list' | 'stack' | 'queue' | 'bst' | 'priority-queue' | 'graph';
 
+export type ViewId = 'home' | AvailableStructureId;
+
 export default function App() {
-  const [activeStructure, setActiveStructure] = useState<AvailableStructureId>('linked-list');
+  const [activeView, setActiveView] = useState<ViewId>('home');
+
+  const selectStructure = (id: AvailableStructureId) => setActiveView(id);
+  const goHome = () => setActiveView('home');
+
+  if (activeView === 'home') {
+    return (
+      <>
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
+        <LandingPage onSelect={selectStructure} />
+      </>
+    );
+  }
 
   return (
     <>
@@ -20,13 +37,13 @@ export default function App() {
         Skip to visualizer
       </a>
       <div className="app-shell">
-        <StructureNav activeId={activeStructure} onSelect={setActiveStructure} />
-        <LinkedListWorkspace active={activeStructure === 'linked-list'} />
-        <StackWorkspace active={activeStructure === 'stack'} />
-        <QueueWorkspace active={activeStructure === 'queue'} />
-        <BstWorkspace active={activeStructure === 'bst'} />
-        <PriorityQueueWorkspace active={activeStructure === 'priority-queue'} />
-        <GraphWorkspace active={activeStructure === 'graph'} />
+        <StructureNav activeId={activeView} onSelect={selectStructure} onGoHome={goHome} />
+        <LinkedListWorkspace active={activeView === 'linked-list'} />
+        <StackWorkspace active={activeView === 'stack'} />
+        <QueueWorkspace active={activeView === 'queue'} />
+        <BstWorkspace active={activeView === 'bst'} />
+        <PriorityQueueWorkspace active={activeView === 'priority-queue'} />
+        <GraphWorkspace active={activeView === 'graph'} />
       </div>
     </>
   );

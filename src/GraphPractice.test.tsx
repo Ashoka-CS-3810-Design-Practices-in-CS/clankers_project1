@@ -7,7 +7,7 @@ describe('Graph practice mode', () => {
   it('asks where DFS goes after the start vertex', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Graph,/ }));
+    await user.click(screen.getByRole('button', { name: 'Open Graph workspace' }));
     await user.click(screen.getByRole('checkbox', { name: 'Practice mode' }));
     await user.click(screen.getByRole('button', { name: 'Load sample' }));
     await user.type(screen.getByLabelText('Vertex'), '1');

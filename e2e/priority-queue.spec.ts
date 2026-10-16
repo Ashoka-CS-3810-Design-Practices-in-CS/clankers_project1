@@ -8,7 +8,7 @@ async function finishOperation(page: import('@playwright/test').Page) {
 
 test('inserts, peeks, extracts, switches, and resets a priority queue', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Priority Queue, ready' }).click();
+  await page.getByRole('button', { name: 'Open Priority Queue workspace' }).click();
   await expect(page.getByRole('heading', { name: 'Priority Queue', exact: true })).toBeVisible();
 
   const input = page.getByLabel('Priority value');
@@ -46,10 +46,7 @@ test('inserts, peeks, extracts, switches, and resets a priority queue', async ({
 
 test('practice mode asks three heap questions during insert', async ({ page }) => {
   await page.goto('/');
-  await page
-    .getByRole('navigation', { name: 'Data structures' })
-    .getByRole('button', { name: /^Priority Queue,/ })
-    .click();
+  await page.getByRole('button', { name: 'Open Priority Queue workspace' }).click();
   const main = page.locator('main:not([hidden])');
   await main.getByRole('checkbox', { name: 'Practice mode' }).check();
   await main.getByRole('button', { name: 'Load sample' }).click();

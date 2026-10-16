@@ -7,7 +7,7 @@ describe('Priority Queue practice mode', () => {
   it('asks what refills the root on extract min', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Priority Queue,/ }));
+    await user.click(screen.getByRole('button', { name: 'Open Priority Queue workspace' }));
     await user.click(screen.getByRole('checkbox', { name: 'Practice mode' }));
     await user.click(screen.getByRole('button', { name: 'Load sample' }));
     await user.click(screen.getByRole('button', { name: 'Extract min' }));

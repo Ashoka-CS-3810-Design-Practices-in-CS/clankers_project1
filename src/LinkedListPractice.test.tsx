@@ -6,6 +6,7 @@ import App from './App';
 async function startSearch(target: string) {
   const user = userEvent.setup();
   render(<App />);
+  await user.click(screen.getByRole('button', { name: 'Open Linked List workspace' }));
   await user.click(screen.getByRole('checkbox', { name: 'Practice mode' }));
   await user.click(screen.getByRole('button', { name: 'Load sample' }));
   await user.type(screen.getByLabelText('Node value'), target);
@@ -56,6 +57,7 @@ describe('Linked List practice mode', () => {
   it('plays normally when practice mode is off', async () => {
     const user = userEvent.setup();
     render(<App />);
+    await user.click(screen.getByRole('button', { name: 'Open Linked List workspace' }));
     await user.click(screen.getByRole('button', { name: 'Load sample' }));
     await user.type(screen.getByLabelText('Node value'), '21');
     await user.click(screen.getByRole('button', { name: 'Search' }));

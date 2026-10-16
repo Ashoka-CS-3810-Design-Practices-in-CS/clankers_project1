@@ -10,10 +10,7 @@ async function centreIsVisible(element: Locator, container: Locator) {
 
 async function open(page: Page, name: string) {
   await page.goto('/');
-  await page
-    .getByRole('navigation', { name: 'Data structures' })
-    .getByRole('button', { name: new RegExp(`^${name},`) })
-    .click();
+  await page.getByRole('button', { name: `Open ${name} workspace`, exact: true }).click();
   return page.locator('main:not([hidden])');
 }
 

@@ -6,7 +6,7 @@ import App from './App';
 async function open(structure: 'Stack' | 'Queue') {
   const user = userEvent.setup();
   render(<App />);
-  await user.click(screen.getByRole('button', { name: new RegExp(`^${structure},`) }));
+  await user.click(screen.getByRole('button', { name: `Open ${structure} workspace` }));
   await user.click(screen.getByRole('checkbox', { name: 'Practice mode' }));
   await user.click(screen.getByRole('button', { name: 'Load sample' }));
   return user;

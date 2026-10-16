@@ -8,7 +8,7 @@ async function finishOperation(page: import('@playwright/test').Page) {
 
 test('inserts, traverses, searches, deletes, switches, and resets a tree', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Binary Search Tree, ready' }).click();
+  await page.getByRole('button', { name: 'Open Binary Search Tree workspace' }).click();
   await expect(
     page.getByRole('heading', { name: 'Binary Search Tree', exact: true }),
   ).toBeVisible();
@@ -49,10 +49,7 @@ test('inserts, traverses, searches, deletes, switches, and resets a tree', async
 
 test('practice mode asks three BST search questions and scores them', async ({ page }) => {
   await page.goto('/');
-  await page
-    .getByRole('navigation', { name: 'Data structures' })
-    .getByRole('button', { name: /^Binary Search Tree,/ })
-    .click();
+  await page.getByRole('button', { name: 'Open Binary Search Tree workspace' }).click();
   const main = page.locator('main:not([hidden])');
   await main.getByRole('checkbox', { name: 'Practice mode' }).check();
   await main.getByRole('button', { name: 'Load sample' }).click();

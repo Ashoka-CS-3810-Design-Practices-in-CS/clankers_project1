@@ -8,7 +8,7 @@ async function finishOperation(page: import('@playwright/test').Page) {
 
 test('pushes, peeks, inspects, pops, switches, and resets a stack', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Stack, ready' }).click();
+  await page.getByRole('button', { name: 'Open Stack workspace' }).click();
   await expect(page.getByRole('heading', { name: 'Stack', exact: true })).toBeVisible();
 
   const input = page.getByLabel('Item value');
@@ -48,10 +48,7 @@ test('pushes, peeks, inspects, pops, switches, and resets a stack', async ({ pag
 
 test('practice mode holds stack inspection at three checkpoints', async ({ page }) => {
   await page.goto('/');
-  await page
-    .getByRole('navigation', { name: 'Data structures' })
-    .getByRole('button', { name: /^Stack,/ })
-    .click();
+  await page.getByRole('button', { name: 'Open Stack workspace' }).click();
   const main = page.locator('main:not([hidden])');
   await main.getByRole('checkbox', { name: 'Practice mode' }).check();
   await main.getByRole('button', { name: 'Load sample' }).click();

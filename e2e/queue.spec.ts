@@ -8,7 +8,7 @@ async function finishOperation(page: import('@playwright/test').Page) {
 
 test('enqueues, peeks, inspects, dequeues, switches, and resets a queue', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Queue, ready', exact: true }).click();
+  await page.getByRole('button', { name: 'Open Queue workspace' }).click();
   await expect(page.getByRole('heading', { name: 'Queue', exact: true })).toBeVisible();
 
   const input = page.getByLabel('Queue value');
@@ -49,10 +49,7 @@ test('enqueues, peeks, inspects, dequeues, switches, and resets a queue', async 
 
 test('practice mode holds queue inspection at three checkpoints', async ({ page }) => {
   await page.goto('/');
-  await page
-    .getByRole('navigation', { name: 'Data structures' })
-    .getByRole('button', { name: /^Queue,/ })
-    .click();
+  await page.getByRole('button', { name: 'Open Queue workspace' }).click();
   const main = page.locator('main:not([hidden])');
   await main.getByRole('checkbox', { name: 'Practice mode' }).check();
   await main.getByRole('button', { name: 'Load sample' }).click();

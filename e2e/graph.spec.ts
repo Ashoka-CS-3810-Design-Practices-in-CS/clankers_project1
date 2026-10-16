@@ -8,7 +8,7 @@ async function finishOperation(page: import('@playwright/test').Page) {
 
 test('builds a graph, runs BFS and DFS, edits it, and resets', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Graph, ready', exact: true }).click();
+  await page.getByRole('button', { name: 'Open Graph workspace' }).click();
   await expect(page.getByRole('heading', { name: 'Graph', exact: true })).toBeVisible();
 
   const vertex = page.getByLabel('Vertex', { exact: true });
@@ -58,10 +58,7 @@ test('builds a graph, runs BFS and DFS, edits it, and resets', async ({ page }) 
 
 test('practice mode asks three BFS questions and scores them', async ({ page }) => {
   await page.goto('/');
-  await page
-    .getByRole('navigation', { name: 'Data structures' })
-    .getByRole('button', { name: /^Graph,/ })
-    .click();
+  await page.getByRole('button', { name: 'Open Graph workspace' }).click();
   const main = page.locator('main:not([hidden])');
   await main.getByRole('checkbox', { name: 'Practice mode' }).check();
   await main.getByRole('button', { name: 'Load sample' }).click();

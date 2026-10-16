@@ -7,7 +7,7 @@ describe('BST practice mode', () => {
   it('asks how a two-child node is deleted and reveals the successor step', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: /^Binary Search Tree,/ }));
+    await user.click(screen.getByRole('button', { name: 'Open Binary Search Tree workspace' }));
     await user.click(screen.getByRole('checkbox', { name: 'Practice mode' }));
     await user.click(screen.getByRole('button', { name: 'Load sample' }));
     await user.type(screen.getByLabelText('Tree node value'), '50');

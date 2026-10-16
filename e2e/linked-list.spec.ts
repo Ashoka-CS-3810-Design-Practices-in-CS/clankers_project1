@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 
 test('builds, searches, traverses, deletes, and resets a linked list', async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: 'Open Linked List workspace' }).click();
   await expect(page.getByRole('heading', { name: 'Linked List' })).toBeVisible();
 
   const input = page.getByLabel('Node value', { exact: true });
@@ -49,6 +50,7 @@ test('builds, searches, traverses, deletes, and resets a linked list', async ({ 
 test('honors the reduced-motion preference', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
+  await page.getByRole('button', { name: 'Open Linked List workspace' }).click();
 
   const durationInMilliseconds = await page
     .getByRole('button', { name: 'Insert head' })
@@ -64,6 +66,7 @@ test('honors the reduced-motion preference', async ({ page }) => {
 
 test('practice mode asks, grades, and reveals each checkpoint', async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: 'Open Linked List workspace' }).click();
   const main = page.locator('main:not([hidden])');
   await main.getByRole('checkbox', { name: 'Practice mode' }).check();
   await main.getByRole('button', { name: 'Load sample' }).click();

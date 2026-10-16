@@ -28,6 +28,12 @@
 
 - The score is per session and is not saved.
 
+## 2026-10-12: Landing and brand update
+
+- Added a dedicated landing page for choosing among the six available structures.
+- Added the supplied Clankers artwork as the landing-page logo, workspace navigation mark, and browser icon.
+- Preserved accessible structure labels and home navigation; the decorative navigation image is hidden from assistive technology.
+
 ## 2026-10-10: Assignment 3 verification and hardening
 
 ### Completed changes
