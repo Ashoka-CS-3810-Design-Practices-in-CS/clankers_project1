@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 
 test('light mode persists and keeps every workspace accessible', async ({ page }) => {
   await page.goto('/');
-  const toggle = page.getByRole('button', { name: 'Light mode' });
+  const toggle = page.getByTestId('theme-toggle');
   await expect(toggle).toHaveAttribute('aria-pressed', 'false');
   await toggle.click();
   await page.reload();
