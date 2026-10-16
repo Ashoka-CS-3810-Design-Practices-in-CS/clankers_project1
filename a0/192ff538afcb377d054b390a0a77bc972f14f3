@@ -1,0 +1,21 @@
+src/components/ThemeToggle.tsx
+  s_3eb8e14d84cbd2::t_12bc6d646e979d 32,39-45
+src/styles.css
+  s_3eb8e14d84cbd2::t_12bc6d646e979d 91,93,95,99,102-103,107,112-130
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a0192ff538afcb377d054b390a0a77bc972f14f3",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
