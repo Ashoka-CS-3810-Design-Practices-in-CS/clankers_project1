@@ -1,11 +1,19 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
+import { PracticeBar } from '../components/PracticeBar';
+import { PracticePanel } from '../components/PracticePanel';
 import { QueueCanvas } from '../components/QueueCanvas';
 import { QueueOperationPanel } from '../components/QueueOperationPanel';
 import { parseIntegerInput } from '../domain/integerValidation';
 import type { PlaybackSpeed } from '../playback/playback';
 import { usePlayback } from '../playback/usePlayback';
+import {
+  containerPractice,
+  QUEUE_WORDS,
+  type ContainerOperation,
+} from '../practice/containerPractice';
+import { usePractice } from '../practice/usePractice';
 import { QueueModel } from '../structures/queue/QueueModel';
 import { QueueOperations, type QueueResult } from '../structures/queue/QueueOperations';
 import { validateQueueCapacity } from '../structures/queue/queueValidation';
@@ -21,6 +29,7 @@ export function QueueWorkspace({ active }: QueueWorkspaceProps) {
   const [result, setResult] = useState<QueueResult | null>(null);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
+  const practice = usePractice();
   const playback = usePlayback();
   const { pause } = playback;
 
@@ -28,6 +37,7 @@ export function QueueWorkspace({ active }: QueueWorkspaceProps) {
   const displayedSnapshot = currentStep?.snapshot ?? model.snapshot();
   const playbackActive = Boolean(result && playback.state.phase !== 'complete');
   const hasSteps = Boolean(result?.steps.length);
+  const activeQuestion = practice.questionAt(playback.state.phase, playback.state.index);
   const itemSummary = useMemo(
     () =>
       `${displayedSnapshot.items.length} ${displayedSnapshot.items.length === 1 ? 'item' : 'items'}`,
@@ -38,11 +48,20 @@ export function QueueWorkspace({ active }: QueueWorkspaceProps) {
     if (!active) pause();
   }, [active, pause]);
 
-  function begin(nextResult: QueueResult) {
+  function begin(nextResult: QueueResult, operation: ContainerOperation, value?: number) {
+    const checkpoints = practice.prepare(() =>
+      containerPractice(QUEUE_WORDS, operation, value, nextResult.steps),
+    );
     setModel(nextResult.model);
     setResult(nextResult);
-    playback.load(nextResult.steps.length);
+    playback.load(nextResult.steps.length, checkpoints);
     setError('');
+  }
+
+  function continueAfterAnswer(correct: boolean) {
+    practice.record(correct);
+    playback.resolve();
+    playback.next();
   }
 
   function enqueue() {
@@ -56,7 +75,7 @@ export function QueueWorkspace({ active }: QueueWorkspaceProps) {
       setError(capacity.message ?? 'The queue is at capacity.');
       return;
     }
-    begin(operations.enqueue(model, validation.value));
+    begin(operations.enqueue(model, validation.value), 'add', validation.value);
   }
 
   function loadSample() {
@@ -95,13 +114,21 @@ export function QueueWorkspace({ active }: QueueWorkspaceProps) {
           setError('');
         }}
         onEnqueue={enqueue}
-        onDequeue={() => begin(operations.dequeue(model))}
-        onPeek={() => begin(operations.peek(model))}
-        onInspect={() => begin(operations.inspect(model))}
+        onDequeue={() => begin(operations.dequeue(model), 'remove')}
+        onPeek={() => begin(operations.peek(model), 'peek')}
+        onInspect={() => begin(operations.inspect(model), 'inspect')}
         onSample={loadSample}
         onReset={resetQueue}
         disabled={playbackActive}
         error={error}
+      />
+
+      <PracticeBar
+        idPrefix="queue"
+        enabled={practice.enabled}
+        onToggle={practice.setEnabled}
+        disabled={playbackActive}
+        score={practice.score}
       />
 
       <div className="visualizer-grid">
@@ -127,6 +154,15 @@ export function QueueWorkspace({ active }: QueueWorkspaceProps) {
           matchedLabel="Front item"
         />
       </div>
+
+      {activeQuestion && (
+        <PracticePanel
+          idPrefix="queue"
+          key={activeQuestion.stepIndex}
+          question={activeQuestion}
+          onContinue={continueAfterAnswer}
+        />
+      )}
 
       <PlaybackControls
         state={playback.state}

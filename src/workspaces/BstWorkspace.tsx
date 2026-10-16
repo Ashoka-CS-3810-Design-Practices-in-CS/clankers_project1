@@ -3,11 +3,15 @@ import { BstCanvas } from '../components/BstCanvas';
 import { BstOperationPanel } from '../components/BstOperationPanel';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
+import { PracticeBar } from '../components/PracticeBar';
+import { PracticePanel } from '../components/PracticePanel';
 import { parseIntegerInput } from '../domain/integerValidation';
 import type { PlaybackSpeed } from '../playback/playback';
 import { usePlayback } from '../playback/usePlayback';
+import { usePractice } from '../practice/usePractice';
 import { BstModel, type TraversalOrder } from '../structures/bst/BstModel';
 import { BstOperations, type BstResult } from '../structures/bst/BstOperations';
+import { bstPractice, type BstPracticeOperation } from '../structures/bst/BstPractice';
 import { validateBstCapacity } from '../structures/bst/bstValidation';
 
 const operations = new BstOperations();
@@ -22,6 +26,7 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
   const [result, setResult] = useState<BstResult | null>(null);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
+  const practice = usePractice();
   const playback = usePlayback();
   const { pause } = playback;
 
@@ -29,6 +34,7 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
   const displayedSnapshot = currentStep?.snapshot ?? model.snapshot();
   const playbackActive = Boolean(result && playback.state.phase !== 'complete');
   const hasSteps = Boolean(result?.steps.length);
+  const activeQuestion = practice.questionAt(playback.state.phase, playback.state.index);
   const nodeSummary = useMemo(
     () =>
       `${displayedSnapshot.nodes.length} ${displayedSnapshot.nodes.length === 1 ? 'node' : 'nodes'}`,
@@ -39,11 +45,18 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
     if (!active) pause();
   }, [active, pause]);
 
-  function begin(nextResult: BstResult) {
+  function begin(nextResult: BstResult, operation: BstPracticeOperation, value?: number) {
+    const checkpoints = practice.prepare(() => bstPractice(operation, value, nextResult));
     setModel(nextResult.model);
     setResult(nextResult);
-    playback.load(nextResult.steps.length);
+    playback.load(nextResult.steps.length, checkpoints);
     setError('');
+  }
+
+  function continueAfterAnswer(correct: boolean) {
+    practice.record(correct);
+    playback.resolve();
+    playback.next();
   }
 
   function runValueOperation(operation: ValueOperation) {
@@ -66,11 +79,11 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
       search: () => operations.search(model, value),
       delete: () => operations.delete(model, value),
     }[operation]();
-    begin(nextResult);
+    begin(nextResult, operation, value);
   }
 
   function traverse(order: TraversalOrder) {
-    begin(operations.traverse(model, order));
+    begin(operations.traverse(model, order), order);
   }
 
   function loadSample() {
@@ -118,6 +131,14 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
         error={error}
       />
 
+      <PracticeBar
+        idPrefix="bst"
+        enabled={practice.enabled}
+        onToggle={practice.setEnabled}
+        disabled={playbackActive}
+        score={practice.score}
+      />
+
       <div className="visualizer-grid">
         <section className="canvas-panel" aria-labelledby="bst-canvas-heading">
           <div className="canvas-heading">
@@ -141,6 +162,15 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
           matchedLabel="Matched node"
         />
       </div>
+
+      {activeQuestion && (
+        <PracticePanel
+          idPrefix="bst"
+          key={activeQuestion.stepIndex}
+          question={activeQuestion}
+          onContinue={continueAfterAnswer}
+        />
+      )}
 
       <PlaybackControls
         state={playback.state}

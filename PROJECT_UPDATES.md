@@ -1,5 +1,33 @@
 # Project Updates
 
+## 2026-10-15: Practice mode on all six structures
+
+### Completed changes
+
+- Added an optional **Practice mode** to the Linked List workspace. When it is on, playback holds at up to three key steps of each trace and asks the learner to predict the next step from three options. After answering, the learner sees whether they were right and why, then reveals the step. A running score is shown in the practice bar.
+- Questions exist for every Linked List operation: insert at head (one reference changes, O(1)), insert at tail (walk from the head because there is no tail pointer), search and delete (match, no match, or reach null), delete's unlink (only the first match is removed), and traverse (next node and output, or null).
+- Practice mode now also covers **Stack** and **Queue**. Questions target LIFO versus FIFO: after a push or enqueue, which item leaves first; after a pop or dequeue, which item is the new top or front; whether peek removes anything; and the order Inspect all follows (top down, or front to rear). One builder, `src/practice/containerPractice.ts`, serves both, with structure-specific wording.
+- Practice mode now also covers the **Binary Search Tree** (`BstPractice.ts`). Walk questions test the ordering rule at each comparison (smaller goes left, larger goes right, equal stops), with distractors that reverse the rule or send equal values down a subtree. Decisive questions cover a search that runs into an empty child, where an insert attaches, duplicates raising the count, and all four deletion cases (leaf, one child, two children by inorder successor, lowering a count). Traversal questions ask for the next node, using where the other two orders would be at that point as distractors.
+- Practice mode now also covers the **Priority Queue** (`PriorityQueuePractice.ts`). Insert asks where a new value is placed first (the next open leaf, not the root or a sorted position), then predicts each sift-up comparison and the stop at the root. Extract min asks what refills the root (the last item, not the smaller child), then predicts each sift-down comparison against the smaller child, with the larger child as a distractor, and the stop at a leaf. Questions are never asked at a compare step, because its narration already says whether it swaps.
+- Practice mode now also covers the **Graph** (`GraphPractice.ts`) for BFS and DFS; adding or removing vertices and edges has nothing to predict. BFS asks which vertex is visited next before each dequeue, with the most recently queued vertex (stack thinking) and undiscovered vertices as distractors, then what an empty queue means, using an unreachable vertex as a distractor when the graph is disconnected. DFS asks, whenever the search sits on a vertex, whether it goes deeper and to which neighbour, or backtracks. Distractors are a later neighbour in label order, a BFS-style jump to a non-neighbour, and revisiting a visited neighbour. DFS questions are asked before the "follow edge" step, because that step's narration names the vertex.
+- The practice state and toggle moved into a shared `usePractice` hook and `PracticeBar` component, so each workspace adds practice with a few lines. Element ids are prefixed per workspace because all workspaces stay mounted.
+- `playbackReducer` gained `checkpoints`, a `question` phase, and a `resolve` action. Next, Play, and autoplay ticks do not advance past an unresolved checkpoint; Previous still works.
+
+### Architectural decisions
+
+- Answers are graded against the trace that already exists: the correct option for the question at step _k_ is derived from step _k + 1_. No answer key is written by hand and nothing is graded with free text.
+- `src/practice/practice.ts` is structure-agnostic (question types, checkpoint selection, option rotation, scoring). Each structure supplies a question builder; the Linked List one is `LinkedListPractice.ts`. Other structures can add practice without changing the reducer or the panel.
+- Checkpoints are chosen deterministically: decisive steps (a match, reaching null, a link changing) first, then routine steps spread across the trace, three at most. Options are rotated by step index so the correct answer is not always first. Empty lists ask nothing.
+- Distractors target common misconceptions: a stored tail pointer, delete removing every copy, search continuing after a match, traversal looping back to the head.
+
+### Testing evidence
+
+- Unit tests for checkpoint selection, option rotation, scoring, every Linked List question type, and the reducer's checkpoint behaviour; component tests for holding, grading, focus, and the score; a Playwright test (desktop and mobile) that runs a full practice search and audits the question state with axe-core (no violations).
+
+### Limitations
+
+- The score is per session and is not saved.
+
 ## 2026-10-12: Landing and brand update
 
 - Added a dedicated landing page for choosing among the six available structures.

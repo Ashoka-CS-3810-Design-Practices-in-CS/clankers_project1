@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 async function finishOperation(page: import('@playwright/test').Page) {
@@ -53,4 +54,37 @@ test('builds a graph, runs BFS and DFS, edits it, and resets', async ({ page }) 
 
   await page.getByRole('button', { name: 'Reset graph' }).click();
   await expect(page.getByText('Your graph is empty')).toBeVisible();
+});
+
+test('practice mode asks three BFS questions and scores them', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Open Graph workspace' }).click();
+  const main = page.locator('main:not([hidden])');
+  await main.getByRole('checkbox', { name: 'Practice mode' }).check();
+  await main.getByRole('button', { name: 'Load sample' }).click();
+  await main.getByLabel('Vertex', { exact: true }).fill('1');
+  await main.getByRole('button', { name: 'BFS', exact: true }).click();
+  await main.getByRole('button', { name: 'Play' }).click();
+
+  await expect(main.getByRole('heading', { name: 'Predict the next step' })).toBeVisible();
+  const audit = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+    .analyze();
+  expect(audit.violations.map((violation) => violation.id)).toEqual([]);
+
+  let answered = 0;
+  for (let guard = 0; guard < 40; guard += 1) {
+    if (await main.getByRole('heading', { name: 'Predict the next step' }).isVisible()) {
+      await main.locator('.practice-option').first().click();
+      await main.getByRole('button', { name: 'Show the step' }).click();
+      answered += 1;
+    } else if (await main.getByRole('button', { name: 'Next' }).isEnabled()) {
+      await main.getByRole('button', { name: 'Next' }).click();
+    } else {
+      break;
+    }
+  }
+  expect(answered).toBe(3);
+  await expect(main.getByText('The queue is empty. BFS visited 1, 2, 3, 4, 5, 6.')).toBeVisible();
+  await expect(main.getByText(/Score: \d of 3 correct/)).toBeVisible();
 });

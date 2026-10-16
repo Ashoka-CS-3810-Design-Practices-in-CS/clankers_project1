@@ -3,9 +3,13 @@ import { GraphCanvas } from '../components/GraphCanvas';
 import { GraphOperationPanel } from '../components/GraphOperationPanel';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
+import { PracticeBar } from '../components/PracticeBar';
+import { PracticePanel } from '../components/PracticePanel';
 import type { ValidationResult } from '../domain/visualization';
 import type { PlaybackSpeed } from '../playback/playback';
 import { usePlayback } from '../playback/usePlayback';
+import { usePractice } from '../practice/usePractice';
+import { graphPractice } from '../structures/graph/GraphPractice';
 import { GraphModel } from '../structures/graph/GraphModel';
 import { GraphOperations, type GraphResult } from '../structures/graph/GraphOperations';
 import {
@@ -17,6 +21,7 @@ import {
 } from '../structures/graph/graphValidation';
 
 const operations = new GraphOperations();
+type PracticeKind = Parameters<typeof graphPractice>[0];
 
 interface GraphWorkspaceProps {
   readonly active: boolean;
@@ -28,6 +33,7 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
   const [vertexInput, setVertexInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
   const [error, setError] = useState('');
+  const practice = usePractice();
   const playback = usePlayback();
   const { pause } = playback;
 
@@ -35,6 +41,7 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
   const displayedSnapshot = currentStep?.snapshot ?? model.snapshot();
   const playbackActive = Boolean(result && playback.state.phase !== 'complete');
   const hasSteps = Boolean(result?.steps.length);
+  const activeQuestion = practice.questionAt(playback.state.phase, playback.state.index);
   const vertexCount = displayedSnapshot.vertices.length;
   const edgeCount = displayedSnapshot.edges.length;
 
@@ -42,11 +49,18 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
     if (!active) pause();
   }, [active, pause]);
 
-  function begin(nextResult: GraphResult) {
+  function begin(nextResult: GraphResult, kind: PracticeKind = 'edit') {
+    const checkpoints = practice.prepare(() => graphPractice(kind, nextResult));
     setModel(nextResult.model);
     setResult(nextResult);
-    playback.load(nextResult.steps.length);
+    playback.load(nextResult.steps.length, checkpoints);
     setError('');
+  }
+
+  function continueAfterAnswer(correct: boolean) {
+    practice.record(correct);
+    playback.resolve();
+    playback.next();
   }
 
   function fail(validation: ValidationResult<unknown>): boolean {
@@ -58,12 +72,13 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
   function withVertex(
     check: (label: number) => ValidationResult<void>,
     run: (label: number) => GraphResult,
+    kind: PracticeKind = 'edit',
   ) {
     const parsed = parseVertexLabel(vertexInput);
     if (fail(parsed)) return;
     const label = parsed.value as number;
     if (fail(check(label))) return;
-    begin(run(label));
+    begin(run(label), kind);
   }
 
   function withEdge(
@@ -144,18 +159,28 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
           withVertex(
             (label) => validateExistingVertex(model, label),
             (label) => operations.bfs(model, label),
+            'bfs',
           )
         }
         onDfs={() =>
           withVertex(
             (label) => validateExistingVertex(model, label),
             (label) => operations.dfs(model, label),
+            'dfs',
           )
         }
         onSample={() => replaceModel(GraphModel.sample())}
         onReset={() => replaceModel(new GraphModel())}
         disabled={playbackActive}
         error={error}
+      />
+
+      <PracticeBar
+        idPrefix="graph"
+        enabled={practice.enabled}
+        onToggle={practice.setEnabled}
+        disabled={playbackActive}
+        score={practice.score}
       />
 
       <div className="visualizer-grid">
@@ -181,6 +206,15 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
           matchedLabel="Queued / on stack"
         />
       </div>
+
+      {activeQuestion && (
+        <PracticePanel
+          idPrefix="graph"
+          key={activeQuestion.stepIndex}
+          question={activeQuestion}
+          onContinue={continueAfterAnswer}
+        />
+      )}
 
       <PlaybackControls
         state={playback.state}
