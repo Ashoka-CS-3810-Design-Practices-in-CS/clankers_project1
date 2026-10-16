@@ -1,5 +1,12 @@
 # Project Updates
 
+## 2026-10-17: Light mode
+
+- Added a keyboard-accessible light-mode toggle on the landing page and all workspaces; dark remains the default.
+- Persisted the selected theme locally, with a safe fallback when browser storage is unavailable.
+- Added light-theme surfaces, controls, feedback states, focus styles, and legends while preserving the visualization palette.
+- Added desktop and mobile checks for theme persistence, workspace accessibility, and unchanged structure data when switching themes.
+
 ## 2026-10-15: Practice mode on all six structures
 
 ### Completed changes
