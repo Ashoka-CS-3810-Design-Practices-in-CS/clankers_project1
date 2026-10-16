@@ -43,6 +43,8 @@ describe('App', () => {
     await user.tab();
     expect(screen.getByRole('link', { name: 'Skip to visualizer' })).toHaveFocus();
     await user.tab();
+    expect(screen.getByRole('button', { name: 'Light mode' })).toHaveFocus();
+    await user.tab();
     expect(screen.getByRole('button', { name: 'Return to home page' })).toHaveFocus();
     await user.tab();
     expect(screen.getByRole('button', { name: /Linked List/ })).toHaveFocus();
