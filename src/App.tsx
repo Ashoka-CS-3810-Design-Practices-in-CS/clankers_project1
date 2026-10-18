@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ThemeToggle } from './components/ThemeToggle';
 import './styles.css';
 import { LandingPage } from './components/LandingPage';
 import { StructureNav } from './components/StructureNav';
@@ -26,6 +27,7 @@ export default function App() {
         <a className="skip-link" href="#main-content">
           Skip to content
         </a>
+        <ThemeToggle />
         <LandingPage onSelect={selectStructure} />
       </>
     );
@@ -36,6 +38,7 @@ export default function App() {
       <a className="skip-link" href="#main-content">
         Skip to visualizer
       </a>
+      <ThemeToggle />
       <div className="app-shell">
         <StructureNav activeId={activeView} onSelect={selectStructure} onGoHome={goHome} />
         <LinkedListWorkspace active={activeView === 'linked-list'} />
