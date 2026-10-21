@@ -1,3 +1,4 @@
+import { linkedListCode } from './LinkedListPseudocode';
 import { StepRecorder } from '../../domain/StepRecorder';
 import type { ComplexityInfo, OperationResult } from '../../domain/visualization';
 import { LinkedListModel, type LinkedListSnapshot } from './LinkedListModel';
@@ -37,13 +38,15 @@ const COMPLEXITY = {
 export class LinkedListOperations {
   insertHead(model: LinkedListModel, value: number): LinkedListResult {
     const working = model.clone();
-    const recorder = new StepRecorder<LinkedListSnapshot>();
+    const recorder = new StepRecorder<LinkedListSnapshot>(linkedListCode.insertHead);
     recorder.record({
+      pseudocodeLineId: 'head.prepare',
       message: `Prepare to insert ${value} before the current head.`,
       snapshot: working.snapshot(),
     });
     const inserted = working.insertFirst(value);
     recorder.record({
+      pseudocodeLineId: 'head.link',
       message: `${value} is now the head. Its next reference points to the previous first node.`,
       snapshot: working.snapshot(),
       activeNodeIds: [inserted.id],
@@ -54,10 +57,11 @@ export class LinkedListOperations {
 
   insertTail(model: LinkedListModel, value: number): LinkedListResult {
     const working = model.clone();
-    const recorder = new StepRecorder<LinkedListSnapshot>();
+    const recorder = new StepRecorder<LinkedListSnapshot>(linkedListCode.insertTail);
     const existing = working.items();
     const visited: string[] = [];
     recorder.record({
+      pseudocodeLineId: 'tail.start',
       message: `Find the final node before appending ${value}.`,
       snapshot: working.snapshot(),
     });
@@ -65,6 +69,7 @@ export class LinkedListOperations {
     existing.forEach((item) => {
       visited.push(item.id);
       recorder.record({
+        pseudocodeLineId: 'tail.walk',
         message:
           item === existing.at(-1)
             ? `${item.value} is the current tail.`
@@ -77,6 +82,7 @@ export class LinkedListOperations {
 
     const inserted = working.insertLast(value);
     recorder.record({
+      pseudocodeLineId: 'tail.link',
       message:
         existing.length === 0
           ? `${value} becomes the head and tail.`
@@ -90,10 +96,11 @@ export class LinkedListOperations {
 
   search(model: LinkedListModel, value: number): LinkedListResult {
     const working = model.clone();
-    const recorder = new StepRecorder<LinkedListSnapshot>();
+    const recorder = new StepRecorder<LinkedListSnapshot>(linkedListCode.search);
     const visited: string[] = [];
     const items = working.items();
     recorder.record({
+      pseudocodeLineId: 'search.start',
       message: `Search from the head for the first node containing ${value}.`,
       snapshot: working.snapshot(),
     });
@@ -102,6 +109,7 @@ export class LinkedListOperations {
       visited.push(item.id);
       const matched = item.value === value;
       recorder.record({
+        pseudocodeLineId: matched ? 'search.found' : 'search.compare',
         message: matched
           ? `Found ${value}. The search stops at the first match.`
           : `${item.value} does not match ${value}.`,
@@ -116,6 +124,7 @@ export class LinkedListOperations {
     }
 
     recorder.record({
+      pseudocodeLineId: 'search.missing',
       message: `No node contains ${value}. The list is unchanged.`,
       snapshot: working.snapshot(),
       visitedNodeIds: visited,
@@ -125,10 +134,11 @@ export class LinkedListOperations {
 
   deleteFirstMatch(model: LinkedListModel, value: number): LinkedListResult {
     const working = model.clone();
-    const recorder = new StepRecorder<LinkedListSnapshot>();
+    const recorder = new StepRecorder<LinkedListSnapshot>(linkedListCode.deleteFirstMatch);
     const visited: string[] = [];
     const items = working.items();
     recorder.record({
+      pseudocodeLineId: 'delete.start',
       message: `Locate the first node containing ${value}.`,
       snapshot: working.snapshot(),
     });
@@ -137,6 +147,7 @@ export class LinkedListOperations {
       visited.push(item.id);
       const matched = item.value === value;
       recorder.record({
+        pseudocodeLineId: matched ? 'delete.found' : 'delete.compare',
         message: matched
           ? `Found ${value}. Redirect the previous link around this node.`
           : `${item.value} is not the target.`,
@@ -148,6 +159,7 @@ export class LinkedListOperations {
       if (matched) {
         working.removeAt(index);
         recorder.record({
+          pseudocodeLineId: 'delete.unlink',
           message: `${value} was removed. The remaining nodes stay in order.`,
           snapshot: working.snapshot(),
           visitedNodeIds: visited.filter((id) => id !== item.id),
@@ -157,6 +169,7 @@ export class LinkedListOperations {
     }
 
     recorder.record({
+      pseudocodeLineId: 'delete.missing',
       message: `No node contains ${value}, so nothing was removed.`,
       snapshot: working.snapshot(),
       visitedNodeIds: visited,
@@ -166,11 +179,12 @@ export class LinkedListOperations {
 
   traverse(model: LinkedListModel): LinkedListResult {
     const working = model.clone();
-    const recorder = new StepRecorder<LinkedListSnapshot>();
+    const recorder = new StepRecorder<LinkedListSnapshot>(linkedListCode.traverse);
     const visited: string[] = [];
     const output: number[] = [];
     const items = working.items();
     recorder.record({
+      pseudocodeLineId: 'traverse.start',
       message: 'Begin at the head and follow each next reference.',
       snapshot: working.snapshot(),
     });
@@ -179,6 +193,7 @@ export class LinkedListOperations {
       visited.push(item.id);
       output.push(item.value);
       recorder.record({
+        pseudocodeLineId: 'traverse.visit',
         message: `Visit ${item.value} and append it to the traversal output.`,
         snapshot: working.snapshot(),
         activeNodeIds: [item.id],
@@ -188,6 +203,7 @@ export class LinkedListOperations {
     });
 
     recorder.record({
+      pseudocodeLineId: 'traverse.done',
       message:
         items.length === 0
           ? 'The list is empty, so traversal finishes immediately.'
@@ -209,6 +225,7 @@ export class LinkedListOperations {
     return Object.freeze({
       model,
       steps: recorder.steps(),
+      pseudocode: recorder.pseudocode,
       status,
       complexity: Object.freeze({ ...complexity }),
       operationLabel,
