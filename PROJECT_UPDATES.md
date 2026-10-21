@@ -1,5 +1,14 @@
 # Project Updates
 
+## 2026-10-21: Synchronized pseudocode
+
+- Added operation-specific pseudocode for every Linked List, Stack, Queue, BST, Priority Queue, and Graph operation.
+- Each immutable visualization step records a stable semantic line ID; the shared panel derives current, executed, and pending states directly from the playback index.
+- Kept Practice Mode, narration, visual highlights, output, and complexity synchronized without changing trace lengths or checkpoint behavior.
+- Added panel-only auto-scroll, horizontal overflow on narrow screens, explicit `NOW`/`DONE` labels, live status text, keyboard focus, light/dark themes, and reduced-motion support.
+- Added unit coverage for valid line mappings and branch cases, component coverage for navigation and Practice Mode holds, and desktop/mobile browser coverage across all six structures.
+- No syntax-highlighting or other runtime dependency was added. Pseudocode describes the educational steps represented by each trace rather than executable source code.
+
 ## 2026-10-17: Light mode
 
 - Added a keyboard-accessible, icon-only sun/moon theme button in the top-right with a reduced-motion-aware transition; dark remains the default.
