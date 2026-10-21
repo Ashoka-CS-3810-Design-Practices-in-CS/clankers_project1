@@ -1,0 +1,23 @@
+src/structures/bst/BstPseudocode.ts
+  s_3eb8e14d84cbd2::t_4f889c251b2318 1-50
+src/structures/bst/BstOperations.ts
+  s_3eb8e14d84cbd2::t_629e0eec49ba97 1,34,38,48-53,67,81,85,94-98,112,122,126,135-139,153,163-169,185,191,200,210,233
+src/workspaces/BstWorkspace.tsx
+  s_3eb8e14d84cbd2::t_4a265fa65c67f0 1,156-171
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "746951cfff921ea37a351768301e8d64302d864b",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
