@@ -1,0 +1,29 @@
+src/domain/visualization.ts
+  s_3eb8e14d84cbd2::t_cc710e3021314f 1-2,12,23
+src/domain/StepRecorder.ts
+  s_3eb8e14d84cbd2::t_cc710e3021314f 2,5,17-18,20-25,27
+src/styles.css
+  s_3eb8e14d84cbd2::t_cc710e3021314f 1-23
+  s_3eb8e14d84cbd2::t_8d4af0db3cd613 24-70
+src/domain/pseudocode.ts
+  s_3eb8e14d84cbd2::t_cc710e3021314f 1-27
+src/components/PseudocodePanel.tsx
+  s_3eb8e14d84cbd2::t_cc710e3021314f 1-67
+  s_3eb8e14d84cbd2::t_e06cc7a455dab9 68-76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "6f08d77ec9c28b30d01c713acf1f24ce8aba55b6",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
