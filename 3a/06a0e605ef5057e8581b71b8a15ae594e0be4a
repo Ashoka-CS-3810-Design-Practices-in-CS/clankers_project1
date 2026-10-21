@@ -1,0 +1,29 @@
+src/structures/priority-queue/PriorityQueuePseudocode.ts
+  s_3eb8e14d84cbd2::t_cfd787eb324bef 1-27
+src/workspaces/GraphWorkspace.tsx
+  s_3eb8e14d84cbd2::t_dffebb37b66d17 1,200-215
+src/structures/graph/GraphPseudocode.ts
+  s_3eb8e14d84cbd2::t_cfd787eb324bef 1-36
+src/structures/graph/GraphOperations.ts
+  s_3eb8e14d84cbd2::t_dffebb37b66d17 1,55,57,63,74,80,90,100,105,112,123,129,136,146,163,175,188,202,214,225,243,254,266,276,284,294,305,335
+src/workspaces/PriorityQueueWorkspace.tsx
+  s_3eb8e14d84cbd2::t_dffebb37b66d17 1,153-168
+src/structures/priority-queue/PriorityQueueOperations.ts
+  s_3eb8e14d84cbd2::t_dffebb37b66d17 1,35,39,51,60,72,81,98,103,111,126,136,149,159,174,186,191,199,204,224
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3a06a0e605ef5057e8581b71b8a15ae594e0be4a",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
