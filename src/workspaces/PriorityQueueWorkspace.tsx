@@ -1,3 +1,4 @@
+import { PseudocodePanel } from '../components/PseudocodePanel';
 import { useEffect, useMemo, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
@@ -149,15 +150,22 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
           </div>
           <PriorityQueueCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
-        <Inspector
-          operationLabel={result?.operationLabel}
-          complexity={result?.complexity}
-          status={result?.status}
-          step={currentStep}
-          outputHeading="Priority queue output"
-          emptyOutputCopy="Extract min or Peek min to expose the highest-priority value."
-          matchedLabel="Compared / minimum"
-        />
+        <div className="learning-panels">
+          <Inspector
+            operationLabel={result?.operationLabel}
+            complexity={result?.complexity}
+            status={result?.status}
+            step={currentStep}
+            outputHeading="Priority queue output"
+            emptyOutputCopy="Extract min or Peek min to expose the highest-priority value."
+            matchedLabel="Compared / minimum"
+          />
+          <PseudocodePanel
+            definition={result?.pseudocode}
+            steps={result?.steps ?? []}
+            index={playback.state.index}
+          />
+        </div>
       </div>
 
       {activeQuestion && (
