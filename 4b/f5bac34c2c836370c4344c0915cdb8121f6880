@@ -1,0 +1,34 @@
+src/components/PseudocodePanel.test.tsx
+  s_3eb8e14d84cbd2::t_557d5bc9a16099 1-11,15-39,44,46-50,52-54
+  s_3eb8e14d84cbd2::t_a368289a3ac102 12-14,41-43
+  s_3eb8e14d84cbd2::t_2415f8ae6b35ba 40,45,51
+src/components/PseudocodePanel.tsx
+  s_3eb8e14d84cbd2::t_6af5044a3947b9 54,71
+src/styles.css
+  s_3eb8e14d84cbd2::t_6af5044a3947b9 56-64
+  s_3eb8e14d84cbd2::t_99dc5e5211e2fd 65,71-73
+src/domain/pseudocode.test.ts
+  s_3eb8e14d84cbd2::t_a368289a3ac102 32-48,54-56,59-64,72-82,85-94,99-106,117-127,133-141
+  s_3eb8e14d84cbd2::t_557d5bc9a16099 1-31,49-53,57-58,65-71,83-84,95-98,107-116,128-132,142-143
+e2e/pseudocode.spec.ts
+  s_3eb8e14d84cbd2::t_a368289a3ac102 5-28,30-35,39-41,69,82-85,87-92
+  s_3eb8e14d84cbd2::t_5b600f2adc7059 61-62,66
+  s_3eb8e14d84cbd2::t_8fda4bc8dacf0f 77-81
+  s_3eb8e14d84cbd2::t_a2259d9c74cb94 1-4,29,36-38,42-60,63-65,67-68,70-76,86,93-101
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4bf5bac34c2c836370c4344c0915cdb8121f6880",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
