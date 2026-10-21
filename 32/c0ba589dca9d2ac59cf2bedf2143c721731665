@@ -1,0 +1,31 @@
+src/structures/linked-list/LinkedListOperations.ts
+  s_af8324b7af09a6::t_e2e9d011f79b37 1,41,43,49,60,64,72,85,99,103,112,127,137,141,150,162,172,182,187,196,206,228
+src/workspaces/LinkedListWorkspace.tsx
+  s_af8324b7af09a6::t_af6a7f7521e096 1,165-179
+src/structures/linked-list/LinkedListPseudocode.ts
+  s_3eb8e14d84cbd2::t_1c3a3cd2c29f2e 1-31
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "32c0ba589dca9d2ac59cf2bedf2143c721731665",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "unknown"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    },
+    "s_af8324b7af09a6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "unknown"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
