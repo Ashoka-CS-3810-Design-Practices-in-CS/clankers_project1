@@ -51,7 +51,7 @@ export function PseudocodePanel({ definition, steps, index }: PseudocodePanelPro
                     aria-current={state === 'active' ? 'step' : undefined}
                   >
                     <span className="pseudocode-marker" aria-hidden="true">
-                      {state === 'active' ? '→' : state === 'executed' ? '✓' : '·'}
+                      {state === 'active' ? 'NOW' : state === 'executed' ? 'DONE' : ''}
                     </span>
                     <span className="pseudocode-number" aria-hidden="true">
                       {number + 1}
@@ -68,7 +68,7 @@ export function PseudocodePanel({ definition, steps, index }: PseudocodePanelPro
               ? `Currently executing: ${activeLine.text}`
               : 'Ready to follow this operation.'}
           </p>
-          <p className="pseudocode-key">→ Current · ✓ Executed · · Pending</p>
+          <p className="pseudocode-key">NOW Current · DONE Executed · Pending</p>
         </>
       )}
     </section>

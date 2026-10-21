@@ -50,15 +50,26 @@
 }
 .pseudocode-marker,
 .pseudocode-number {
-  width: 2.5ch;
-  flex: 0 0 2.5ch;
   font-family: var(--font-mono);
   font-size: 0.75rem;
+}
+.pseudocode-marker {
+  width: 5.5ch;
+  flex: 0 0 5.5ch;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+}
+.pseudocode-number {
+  width: 2.5ch;
+  flex: 0 0 2.5ch;
 }
 .pseudocode-lines [data-state='active'] {
   color: var(--accent-ink);
   background: var(--accent);
   font-weight: 700;
+}
+.pseudocode-lines [data-state='active'] > * {
+  color: var(--accent-ink);
 }
 .pseudocode-lines [data-state='executed'] {
   color: var(--text);
