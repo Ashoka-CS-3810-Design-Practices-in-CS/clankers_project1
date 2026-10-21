@@ -1,3 +1,4 @@
+import { PseudocodePanel } from '../components/PseudocodePanel';
 import { useEffect, useMemo, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
@@ -144,15 +145,22 @@ export function QueueWorkspace({ active }: QueueWorkspaceProps) {
           </div>
           <QueueCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
-        <Inspector
-          operationLabel={result?.operationLabel}
-          complexity={result?.complexity}
-          status={result?.status}
-          step={currentStep}
-          outputHeading="Queue output"
-          emptyOutputCopy="Dequeue, Peek front, or Inspect all to expose values from the front."
-          matchedLabel="Front item"
-        />
+        <div className="learning-panels">
+          <Inspector
+            operationLabel={result?.operationLabel}
+            complexity={result?.complexity}
+            status={result?.status}
+            step={currentStep}
+            outputHeading="Queue output"
+            emptyOutputCopy="Dequeue, Peek front, or Inspect all to expose values from the front."
+            matchedLabel="Front item"
+          />
+          <PseudocodePanel
+            definition={result?.pseudocode}
+            steps={result?.steps ?? []}
+            index={playback.state.index}
+          />
+        </div>
       </div>
 
       {activeQuestion && (
