@@ -1,3 +1,5 @@
+import type { PseudocodeDefinition, PseudocodeLineId } from './pseudocode';
+
 export type OperationStatus = 'success' | 'not-found' | 'blocked';
 
 export interface ComplexityInfo {
@@ -7,6 +9,7 @@ export interface ComplexityInfo {
 }
 
 export interface VisualizationStep<TSnapshot> {
+  readonly pseudocodeLineId?: PseudocodeLineId;
   readonly id: string;
   readonly message: string;
   readonly snapshot: TSnapshot;
@@ -17,6 +20,7 @@ export interface VisualizationStep<TSnapshot> {
 }
 
 export interface OperationResult<TModel, TSnapshot> {
+  readonly pseudocode?: PseudocodeDefinition;
   readonly model: TModel;
   readonly steps: readonly VisualizationStep<TSnapshot>[];
   readonly status: OperationStatus;

@@ -1,3 +1,73 @@
+.learning-panels {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.pseudocode-panel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--panel);
+}
+
+.pseudocode-heading {
+  padding: 16px 18px 10px;
+}
+.pseudocode-heading h2 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.pseudocode-heading p,
+.pseudocode-status,
+.pseudocode-key {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+.pseudocode-scroll {
+  max-height: 300px;
+  overflow: auto;
+}
+.pseudocode-lines {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  min-width: max-content;
+}
+.pseudocode-lines li {
+  display: flex;
+  align-items: baseline;
+  padding: 7px 14px;
+  color: var(--text-muted);
+}
+.pseudocode-lines code {
+  white-space: pre;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.pseudocode-marker,
+.pseudocode-number {
+  width: 2.5ch;
+  flex: 0 0 2.5ch;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.pseudocode-lines [data-state='active'] {
+  color: var(--accent-ink);
+  background: var(--accent);
+  font-weight: 700;
+}
+.pseudocode-lines [data-state='executed'] {
+  color: var(--text);
+}
+.pseudocode-status,
+.pseudocode-key {
+  margin: 10px 18px;
+}
+
 :root {
   color-scheme: dark;
   font-family:
