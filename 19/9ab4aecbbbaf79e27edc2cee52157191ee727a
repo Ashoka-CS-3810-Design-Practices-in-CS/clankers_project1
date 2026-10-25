@@ -1,0 +1,33 @@
+src/workspaces/QueueWorkspace.tsx
+  s_3eb8e14d84cbd2::t_35a9013c2bdf61 135,149-153
+src/workspaces/StackWorkspace.tsx
+  s_3eb8e14d84cbd2::t_35a9013c2bdf61 135,149-153
+src/workspaces/BstWorkspace.tsx
+  s_3eb8e14d84cbd2::t_35a9013c2bdf61 143,157-161
+e2e/pseudocode.spec.ts
+  s_3eb8e14d84cbd2::t_36caacadf47e88 49-50,53-68
+src/workspaces/GraphWorkspace.tsx
+  s_3eb8e14d84cbd2::t_35a9013c2bdf61 191
+src/workspaces/LinkedListWorkspace.tsx
+  s_3eb8e14d84cbd2::t_35a9013c2bdf61 152,166-170
+src/workspaces/PriorityQueueWorkspace.tsx
+  s_3eb8e14d84cbd2::t_35a9013c2bdf61 138,154-158
+src/styles.css
+  s_3eb8e14d84cbd2::t_928a4c365c97bd 986-987,993,999-1004,1021,1026,1033,1039,1044,1048-1049,1053,1650,1659,1663,1751,1756-1767,1781,1785
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "199ab4aecbbbaf79e27edc2cee52157191ee727a",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
