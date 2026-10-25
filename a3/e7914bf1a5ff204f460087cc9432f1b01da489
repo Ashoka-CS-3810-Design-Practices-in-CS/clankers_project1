@@ -1,0 +1,28 @@
+e2e/pseudocode.spec.ts
+  s_3eb8e14d84cbd2::t_b272cd7e6c66be 102-132,136-137,141,144-145,150
+  s_3eb8e14d84cbd2::t_8daa3a36734aa0 133-135,138-140,142-143,146-149
+src/components/Inspector.tsx
+  s_3eb8e14d84cbd2::t_8daa3a36734aa0 23
+src/styles.css
+  s_3eb8e14d84cbd2::t_bac37dfb82b57e 30-32,1023,1036-1039,1042-1046,1051-1064,1067-1077,1655-1660,1739-1742
+  s_3eb8e14d84cbd2::t_ab0f5e41337a59 986-1022,1024-1035,1040-1041,1047-1050,1065-1066,1644-1647,1653-1654,1743-1772
+  s_3eb8e14d84cbd2::t_299f6ffce1843c 1773
+src/workspaces/GraphWorkspace.tsx
+  s_3eb8e14d84cbd2::t_ab0f5e41337a59 107-111,191,205-209
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a3e7914bf1a5ff204f460087cc9432f1b01da489",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
