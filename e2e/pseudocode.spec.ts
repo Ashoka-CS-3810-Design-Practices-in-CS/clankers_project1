@@ -66,6 +66,29 @@ for (const example of examples) {
       expect(panelBox.width).toBeLessThanOrEqual(stageBox.width);
     }
 
+    const zoomGroup = canvas.getByRole('group', { name: 'Visualization zoom' });
+    const zoomableCanvas = canvas.locator('.zoomable-canvas');
+    const visualization = canvas.locator('svg[role="img"]');
+    const initialSize = await visualization.boundingBox();
+    await zoomGroup.getByRole('button', { name: 'Zoom in visualization' }).click();
+    await expect(zoomGroup.getByText('125%')).toBeVisible();
+    await expect(zoomableCanvas).toHaveAttribute('data-zoom', '1.25');
+    expect(initialSize).toBeTruthy();
+    if (!initialSize) throw new Error('Expected a measurable visualization.');
+    await expect
+      .poll(async () => {
+        const enlargedSize = await visualization.boundingBox();
+        return Boolean(
+          enlargedSize &&
+          (enlargedSize.width > initialSize.width || enlargedSize.height > initialSize.height),
+        );
+      })
+      .toBe(true);
+    await zoomGroup
+      .getByRole('button', { name: 'Reset visualization zoom to 100 percent' })
+      .click();
+    await expect(zoomGroup.getByText('100%')).toBeVisible();
+
     await page.getByRole('button', { name: 'Next', exact: true }).click();
     await expect(line).not.toHaveText(example.first);
     const second = await line.textContent();

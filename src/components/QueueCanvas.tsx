@@ -4,6 +4,7 @@ import type { QueueSnapshot } from '../structures/queue/QueueModel';
 interface QueueCanvasProps {
   readonly snapshot: QueueSnapshot;
   readonly step?: VisualizationStep<QueueSnapshot>;
+  readonly zoom?: number;
 }
 
 const ITEM_WIDTH = 96;
@@ -28,7 +29,7 @@ function roleLabel(index: number, count: number): string | null {
   return null;
 }
 
-export function QueueCanvas({ snapshot, step }: QueueCanvasProps) {
+export function QueueCanvas({ snapshot, step, zoom = 1 }: QueueCanvasProps) {
   const { items } = snapshot;
 
   if (items.length === 0) {
@@ -51,8 +52,8 @@ export function QueueCanvas({ snapshot, step }: QueueCanvasProps) {
       <svg
         className="queue-svg"
         viewBox={`0 0 ${contentWidth} ${SVG_HEIGHT}`}
-        width={contentWidth}
-        height={SVG_HEIGHT}
+        width={contentWidth * zoom}
+        height={SVG_HEIGHT * zoom}
         role="img"
         aria-labelledby="queue-title queue-description"
       >

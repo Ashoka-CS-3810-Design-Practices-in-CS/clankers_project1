@@ -4,6 +4,7 @@ import type { GraphSnapshot } from '../structures/graph/GraphModel';
 interface GraphCanvasProps {
   readonly snapshot: GraphSnapshot;
   readonly step?: VisualizationStep<GraphSnapshot>;
+  readonly zoom?: number;
 }
 
 const VERTEX_RADIUS = 24;
@@ -32,7 +33,7 @@ function circularLayout(count: number, center: number): readonly { x: number; y:
   });
 }
 
-export function GraphCanvas({ snapshot, step }: GraphCanvasProps) {
+export function GraphCanvas({ snapshot, step, zoom = 1 }: GraphCanvasProps) {
   const { vertices, edges, frontier } = snapshot;
 
   if (vertices.length === 0) {
@@ -56,50 +57,52 @@ export function GraphCanvas({ snapshot, step }: GraphCanvasProps) {
 
   return (
     <div className="graph-wrap">
-      <svg
-        className="graph-svg"
-        viewBox={`0 0 ${size} ${size}`}
-        style={{ maxWidth: Math.max(size, 220) }}
-        role="img"
-        aria-labelledby="graph-title graph-description"
-      >
-        <title id="graph-title">Undirected graph</title>
-        <desc id="graph-description">
-          {vertices.length} {vertices.length === 1 ? 'vertex' : 'vertices'} and {edges.length}{' '}
-          {edges.length === 1 ? 'edge' : 'edges'}.{' '}
-          {edges.length > 0
-            ? `Edges: ${edges.map((edge) => `${labelById.get(edge.from)}–${labelById.get(edge.to)}`).join(', ')}.`
-            : 'No edges yet.'}
-        </desc>
+      <div className="graph-zoom-scroll" tabIndex={0} aria-label="Scrollable graph visualization">
+        <svg
+          className="graph-svg"
+          viewBox={`0 0 ${size} ${size}`}
+          style={{ width: `${zoom * 100}%`, height: `${zoom * 100}%` }}
+          role="img"
+          aria-labelledby="graph-title graph-description"
+        >
+          <title id="graph-title">Undirected graph</title>
+          <desc id="graph-description">
+            {vertices.length} {vertices.length === 1 ? 'vertex' : 'vertices'} and {edges.length}{' '}
+            {edges.length === 1 ? 'edge' : 'edges'}.{' '}
+            {edges.length > 0
+              ? `Edges: ${edges.map((edge) => `${labelById.get(edge.from)}–${labelById.get(edge.to)}`).join(', ')}.`
+              : 'No edges yet.'}
+          </desc>
 
-        {edges.map((edge) => {
-          const from = positionById.get(edge.from);
-          const to = positionById.get(edge.to);
-          if (!from || !to) return null;
-          return (
-            <line
-              key={edge.id}
-              x1={from.x}
-              y1={from.y}
-              x2={to.x}
-              y2={to.y}
-              className={`graph-edge state-${stateOf(edge.id, step)}`}
-            />
-          );
-        })}
+          {edges.map((edge) => {
+            const from = positionById.get(edge.from);
+            const to = positionById.get(edge.to);
+            if (!from || !to) return null;
+            return (
+              <line
+                key={edge.id}
+                x1={from.x}
+                y1={from.y}
+                x2={to.x}
+                y2={to.y}
+                className={`graph-edge state-${stateOf(edge.id, step)}`}
+              />
+            );
+          })}
 
-        {vertices.map((vertex) => {
-          const { x, y } = positionById.get(vertex.id) as { x: number; y: number };
-          return (
-            <g key={vertex.id} className={`graph-vertex state-${stateOf(vertex.id, step)}`}>
-              <circle cx={x} cy={y} r={VERTEX_RADIUS} />
-              <text x={x} y={y + 5} textAnchor="middle" className="graph-value">
-                {vertex.value}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
+          {vertices.map((vertex) => {
+            const { x, y } = positionById.get(vertex.id) as { x: number; y: number };
+            return (
+              <g key={vertex.id} className={`graph-vertex state-${stateOf(vertex.id, step)}`}>
+                <circle cx={x} cy={y} r={VERTEX_RADIUS} />
+                <text x={x} y={y + 5} textAnchor="middle" className="graph-value">
+                  {vertex.value}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+      </div>
 
       {frontier && (
         <div className="graph-frontier" aria-live="off">

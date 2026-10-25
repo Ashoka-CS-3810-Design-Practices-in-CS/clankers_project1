@@ -4,6 +4,7 @@ import type { VisualizationStep } from '../domain/visualization';
 interface LinkedListCanvasProps {
   readonly snapshot: LinkedListSnapshot;
   readonly step?: VisualizationStep<LinkedListSnapshot>;
+  readonly zoom?: number;
 }
 
 const NODE_WIDTH = 104;
@@ -17,7 +18,7 @@ function nodeState(nodeId: string, step?: VisualizationStep<LinkedListSnapshot>)
   return 'default';
 }
 
-export function LinkedListCanvas({ snapshot, step }: LinkedListCanvasProps) {
+export function LinkedListCanvas({ snapshot, step, zoom = 1 }: LinkedListCanvasProps) {
   if (snapshot.nodes.length === 0) {
     return (
       <div className="empty-canvas">
@@ -37,8 +38,8 @@ export function LinkedListCanvas({ snapshot, step }: LinkedListCanvasProps) {
       <svg
         className="list-svg"
         viewBox={`0 0 ${contentWidth} 210`}
-        width={contentWidth}
-        height="210"
+        width={contentWidth * zoom}
+        height={210 * zoom}
         role="img"
         aria-labelledby="list-title list-description"
       >

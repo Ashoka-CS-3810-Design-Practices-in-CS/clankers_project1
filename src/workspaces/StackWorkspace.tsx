@@ -1,4 +1,5 @@
 import { PseudocodePanel } from '../components/PseudocodePanel';
+import { VisualizationZoom } from '../components/VisualizationZoom';
 import { useEffect, useMemo, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
@@ -143,7 +144,9 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
               {playback.state.phase}
             </span>
           </div>
-          <StackCanvas snapshot={displayedSnapshot} step={currentStep} />
+          <VisualizationZoom>
+            {(zoom) => <StackCanvas snapshot={displayedSnapshot} step={currentStep} zoom={zoom} />}
+          </VisualizationZoom>
         </section>
         <div className="learning-panels">
           <PseudocodePanel

@@ -1,4 +1,5 @@
 import { PseudocodePanel } from '../components/PseudocodePanel';
+import { VisualizationZoom } from '../components/VisualizationZoom';
 import { useEffect, useMemo, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { LinkedListCanvas } from '../components/LinkedListCanvas';
@@ -160,7 +161,11 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
               {playback.state.phase}
             </span>
           </div>
-          <LinkedListCanvas snapshot={displayedSnapshot} step={currentStep} />
+          <VisualizationZoom>
+            {(zoom) => (
+              <LinkedListCanvas snapshot={displayedSnapshot} step={currentStep} zoom={zoom} />
+            )}
+          </VisualizationZoom>
         </section>
         <div className="learning-panels">
           <PseudocodePanel

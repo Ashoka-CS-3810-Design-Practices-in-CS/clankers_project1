@@ -4,6 +4,7 @@ import type { StackSnapshot } from '../structures/stack/StackModel';
 interface StackCanvasProps {
   readonly snapshot: StackSnapshot;
   readonly step?: VisualizationStep<StackSnapshot>;
+  readonly zoom?: number;
 }
 
 const ITEM_WIDTH = 230;
@@ -17,7 +18,7 @@ function itemState(itemId: string, step?: VisualizationStep<StackSnapshot>): str
   return 'default';
 }
 
-export function StackCanvas({ snapshot, step }: StackCanvasProps) {
+export function StackCanvas({ snapshot, step, zoom = 1 }: StackCanvasProps) {
   if (snapshot.items.length === 0) {
     return (
       <div className="empty-canvas">
@@ -38,8 +39,8 @@ export function StackCanvas({ snapshot, step }: StackCanvasProps) {
       <svg
         className="stack-svg"
         viewBox={`0 0 420 ${contentHeight}`}
-        width="420"
-        height={contentHeight}
+        width={420 * zoom}
+        height={contentHeight * zoom}
         role="img"
         aria-labelledby="stack-title stack-description"
       >

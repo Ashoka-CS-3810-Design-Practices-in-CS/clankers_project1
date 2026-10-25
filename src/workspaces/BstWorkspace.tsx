@@ -1,4 +1,5 @@
 import { PseudocodePanel } from '../components/PseudocodePanel';
+import { VisualizationZoom } from '../components/VisualizationZoom';
 import { useEffect, useMemo, useState } from 'react';
 import { BstCanvas } from '../components/BstCanvas';
 import { BstOperationPanel } from '../components/BstOperationPanel';
@@ -151,7 +152,9 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
               {playback.state.phase}
             </span>
           </div>
-          <BstCanvas snapshot={displayedSnapshot} step={currentStep} />
+          <VisualizationZoom>
+            {(zoom) => <BstCanvas snapshot={displayedSnapshot} step={currentStep} zoom={zoom} />}
+          </VisualizationZoom>
         </section>
         <div className="learning-panels">
           <PseudocodePanel

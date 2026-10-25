@@ -1,4 +1,5 @@
 import { PseudocodePanel } from '../components/PseudocodePanel';
+import { VisualizationZoom } from '../components/VisualizationZoom';
 import { useEffect, useState } from 'react';
 import { GraphCanvas } from '../components/GraphCanvas';
 import { GraphOperationPanel } from '../components/GraphOperationPanel';
@@ -199,7 +200,9 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
               {playback.state.phase}
             </span>
           </div>
-          <GraphCanvas snapshot={displayedSnapshot} step={currentStep} />
+          <VisualizationZoom>
+            {(zoom) => <GraphCanvas snapshot={displayedSnapshot} step={currentStep} zoom={zoom} />}
+          </VisualizationZoom>
         </section>
         <div className="learning-panels">
           <PseudocodePanel

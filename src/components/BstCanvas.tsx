@@ -5,6 +5,7 @@ import { useKeepInView } from './useKeepInView';
 interface BstCanvasProps {
   readonly snapshot: BstSnapshot;
   readonly step?: VisualizationStep<BstSnapshot>;
+  readonly zoom?: number;
 }
 
 interface PositionedNode {
@@ -59,11 +60,11 @@ function valueFontSize(value: number): number {
   return 9;
 }
 
-export function BstCanvas({ snapshot, step }: BstCanvasProps) {
+export function BstCanvas({ snapshot, step, zoom = 1 }: BstCanvasProps) {
   const positioned = snapshot.rootId ? layoutTree(snapshot) : [];
   const focusId = step?.activeNodeIds[0] ?? step?.matchedNodeIds[0] ?? snapshot.rootId;
   const focus = positioned.find((item) => item.node.id === focusId);
-  const scrollRef = useKeepInView<HTMLDivElement>(focus ? focus.x + NODE_WIDTH / 2 : null);
+  const scrollRef = useKeepInView<HTMLDivElement>(focus ? (focus.x + NODE_WIDTH / 2) * zoom : null);
 
   if (!snapshot.rootId) {
     return (
@@ -95,8 +96,8 @@ export function BstCanvas({ snapshot, step }: BstCanvasProps) {
       <svg
         className="tree-svg"
         viewBox={`0 0 ${contentWidth} ${contentHeight}`}
-        width={contentWidth}
-        height={contentHeight}
+        width={contentWidth * zoom}
+        height={contentHeight * zoom}
         role="img"
         aria-labelledby="bst-title bst-description"
       >
