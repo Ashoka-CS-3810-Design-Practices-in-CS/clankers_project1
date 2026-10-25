@@ -1,10 +1,10 @@
 # Project Updates
 
-## 2026-10-25: Bounded graph learning workspace
+## 2026-10-25: Bounded learning workspaces
 
-- Kept the graph canvas, active pseudocode, and step explanation in one responsive learning stage on desktop and laptop widths.
-- Made the graph SVG scale within its canvas while pseudocode and inspector content scroll inside their own panels, preventing workspace overflow.
-- Prioritized pseudocode above secondary details, retained a stacked mobile layout, and added browser coverage for desktop/mobile bounds and active-line visibility.
+- Standardized one bounded learning stage across all six structures, keeping the visualization, active pseudocode, and step explanation together on desktop and laptop widths.
+- Made every visualization scroll or scale within its canvas while pseudocode and inspector content scroll inside their own panels, preventing workspace overflow.
+- Prioritized pseudocode above secondary details, retained stacked mobile layouts, and added browser coverage for every structure's desktop/mobile bounds and active-line visibility.
 
 ## 2026-10-21: Synchronized pseudocode
 
