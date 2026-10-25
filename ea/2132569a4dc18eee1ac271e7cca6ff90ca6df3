@@ -1,0 +1,64 @@
+src/components/LinkedListCanvas.tsx
+  s_3eb8e14d84cbd2::t_db7cb76c5529c6 7,21,41-42
+src/workspaces/GraphWorkspace.tsx
+  s_3eb8e14d84cbd2::t_3ef98e34df1ca7 2,203-205
+src/workspaces/StackWorkspace.tsx
+  s_3eb8e14d84cbd2::t_3ef98e34df1ca7 2,147-149
+src/workspaces/QueueWorkspace.tsx
+  s_3eb8e14d84cbd2::t_3ef98e34df1ca7 2,147-149
+src/components/BstCanvas.tsx
+  s_3eb8e14d84cbd2::t_5a03e71dbae0db 67
+  s_3eb8e14d84cbd2::t_db7cb76c5529c6 8,63,99-100
+src/workspaces/BstWorkspace.tsx
+  s_3eb8e14d84cbd2::t_3ef98e34df1ca7 2,155-157
+e2e/pseudocode.spec.ts
+  s_af8324b7af09a6::t_d85d43f13fa433 83
+  s_3eb8e14d84cbd2::t_f3c388f823f146 70,75-82,84-86
+  s_3eb8e14d84cbd2::t_f015231ddecb49 69,71-74,87-91
+src/styles.css
+  s_3eb8e14d84cbd2::t_5fd9c58097dc3c 601-657,1074-1075,1077-1082,1084-1085,1843-1844
+  s_3eb8e14d84cbd2::t_f015231ddecb49 779
+  s_3eb8e14d84cbd2::t_f3c388f823f146 658-661
+src/components/StackCanvas.tsx
+  s_3eb8e14d84cbd2::t_db7cb76c5529c6 7,21,42-43
+src/components/QueueCanvas.tsx
+  s_3eb8e14d84cbd2::t_db7cb76c5529c6 7,32,55-56
+src/components/PriorityQueueCanvas.tsx
+  s_3eb8e14d84cbd2::t_db7cb76c5529c6 11,33,58-60,84-85
+src/components/VisualizationZoom.tsx
+  s_3eb8e14d84cbd2::t_db7cb76c5529c6 1-19,21-57
+  s_3eb8e14d84cbd2::t_f3c388f823f146 20
+src/workspaces/PriorityQueueWorkspace.tsx
+  s_3eb8e14d84cbd2::t_3ef98e34df1ca7 2,152-156
+src/workspaces/LinkedListWorkspace.tsx
+  s_3eb8e14d84cbd2::t_3ef98e34df1ca7 2,164-168
+src/components/GraphCanvas.tsx
+  s_3eb8e14d84cbd2::t_5a03e71dbae0db 60,68-75,77-91,93-103
+  s_3eb8e14d84cbd2::t_db7cb76c5529c6 7,36,61-67,104-105
+src/components/VisualizationZoom.test.tsx
+  s_3eb8e14d84cbd2::t_db7cb76c5529c6 1-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "ea2132569a4dc18eee1ac271e7cca6ff90ca6df3",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    },
+    "s_af8324b7af09a6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "unknown"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
