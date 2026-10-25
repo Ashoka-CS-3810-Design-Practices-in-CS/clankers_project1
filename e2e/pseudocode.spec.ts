@@ -99,3 +99,52 @@ for (const example of examples) {
     await expect(panel.getByRole('region', { name: 'Scrollable pseudocode' })).toBeFocused();
   });
 }
+
+test('graph keeps the visualization and pseudocode inside a bounded responsive stage', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Open Graph workspace' }).click();
+  await page.getByRole('button', { name: 'Load sample' }).click();
+  await page.getByLabel('Vertex', { exact: true }).fill('1');
+  await page.getByRole('button', { name: 'BFS', exact: true }).click();
+
+  const workspace = page.locator('.graph-workspace');
+  const stage = workspace.locator('.graph-visualizer-grid');
+  const canvas = stage.locator('.canvas-panel');
+  const pseudocode = stage.getByRole('region', { name: 'Operation pseudocode' });
+  const codeViewport = pseudocode.getByRole('region', { name: 'Scrollable pseudocode' });
+  const activeLine = pseudocode.locator('[aria-current="step"]');
+  const viewport = page.viewportSize();
+
+  await expect(stage).toBeVisible();
+  await expect(pseudocode).toBeVisible();
+  await expect(activeLine).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
+    true,
+  );
+
+  const stageBox = await stage.boundingBox();
+  const canvasBox = await canvas.boundingBox();
+  const pseudocodeBox = await pseudocode.boundingBox();
+  const codeViewportBox = await codeViewport.boundingBox();
+  const activeLineBox = await activeLine.boundingBox();
+  expect(stageBox && canvasBox && pseudocodeBox && codeViewportBox && activeLineBox).toBeTruthy();
+  if (!stageBox || !canvasBox || !pseudocodeBox || !codeViewportBox || !activeLineBox) {
+    throw new Error('Expected the graph learning stage to have measurable visible regions.');
+  }
+
+  if ((viewport?.width ?? 0) > 760) {
+    expect(Math.abs(canvasBox.y - pseudocodeBox.y)).toBeLessThan(2);
+    expect(stageBox.height).toBeLessThanOrEqual(600);
+    expect(pseudocodeBox.x + pseudocodeBox.width).toBeLessThanOrEqual(viewport?.width ?? Infinity);
+  } else {
+    expect(pseudocodeBox.y).toBeGreaterThan(canvasBox.y + canvasBox.height);
+    expect(pseudocodeBox.width).toBeLessThanOrEqual(stageBox.width);
+  }
+
+  expect(activeLineBox.y).toBeGreaterThanOrEqual(codeViewportBox.y);
+  expect(activeLineBox.y + activeLineBox.height).toBeLessThanOrEqual(
+    codeViewportBox.y + codeViewportBox.height,
+  );
+});
