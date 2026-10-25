@@ -1,5 +1,11 @@
 # Project Updates
 
+## 2026-10-25: Visualization zoom and brand asset
+
+- Replaced the shared navigation, landing-page, and favicon logo asset with the supplied Clankers artwork.
+- Added reusable 75%–200% visualization zoom controls with a one-click 100% reset across all six structures; enlarged diagrams remain contained in their scrollable canvases.
+- Kept zoom independent from playback and model state, added screen-reader announcements and keyboard focus, and covered the shared behavior in component and desktop/mobile browser tests.
+
 ## 2026-10-25: Bounded learning workspaces
 
 - Standardized one bounded learning stage across all six structures, keeping the visualization, active pseudocode, and step explanation together on desktop and laptop widths.
