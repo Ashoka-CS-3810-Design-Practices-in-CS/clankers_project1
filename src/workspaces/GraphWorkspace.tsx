@@ -188,7 +188,7 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
         score={practice.score}
       />
 
-      <div className="visualizer-grid graph-visualizer-grid">
+      <div className="visualizer-grid bounded-learning-stage graph-visualizer-grid">
         <section className="canvas-panel" aria-labelledby="graph-canvas-heading">
           <div className="canvas-heading">
             <div>

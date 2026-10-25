@@ -149,7 +149,7 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
         score={practice.score}
       />
 
-      <div className="visualizer-grid">
+      <div className="visualizer-grid bounded-learning-stage">
         <section className="canvas-panel" aria-labelledby="linked-list-canvas-heading">
           <div className="canvas-heading">
             <div>
@@ -163,6 +163,11 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
           <LinkedListCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
         <div className="learning-panels">
+          <PseudocodePanel
+            definition={result?.pseudocode}
+            steps={result?.steps ?? []}
+            index={playback.state.index}
+          />
           <Inspector
             operationLabel={result?.operationLabel}
             complexity={result?.complexity}
@@ -170,11 +175,6 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
             step={currentStep}
             outputHeading="Traversal output"
             emptyOutputCopy="Run Traverse to collect values from head to null."
-          />
-          <PseudocodePanel
-            definition={result?.pseudocode}
-            steps={result?.steps ?? []}
-            index={playback.state.index}
           />
         </div>
       </div>

@@ -135,7 +135,7 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
         score={practice.score}
       />
 
-      <div className="visualizer-grid">
+      <div className="visualizer-grid bounded-learning-stage">
         <section className="canvas-panel" aria-labelledby="pq-canvas-heading">
           <div className="canvas-heading">
             <div>
@@ -151,6 +151,11 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
           <PriorityQueueCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
         <div className="learning-panels">
+          <PseudocodePanel
+            definition={result?.pseudocode}
+            steps={result?.steps ?? []}
+            index={playback.state.index}
+          />
           <Inspector
             operationLabel={result?.operationLabel}
             complexity={result?.complexity}
@@ -159,11 +164,6 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
             outputHeading="Priority queue output"
             emptyOutputCopy="Extract min or Peek min to expose the highest-priority value."
             matchedLabel="Compared / minimum"
-          />
-          <PseudocodePanel
-            definition={result?.pseudocode}
-            steps={result?.steps ?? []}
-            index={playback.state.index}
           />
         </div>
       </div>

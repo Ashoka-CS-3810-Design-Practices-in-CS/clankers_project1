@@ -46,8 +46,26 @@ for (const example of examples) {
     if (example.structure === 'Graph') await page.getByLabel('Vertex', { exact: true }).fill('1');
     await page.getByRole('button', { name: example.operation, exact: true }).click();
     const panel = page.getByRole('region', { name: 'Operation pseudocode', exact: true });
+    const stage = page.locator('main:not([hidden]) .bounded-learning-stage');
+    const canvas = stage.locator('.canvas-panel');
     const line = panel.locator('[aria-current="step"] code');
     await expect(line).toHaveText(example.first);
+
+    const stageBox = await stage.boundingBox();
+    const canvasBox = await canvas.boundingBox();
+    const panelBox = await panel.boundingBox();
+    expect(stageBox && canvasBox && panelBox).toBeTruthy();
+    if (!stageBox || !canvasBox || !panelBox) {
+      throw new Error(`Expected ${example.structure} to use the visible bounded learning stage.`);
+    }
+    if ((page.viewportSize()?.width ?? 0) > 760) {
+      expect(Math.abs(canvasBox.y - panelBox.y)).toBeLessThan(2);
+      expect(stageBox.height).toBeLessThanOrEqual(600);
+    } else {
+      expect(panelBox.y).toBeGreaterThan(canvasBox.y + canvasBox.height);
+      expect(panelBox.width).toBeLessThanOrEqual(stageBox.width);
+    }
+
     await page.getByRole('button', { name: 'Next', exact: true }).click();
     await expect(line).not.toHaveText(example.first);
     const second = await line.textContent();

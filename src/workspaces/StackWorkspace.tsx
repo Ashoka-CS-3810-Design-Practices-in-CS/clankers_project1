@@ -132,7 +132,7 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
         score={practice.score}
       />
 
-      <div className="visualizer-grid">
+      <div className="visualizer-grid bounded-learning-stage">
         <section className="canvas-panel" aria-labelledby="stack-canvas-heading">
           <div className="canvas-heading">
             <div>
@@ -146,6 +146,11 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
           <StackCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
         <div className="learning-panels">
+          <PseudocodePanel
+            definition={result?.pseudocode}
+            steps={result?.steps ?? []}
+            index={playback.state.index}
+          />
           <Inspector
             operationLabel={result?.operationLabel}
             complexity={result?.complexity}
@@ -154,11 +159,6 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
             outputHeading="Operation output"
             emptyOutputCopy="Pop, Peek, or Inspect all to expose values from the top."
             matchedLabel="Top item"
-          />
-          <PseudocodePanel
-            definition={result?.pseudocode}
-            steps={result?.steps ?? []}
-            index={playback.state.index}
           />
         </div>
       </div>

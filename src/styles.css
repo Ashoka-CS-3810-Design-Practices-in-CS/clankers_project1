@@ -983,17 +983,23 @@ input:disabled {
   margin: 0 auto;
 }
 
-/* Keep the graph, pseudocode, and supporting details in one bounded learning stage. */
-.graph-visualizer-grid {
+/* Keep the visualization, pseudocode, and supporting details in one bounded learning stage. */
+.bounded-learning-stage {
   height: clamp(360px, calc(100dvh - 390px), 600px);
   min-height: 0;
   align-items: stretch;
 }
 
-.graph-visualizer-grid .canvas-panel {
+.bounded-learning-stage .canvas-panel {
   min-height: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
+}
+
+.bounded-learning-stage :is(.canvas-scroll, .stack-scroll, .tree-scroll) {
+  min-height: 0;
+  height: 100%;
+  max-height: none;
 }
 
 .graph-visualizer-grid .graph-wrap {
@@ -1012,39 +1018,39 @@ input:disabled {
   max-height: 100%;
 }
 
-.graph-visualizer-grid .empty-canvas {
+.bounded-learning-stage .empty-canvas {
   min-height: 0;
   height: 100%;
 }
 
-.graph-visualizer-grid .learning-panels {
+.bounded-learning-stage .learning-panels {
   min-height: 0;
   height: 100%;
   grid-template-rows: minmax(240px, 1.45fr) minmax(104px, 0.55fr);
   align-content: stretch;
 }
 
-.graph-visualizer-grid .pseudocode-panel {
+.bounded-learning-stage .pseudocode-panel {
   min-height: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto auto;
 }
 
-.graph-visualizer-grid .pseudocode-scroll {
+.bounded-learning-stage .pseudocode-scroll {
   min-height: 0;
   max-height: none;
 }
 
-.graph-visualizer-grid .pseudocode-heading {
+.bounded-learning-stage .pseudocode-heading {
   padding: 12px 14px 6px;
 }
 
-.graph-visualizer-grid .pseudocode-status,
-.graph-visualizer-grid .pseudocode-key {
+.bounded-learning-stage .pseudocode-status,
+.bounded-learning-stage .pseudocode-key {
   margin: 7px 14px;
 }
 
-.graph-visualizer-grid .inspector {
+.bounded-learning-stage .inspector {
   min-height: 0;
   overflow: auto;
   overscroll-behavior: contain;
@@ -1641,7 +1647,7 @@ input:disabled {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .graph-visualizer-grid {
+  .bounded-learning-stage {
     grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.8fr);
   }
 
@@ -1650,11 +1656,11 @@ input:disabled {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .graph-visualizer-grid .inspector {
+  .bounded-learning-stage .inspector {
     display: block;
   }
 
-  .graph-visualizer-grid .inspector-section {
+  .bounded-learning-stage .inspector-section {
     border-right: 0;
   }
 
@@ -1742,14 +1748,23 @@ input:disabled {
     padding: 20px;
   }
 
-  .graph-visualizer-grid {
+  .bounded-learning-stage {
     height: auto;
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .graph-visualizer-grid .canvas-panel,
-  .graph-visualizer-grid .graph-wrap,
-  .graph-visualizer-grid .learning-panels {
+  .bounded-learning-stage .canvas-panel,
+  .bounded-learning-stage .learning-panels {
+    height: auto;
+  }
+
+  .bounded-learning-stage :is(.canvas-scroll, .stack-scroll, .tree-scroll) {
+    min-height: 238px;
+    height: auto;
+    max-height: 430px;
+  }
+
+  .graph-visualizer-grid .graph-wrap {
     height: auto;
   }
 
@@ -1763,11 +1778,11 @@ input:disabled {
     max-height: 360px;
   }
 
-  .graph-visualizer-grid .learning-panels {
+  .bounded-learning-stage .learning-panels {
     grid-template-rows: none;
   }
 
-  .graph-visualizer-grid .pseudocode-scroll {
+  .bounded-learning-stage .pseudocode-scroll {
     max-height: 280px;
   }
 

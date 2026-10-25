@@ -132,7 +132,7 @@ export function QueueWorkspace({ active }: QueueWorkspaceProps) {
         score={practice.score}
       />
 
-      <div className="visualizer-grid">
+      <div className="visualizer-grid bounded-learning-stage">
         <section className="canvas-panel" aria-labelledby="queue-canvas-heading">
           <div className="canvas-heading">
             <div>
@@ -146,6 +146,11 @@ export function QueueWorkspace({ active }: QueueWorkspaceProps) {
           <QueueCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
         <div className="learning-panels">
+          <PseudocodePanel
+            definition={result?.pseudocode}
+            steps={result?.steps ?? []}
+            index={playback.state.index}
+          />
           <Inspector
             operationLabel={result?.operationLabel}
             complexity={result?.complexity}
@@ -154,11 +159,6 @@ export function QueueWorkspace({ active }: QueueWorkspaceProps) {
             outputHeading="Queue output"
             emptyOutputCopy="Dequeue, Peek front, or Inspect all to expose values from the front."
             matchedLabel="Front item"
-          />
-          <PseudocodePanel
-            definition={result?.pseudocode}
-            steps={result?.steps ?? []}
-            index={playback.state.index}
           />
         </div>
       </div>
