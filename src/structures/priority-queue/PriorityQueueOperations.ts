@@ -1,3 +1,4 @@
+import { heapCode } from './PriorityQueuePseudocode';
 import { StepRecorder } from '../../domain/StepRecorder';
 import type { ComplexityInfo, OperationResult } from '../../domain/visualization';
 import {
@@ -31,10 +32,11 @@ const COMPLEXITY = {
 export class PriorityQueueOperations {
   insert(model: PriorityQueueModel, value: number): PriorityQueueResult {
     const working = model.clone();
-    const recorder = new StepRecorder<PriorityQueueSnapshot>();
+    const recorder = new StepRecorder<PriorityQueueSnapshot>(heapCode.insert);
     const visited: string[] = [];
 
     recorder.record({
+      pseudocodeLineId: 'insert.start',
       message: working.isEmpty()
         ? `The heap is empty, so ${value} will become the root.`
         : `Prepare to add ${value} at the next open position so the tree stays complete.`,
@@ -46,6 +48,7 @@ export class PriorityQueueOperations {
         case 'placed':
           visited.push(event.item.id);
           recorder.record({
+            pseudocodeLineId: 'insert.place',
             message: `${event.item.value} is placed at index ${event.index}, the next open leaf.`,
             snapshot: working.snapshot(),
             activeNodeIds: [event.item.id],
@@ -54,6 +57,7 @@ export class PriorityQueueOperations {
           break;
         case 'compare':
           recorder.record({
+            pseudocodeLineId: event.willSwap ? 'insert.compare' : 'insert.stop',
             message: event.willSwap
               ? `Compare ${event.item.value} with its parent ${event.other.value}: the child is smaller, so they must swap.`
               : `Compare ${event.item.value} with its parent ${event.other.value}: the parent is not larger, so heap order holds.`,
@@ -65,6 +69,7 @@ export class PriorityQueueOperations {
           break;
         case 'swap':
           recorder.record({
+            pseudocodeLineId: 'insert.swap',
             message: `${event.item.value} swaps upward with ${event.other.value}.`,
             snapshot: working.snapshot(),
             activeNodeIds: [event.item.id],
@@ -73,6 +78,7 @@ export class PriorityQueueOperations {
           break;
         case 'settled':
           recorder.record({
+            pseudocodeLineId: 'insert.root',
             message: `${event.item.value} is at the root, so it is now the highest-priority item.`,
             snapshot: working.snapshot(),
             activeNodeIds: [event.item.id],
@@ -89,11 +95,12 @@ export class PriorityQueueOperations {
 
   extractMin(model: PriorityQueueModel): PriorityQueueResult {
     const working = model.clone();
-    const recorder = new StepRecorder<PriorityQueueSnapshot>();
+    const recorder = new StepRecorder<PriorityQueueSnapshot>(heapCode.extractMin);
     const root = working.peekMin();
 
     if (!root) {
       recorder.record({
+        pseudocodeLineId: 'extract.empty',
         message: 'The priority queue is empty, so there is no minimum to remove.',
         snapshot: working.snapshot(),
       });
@@ -101,6 +108,7 @@ export class PriorityQueueOperations {
     }
 
     recorder.record({
+      pseudocodeLineId: 'extract.read',
       message: `${root.value} is at the root, so it has the highest priority and leaves first.`,
       snapshot: working.snapshot(),
       activeNodeIds: [root.id],
@@ -115,6 +123,7 @@ export class PriorityQueueOperations {
         case 'replaced-root':
           visited.push(event.moved.id);
           recorder.record({
+            pseudocodeLineId: 'extract.replace',
             message: `Remove ${event.removed.value} and move the last item, ${event.moved.value}, into the root.`,
             snapshot: working.snapshot(),
             activeNodeIds: [event.moved.id],
@@ -124,6 +133,7 @@ export class PriorityQueueOperations {
           break;
         case 'compare':
           recorder.record({
+            pseudocodeLineId: event.willSwap ? 'extract.compare' : 'extract.stop',
             message: event.willSwap
               ? `Compare ${event.item.value} with its smaller child ${event.other.value}: the child is smaller, so they must swap.`
               : `Compare ${event.item.value} with its smaller child ${event.other.value}: the parent is not larger, so heap order is restored.`,
@@ -136,6 +146,7 @@ export class PriorityQueueOperations {
           break;
         case 'swap':
           recorder.record({
+            pseudocodeLineId: 'extract.swap',
             message: `${event.item.value} swaps downward with ${event.other.value}.`,
             snapshot: working.snapshot(),
             activeNodeIds: [event.item.id],
@@ -145,6 +156,7 @@ export class PriorityQueueOperations {
           break;
         case 'settled':
           recorder.record({
+            pseudocodeLineId: 'extract.leaf',
             message: `${event.item.value} has no children left to compare, so heap order is restored.`,
             snapshot: working.snapshot(),
             activeNodeIds: [event.item.id],
@@ -159,6 +171,7 @@ export class PriorityQueueOperations {
 
     if (working.isEmpty()) {
       recorder.record({
+        pseudocodeLineId: 'extract.only',
         message: `${root.value} was the only item. The priority queue is now empty.`,
         snapshot: working.snapshot(),
         output,
@@ -170,11 +183,12 @@ export class PriorityQueueOperations {
 
   peekMin(model: PriorityQueueModel): PriorityQueueResult {
     const working = model.clone();
-    const recorder = new StepRecorder<PriorityQueueSnapshot>();
+    const recorder = new StepRecorder<PriorityQueueSnapshot>(heapCode.peekMin);
     const root = working.peekMin();
 
     if (!root) {
       recorder.record({
+        pseudocodeLineId: 'peek.empty',
         message: 'The priority queue is empty, so there is no minimum to inspect.',
         snapshot: working.snapshot(),
       });
@@ -182,10 +196,12 @@ export class PriorityQueueOperations {
     }
 
     recorder.record({
+      pseudocodeLineId: 'peek.read',
       message: 'Read the root without removing it.',
       snapshot: working.snapshot(),
     });
     recorder.record({
+      pseudocodeLineId: 'peek.return',
       message: `${root.value} is the minimum. The heap remains unchanged.`,
       snapshot: working.snapshot(),
       activeNodeIds: [root.id],
@@ -205,6 +221,7 @@ export class PriorityQueueOperations {
     return Object.freeze({
       model,
       steps: recorder.steps(),
+      pseudocode: recorder.pseudocode,
       status,
       complexity: Object.freeze({ ...complexity }),
       operationLabel,

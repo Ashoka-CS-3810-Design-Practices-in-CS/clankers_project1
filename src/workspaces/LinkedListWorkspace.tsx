@@ -1,3 +1,4 @@
+import { PseudocodePanel } from '../components/PseudocodePanel';
 import { useEffect, useMemo, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { LinkedListCanvas } from '../components/LinkedListCanvas';
@@ -148,7 +149,7 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
         score={practice.score}
       />
 
-      <div className="visualizer-grid">
+      <div className="visualizer-grid bounded-learning-stage">
         <section className="canvas-panel" aria-labelledby="linked-list-canvas-heading">
           <div className="canvas-heading">
             <div>
@@ -161,14 +162,21 @@ export function LinkedListWorkspace({ active }: LinkedListWorkspaceProps) {
           </div>
           <LinkedListCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
-        <Inspector
-          operationLabel={result?.operationLabel}
-          complexity={result?.complexity}
-          status={result?.status}
-          step={currentStep}
-          outputHeading="Traversal output"
-          emptyOutputCopy="Run Traverse to collect values from head to null."
-        />
+        <div className="learning-panels">
+          <PseudocodePanel
+            definition={result?.pseudocode}
+            steps={result?.steps ?? []}
+            index={playback.state.index}
+          />
+          <Inspector
+            operationLabel={result?.operationLabel}
+            complexity={result?.complexity}
+            status={result?.status}
+            step={currentStep}
+            outputHeading="Traversal output"
+            emptyOutputCopy="Run Traverse to collect values from head to null."
+          />
+        </div>
       </div>
 
       {activeQuestion && (

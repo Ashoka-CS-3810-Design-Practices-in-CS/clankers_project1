@@ -1,3 +1,4 @@
+import { PseudocodePanel } from '../components/PseudocodePanel';
 import { useEffect, useMemo, useState } from 'react';
 import { BstCanvas } from '../components/BstCanvas';
 import { BstOperationPanel } from '../components/BstOperationPanel';
@@ -139,7 +140,7 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
         score={practice.score}
       />
 
-      <div className="visualizer-grid">
+      <div className="visualizer-grid bounded-learning-stage">
         <section className="canvas-panel" aria-labelledby="bst-canvas-heading">
           <div className="canvas-heading">
             <div>
@@ -152,15 +153,22 @@ export function BstWorkspace({ active }: BstWorkspaceProps) {
           </div>
           <BstCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
-        <Inspector
-          operationLabel={result?.operationLabel}
-          complexity={result?.complexity}
-          status={result?.status}
-          step={currentStep}
-          outputHeading="Traversal and result output"
-          emptyOutputCopy="Search, Delete, or choose a traversal to expose values."
-          matchedLabel="Matched node"
-        />
+        <div className="learning-panels">
+          <PseudocodePanel
+            definition={result?.pseudocode}
+            steps={result?.steps ?? []}
+            index={playback.state.index}
+          />
+          <Inspector
+            operationLabel={result?.operationLabel}
+            complexity={result?.complexity}
+            status={result?.status}
+            step={currentStep}
+            outputHeading="Traversal and result output"
+            emptyOutputCopy="Search, Delete, or choose a traversal to expose values."
+            matchedLabel="Matched node"
+          />
+        </div>
       </div>
 
       {activeQuestion && (

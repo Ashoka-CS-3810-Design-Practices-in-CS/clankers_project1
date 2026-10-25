@@ -1,3 +1,4 @@
+import { queueCode } from './QueuePseudocode';
 import { StepRecorder } from '../../domain/StepRecorder';
 import type { ComplexityInfo, OperationResult } from '../../domain/visualization';
 import { QueueModel, type QueueSnapshot } from './QueueModel';
@@ -31,10 +32,11 @@ const COMPLEXITY = {
 export class QueueOperations {
   enqueue(model: QueueModel, value: number): QueueResult {
     const working = model.clone();
-    const recorder = new StepRecorder<QueueSnapshot>();
+    const recorder = new StepRecorder<QueueSnapshot>(queueCode.enqueue);
     const previousRear = working.rear();
 
     recorder.record({
+      pseudocodeLineId: 'enqueue.prepare',
       message: previousRear
         ? `Prepare to place ${value} behind the current rear item, ${previousRear.value}.`
         : `The queue is empty, so ${value} will become both the front and the rear.`,
@@ -43,6 +45,7 @@ export class QueueOperations {
     });
     const added = working.enqueue(value);
     recorder.record({
+      pseudocodeLineId: 'enqueue.add',
       message: `${value} joined at the rear of the queue.`,
       snapshot: working.snapshot(),
       activeNodeIds: [added.id],
@@ -53,11 +56,12 @@ export class QueueOperations {
 
   dequeue(model: QueueModel): QueueResult {
     const working = model.clone();
-    const recorder = new StepRecorder<QueueSnapshot>();
+    const recorder = new StepRecorder<QueueSnapshot>(queueCode.dequeue);
     const front = working.front();
 
     if (!front) {
       recorder.record({
+        pseudocodeLineId: 'dequeue.empty',
         message: 'The queue is empty, so there is no front item to remove.',
         snapshot: working.snapshot(),
       });
@@ -65,6 +69,7 @@ export class QueueOperations {
     }
 
     recorder.record({
+      pseudocodeLineId: 'dequeue.read',
       message: `${front.value} has waited longest, so it leaves from the front first.`,
       snapshot: working.snapshot(),
       activeNodeIds: [front.id],
@@ -72,6 +77,7 @@ export class QueueOperations {
     });
     working.dequeue();
     recorder.record({
+      pseudocodeLineId: 'dequeue.remove',
       message: working.isEmpty()
         ? `${front.value} was dequeued. The queue is now empty.`
         : `${front.value} was dequeued. The next item becomes the new front.`,
@@ -83,11 +89,12 @@ export class QueueOperations {
 
   peek(model: QueueModel): QueueResult {
     const working = model.clone();
-    const recorder = new StepRecorder<QueueSnapshot>();
+    const recorder = new StepRecorder<QueueSnapshot>(queueCode.peek);
     const front = working.front();
 
     if (!front) {
       recorder.record({
+        pseudocodeLineId: 'peek.empty',
         message: 'The queue is empty, so there is no front item to inspect.',
         snapshot: working.snapshot(),
       });
@@ -95,10 +102,12 @@ export class QueueOperations {
     }
 
     recorder.record({
+      pseudocodeLineId: 'peek.read',
       message: 'Read the item at the front without removing it.',
       snapshot: working.snapshot(),
     });
     recorder.record({
+      pseudocodeLineId: 'peek.return',
       message: `${front.value} is at the front. The queue remains unchanged.`,
       snapshot: working.snapshot(),
       activeNodeIds: [front.id],
@@ -110,11 +119,12 @@ export class QueueOperations {
 
   inspect(model: QueueModel): QueueResult {
     const working = model.clone();
-    const recorder = new StepRecorder<QueueSnapshot>();
+    const recorder = new StepRecorder<QueueSnapshot>(queueCode.inspect);
     const visited: string[] = [];
     const output: number[] = [];
     const items = working.items();
     recorder.record({
+      pseudocodeLineId: 'inspect.start',
       message: 'Begin at the front and inspect each item toward the rear.',
       snapshot: working.snapshot(),
     });
@@ -123,6 +133,7 @@ export class QueueOperations {
       visited.push(item.id);
       output.push(item.value);
       recorder.record({
+        pseudocodeLineId: 'inspect.visit',
         message: `Inspect ${item.value} and continue to the item behind it.`,
         snapshot: working.snapshot(),
         activeNodeIds: [item.id],
@@ -132,6 +143,7 @@ export class QueueOperations {
     });
 
     recorder.record({
+      pseudocodeLineId: 'inspect.done',
       message:
         items.length === 0
           ? 'The queue is empty, so inspection finishes immediately.'
@@ -153,6 +165,7 @@ export class QueueOperations {
     return Object.freeze({
       model,
       steps: recorder.steps(),
+      pseudocode: recorder.pseudocode,
       status,
       complexity: Object.freeze({ ...complexity }),
       operationLabel,

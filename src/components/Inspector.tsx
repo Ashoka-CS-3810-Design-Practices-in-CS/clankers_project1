@@ -20,7 +20,7 @@ export function Inspector<TSnapshot>({
   matchedLabel = 'Matched',
 }: InspectorProps<TSnapshot>) {
   return (
-    <aside className="inspector" aria-label="Operation inspector">
+    <aside className="inspector" aria-label="Operation inspector" tabIndex={0}>
       <section className="inspector-section current-step">
         <div className="section-heading-row">
           <h2>Current step</h2>

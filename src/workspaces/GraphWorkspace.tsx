@@ -1,3 +1,4 @@
+import { PseudocodePanel } from '../components/PseudocodePanel';
 import { useEffect, useState } from 'react';
 import { GraphCanvas } from '../components/GraphCanvas';
 import { GraphOperationPanel } from '../components/GraphOperationPanel';
@@ -103,7 +104,11 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
   }
 
   return (
-    <main className="workspace" id={active ? 'main-content' : undefined} hidden={!active}>
+    <main
+      className="workspace graph-workspace"
+      id={active ? 'main-content' : undefined}
+      hidden={!active}
+    >
       <header className="workspace-header">
         <div>
           <h1>Graph</h1>
@@ -183,7 +188,7 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
         score={practice.score}
       />
 
-      <div className="visualizer-grid">
+      <div className="visualizer-grid bounded-learning-stage graph-visualizer-grid">
         <section className="canvas-panel" aria-labelledby="graph-canvas-heading">
           <div className="canvas-heading">
             <div>
@@ -196,15 +201,22 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
           </div>
           <GraphCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
-        <Inspector
-          operationLabel={result?.operationLabel}
-          complexity={result?.complexity}
-          status={result?.status}
-          step={currentStep}
-          outputHeading="Visit order"
-          emptyOutputCopy="Run BFS or DFS from the vertex in the first field to see the visit order."
-          matchedLabel="Queued / on stack"
-        />
+        <div className="learning-panels">
+          <PseudocodePanel
+            definition={result?.pseudocode}
+            steps={result?.steps ?? []}
+            index={playback.state.index}
+          />
+          <Inspector
+            operationLabel={result?.operationLabel}
+            complexity={result?.complexity}
+            status={result?.status}
+            step={currentStep}
+            outputHeading="Visit order"
+            emptyOutputCopy="Run BFS or DFS from the vertex in the first field to see the visit order."
+            matchedLabel="Queued / on stack"
+          />
+        </div>
       </div>
 
       {activeQuestion && (

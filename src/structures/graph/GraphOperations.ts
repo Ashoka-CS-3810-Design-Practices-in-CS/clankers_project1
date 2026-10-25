@@ -1,3 +1,4 @@
+import { graphCode } from './GraphPseudocode';
 import { StepRecorder } from '../../domain/StepRecorder';
 import type { ComplexityInfo, OperationResult } from '../../domain/visualization';
 import {
@@ -51,13 +52,15 @@ const COMPLEXITY = {
 export class GraphOperations {
   addVertex(model: GraphModel, label: number): GraphResult {
     const working = model.clone();
-    const recorder = new StepRecorder<GraphSnapshot>();
+    const recorder = new StepRecorder<GraphSnapshot>(graphCode.addVertex);
     recorder.record({
+      pseudocodeLineId: 'vertex.check',
       message: `Check that no vertex is already labelled ${label}.`,
       snapshot: working.snapshot(),
     });
     const vertex = working.addVertex(label);
     recorder.record({
+      pseudocodeLineId: 'vertex.add',
       message: `Vertex ${label} is added with no edges yet.`,
       snapshot: working.snapshot(),
       activeNodeIds: [vertex.id],
@@ -68,12 +71,13 @@ export class GraphOperations {
 
   removeVertex(model: GraphModel, label: number): GraphResult {
     const working = model.clone();
-    const recorder = new StepRecorder<GraphSnapshot>();
+    const recorder = new StepRecorder<GraphSnapshot>(graphCode.removeVertex);
     const vertex = working.vertex(label) as GraphVertex;
     const neighbours = working.neighbours(vertex.id);
     const incident = neighbours.map((neighbour) => edgeId(vertex.id, neighbour.id));
 
     recorder.record({
+      pseudocodeLineId: 'vertex.find',
       message:
         neighbours.length === 0
           ? `Vertex ${label} has no edges, so only the vertex itself is removed.`
@@ -83,6 +87,7 @@ export class GraphOperations {
     });
     working.removeVertex(label);
     recorder.record({
+      pseudocodeLineId: 'vertex.remove',
       message: `Vertex ${label} has been removed from the graph.`,
       snapshot: working.snapshot(),
       output: [label],
@@ -92,17 +97,19 @@ export class GraphOperations {
 
   addEdge(model: GraphModel, from: number, to: number): GraphResult {
     const working = model.clone();
-    const recorder = new StepRecorder<GraphSnapshot>();
+    const recorder = new StepRecorder<GraphSnapshot>(graphCode.addEdge);
     const first = working.vertex(from) as GraphVertex;
     const second = working.vertex(to) as GraphVertex;
 
     recorder.record({
+      pseudocodeLineId: 'edge.find',
       message: `Connect ${from} and ${to}. The graph is undirected, so each joins the other’s adjacency list.`,
       snapshot: working.snapshot(),
       activeNodeIds: [first.id, second.id],
     });
     const edge = working.addEdge(from, to);
     recorder.record({
+      pseudocodeLineId: 'edge.add',
       message: `Edge ${from}–${to} is added. ${from} now has ${working.neighbours(first.id).length} and ${to} has ${working.neighbours(second.id).length} ${working.neighbours(second.id).length === 1 ? 'neighbour' : 'neighbours'}.`,
       snapshot: working.snapshot(),
       activeNodeIds: [first.id, second.id, edge.id],
@@ -113,18 +120,20 @@ export class GraphOperations {
 
   removeEdge(model: GraphModel, from: number, to: number): GraphResult {
     const working = model.clone();
-    const recorder = new StepRecorder<GraphSnapshot>();
+    const recorder = new StepRecorder<GraphSnapshot>(graphCode.removeEdge);
     const first = working.vertex(from) as GraphVertex;
     const second = working.vertex(to) as GraphVertex;
     const id = edgeId(first.id, second.id);
 
     recorder.record({
+      pseudocodeLineId: 'edge.find',
       message: `Find edge ${from}–${to} in both adjacency lists.`,
       snapshot: working.snapshot(),
       activeNodeIds: [first.id, second.id, id],
     });
     working.removeEdge(from, to);
     recorder.record({
+      pseudocodeLineId: 'edge.remove',
       message: `Edge ${from}–${to} is removed. Both vertices stay in the graph.`,
       snapshot: working.snapshot(),
       activeNodeIds: [first.id, second.id],
@@ -134,7 +143,7 @@ export class GraphOperations {
 
   bfs(model: GraphModel, startLabel: number): GraphResult {
     const working = model.clone();
-    const recorder = new StepRecorder<GraphSnapshot>();
+    const recorder = new StepRecorder<GraphSnapshot>(graphCode.bfs);
     const start = working.vertex(startLabel) as GraphVertex;
     const discovered = new Set<string>([start.id]);
     const visited: string[] = [];
@@ -151,6 +160,7 @@ export class GraphOperations {
     });
 
     recorder.record({
+      pseudocodeLineId: 'bfs.start',
       message: `Start BFS at ${startLabel}: mark it discovered and enqueue it.`,
       snapshot: working.snapshot(frontier()),
       matchedNodeIds: [start.id],
@@ -162,6 +172,7 @@ export class GraphOperations {
       visited.push(current.id);
       output.push(current.value);
       recorder.record({
+        pseudocodeLineId: 'bfs.visit',
         message: `Dequeue ${current.value} and visit it. Visit order so far: ${output.join(', ')}.`,
         snapshot: working.snapshot(frontier()),
         activeNodeIds: [current.id],
@@ -174,6 +185,7 @@ export class GraphOperations {
         const edge = edgeId(current.id, neighbour.id);
         if (discovered.has(neighbour.id)) {
           recorder.record({
+            pseudocodeLineId: 'bfs.skip',
             message: `${neighbour.value} has already been discovered, so it is not enqueued again.`,
             snapshot: working.snapshot(frontier()),
             activeNodeIds: [current.id, edge],
@@ -187,6 +199,7 @@ export class GraphOperations {
         treeEdges.push(edge);
         queue.push(neighbour);
         recorder.record({
+          pseudocodeLineId: 'bfs.enqueue',
           message: `${neighbour.value} is new: mark it discovered and enqueue it behind the others.`,
           snapshot: working.snapshot(frontier()),
           activeNodeIds: [current.id, edge],
@@ -198,6 +211,7 @@ export class GraphOperations {
     }
 
     recorder.record({
+      pseudocodeLineId: 'bfs.done',
       message: this.finishMessage('BFS', 'The queue is empty', output, working.vertexCount()),
       snapshot: working.snapshot(frontier()),
       visitedNodeIds: [...visited, ...treeEdges],
@@ -208,7 +222,7 @@ export class GraphOperations {
 
   dfs(model: GraphModel, startLabel: number): GraphResult {
     const working = model.clone();
-    const recorder = new StepRecorder<GraphSnapshot>();
+    const recorder = new StepRecorder<GraphSnapshot>(graphCode.dfs);
     const start = working.vertex(startLabel) as GraphVertex;
     const visitedSet = new Set<string>();
     const visited: string[] = [];
@@ -226,6 +240,7 @@ export class GraphOperations {
     });
 
     recorder.record({
+      pseudocodeLineId: 'dfs.start',
       message: `Start DFS at ${startLabel}. Each call goes as deep as possible before backtracking.`,
       snapshot: working.snapshot(frontier()),
     });
@@ -236,6 +251,7 @@ export class GraphOperations {
       output.push(current.value);
       stack.push(current);
       recorder.record({
+        pseudocodeLineId: 'dfs.visit',
         message: `Visit ${current.value} and push it onto the call stack. Visit order so far: ${output.join(', ')}.`,
         snapshot: working.snapshot(frontier()),
         activeNodeIds: [current.id],
@@ -247,6 +263,7 @@ export class GraphOperations {
         if (visitedSet.has(neighbour.id)) {
           if (neighbour.id === parent?.id) return;
           recorder.record({
+            pseudocodeLineId: 'dfs.skip',
             message: `${neighbour.value} is already visited, so skip edge ${current.value}–${neighbour.value}.`,
             snapshot: working.snapshot(frontier()),
             activeNodeIds: [current.id, edge],
@@ -256,6 +273,7 @@ export class GraphOperations {
         }
         treeEdges.push(edge);
         recorder.record({
+          pseudocodeLineId: 'dfs.descend',
           message: `${neighbour.value} is unvisited, so follow edge ${current.value}–${neighbour.value} deeper.`,
           snapshot: working.snapshot(frontier()),
           activeNodeIds: [current.id, edge],
@@ -263,6 +281,7 @@ export class GraphOperations {
         });
         visit(neighbour, current);
         recorder.record({
+          pseudocodeLineId: 'dfs.resume',
           message: `Back at ${current.value} after finishing ${neighbour.value}. Check its next neighbour.`,
           snapshot: working.snapshot(frontier()),
           activeNodeIds: [current.id],
@@ -272,6 +291,7 @@ export class GraphOperations {
 
       stack.pop();
       recorder.record({
+        pseudocodeLineId: 'dfs.pop',
         message: `${current.value} has no unvisited neighbours left, so pop it off the stack.`,
         snapshot: working.snapshot(frontier()),
         activeNodeIds: [current.id],
@@ -282,6 +302,7 @@ export class GraphOperations {
     visit(start, null);
 
     recorder.record({
+      pseudocodeLineId: 'dfs.done',
       message: this.finishMessage('DFS', 'The stack is empty', output, working.vertexCount()),
       snapshot: working.snapshot(frontier()),
       visitedNodeIds: [...visited, ...treeEdges],
@@ -311,6 +332,7 @@ export class GraphOperations {
     return Object.freeze({
       model,
       steps: recorder.steps(),
+      pseudocode: recorder.pseudocode,
       status: 'success' as const,
       complexity: Object.freeze({ ...complexity }),
       operationLabel,

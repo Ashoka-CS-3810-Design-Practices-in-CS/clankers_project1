@@ -1,3 +1,4 @@
+import { PseudocodePanel } from '../components/PseudocodePanel';
 import { useEffect, useMemo, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
@@ -131,7 +132,7 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
         score={practice.score}
       />
 
-      <div className="visualizer-grid">
+      <div className="visualizer-grid bounded-learning-stage">
         <section className="canvas-panel" aria-labelledby="stack-canvas-heading">
           <div className="canvas-heading">
             <div>
@@ -144,15 +145,22 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
           </div>
           <StackCanvas snapshot={displayedSnapshot} step={currentStep} />
         </section>
-        <Inspector
-          operationLabel={result?.operationLabel}
-          complexity={result?.complexity}
-          status={result?.status}
-          step={currentStep}
-          outputHeading="Operation output"
-          emptyOutputCopy="Pop, Peek, or Inspect all to expose values from the top."
-          matchedLabel="Top item"
-        />
+        <div className="learning-panels">
+          <PseudocodePanel
+            definition={result?.pseudocode}
+            steps={result?.steps ?? []}
+            index={playback.state.index}
+          />
+          <Inspector
+            operationLabel={result?.operationLabel}
+            complexity={result?.complexity}
+            status={result?.status}
+            step={currentStep}
+            outputHeading="Operation output"
+            emptyOutputCopy="Pop, Peek, or Inspect all to expose values from the top."
+            matchedLabel="Top item"
+          />
+        </div>
       </div>
 
       {activeQuestion && (
