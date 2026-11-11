@@ -8,6 +8,7 @@ interface PlaybackControlsProps {
   readonly onPrevious: () => void;
   readonly onNext: () => void;
   readonly onRestart: () => void;
+  readonly onCancel: () => void;
   readonly onSpeedChange: (speed: PlaybackSpeed) => void;
 }
 
@@ -19,6 +20,7 @@ export function PlaybackControls({
   onPrevious,
   onNext,
   onRestart,
+  onCancel,
   onSpeedChange,
 }: PlaybackControlsProps) {
   const atStart = state.index === 0;
@@ -50,6 +52,14 @@ export function PlaybackControls({
         )}
         <button type="button" onClick={onNext} disabled={atEnd || awaitingAnswer}>
           Next
+        </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          disabled={!hasSteps || state.phase === 'complete'}
+          title="Stop playback and restore the structure from before this operation"
+        >
+          Cancel operation
         </button>
       </div>
       <div className="playback-progress" aria-live="polite">

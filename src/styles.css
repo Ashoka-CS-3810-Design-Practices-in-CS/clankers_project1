@@ -598,6 +598,67 @@ input:disabled {
   color: #686e65;
 }
 
+.zoomable-canvas {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.zoom-toolbar {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  padding: 5px 12px;
+  border-bottom: 1px solid #dedbd1;
+  background: #f4f1e8;
+}
+
+.zoom-toolbar button {
+  min-width: 30px;
+  min-height: 30px;
+  display: inline-grid;
+  place-items: center;
+  padding: 3px 8px;
+  border: 1px solid #b9b8af;
+  border-radius: 7px;
+  background: #faf8f0;
+  color: #343a32;
+  font-family: var(--font-mono);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.zoom-toolbar button:hover:not(:disabled) {
+  border-color: #72786e;
+  background: #fffdf6;
+}
+
+.zoom-toolbar button:disabled {
+  opacity: 0.42;
+}
+
+.zoom-toolbar .zoom-reset {
+  min-width: 54px;
+  font-size: 0.66rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.zoom-toolbar button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.zoomable-canvas-content {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.zoomable-canvas :is(.list-svg, .queue-svg) {
+  max-height: none;
+}
+
 .phase-label,
 .operation-name {
   display: inline-flex;
@@ -715,7 +776,7 @@ input:disabled {
 .stack-svg {
   display: block;
   flex: 0 0 auto;
-  max-width: 100%;
+  max-width: none;
   height: auto;
 }
 
@@ -1010,12 +1071,18 @@ input:disabled {
   overflow: hidden;
 }
 
-.graph-visualizer-grid .graph-svg {
-  width: 100%;
-  height: 100%;
+.graph-zoom-scroll {
   min-height: 0;
-  max-width: 100% !important;
-  max-height: 100%;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.graph-visualizer-grid .graph-svg {
+  display: block;
+  min-height: 0;
+  max-width: none;
+  max-height: none;
 }
 
 .bounded-learning-stage .empty-canvas {
@@ -1415,6 +1482,7 @@ input:disabled {
 
 .playback-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 7px;
 }
 
@@ -1773,9 +1841,8 @@ input:disabled {
     overflow: hidden;
   }
 
-  .graph-visualizer-grid .graph-svg {
-    height: auto;
-    max-height: 360px;
+  .graph-visualizer-grid .graph-zoom-scroll {
+    height: 360px;
   }
 
   .bounded-learning-stage .learning-panels {
@@ -1825,7 +1892,7 @@ input:disabled {
 
   .playback-buttons {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .playback-buttons button {

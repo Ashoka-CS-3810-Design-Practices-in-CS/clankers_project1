@@ -1,5 +1,27 @@
 # Project Updates
 
+## 2026-11-11: CI formatting repair
+
+- Fixed Prettier failures in the cancellation browser test and the merged project updates, which stopped CI before tests and build could run.
+
+## 2026-11-11: Cancel operations and unlock reset
+
+- Added Cancel operation to every workspace: it stops playback, discards the trace and practice questions, and restores the model from before the operation.
+- Kept Reset available during paused playback, autoplay, and practice checkpoints; clearing playback also removes its timer.
+- Added regression coverage for rollback, stable IDs, resumed editing, timer cleanup, practice holds, and keyboard cancellation across all six structures on desktop and mobile.
+- Verification: `npm run check` passed with 227 tests; the full Playwright suite passed all 72 desktop/mobile tests.
+
+## 2026-11-11: Linked List integer overflow fix
+
+- Sized each node's value compartment for its full signed integer and derived pointer, arrow, and following-node positions from the resulting width.
+- Preserved readable text, stable IDs, and canvas scrolling; added browser regression coverage for both safe-integer limits, duplicates, mixed widths, zoom limits, and themes on desktop and mobile.
+
+## 2026-10-25: Visualization zoom and brand asset
+
+- Replaced the shared navigation, landing-page, and favicon logo asset with the supplied Clankers artwork.
+- Added reusable 75%–200% visualization zoom controls with a one-click 100% reset across all six structures; enlarged diagrams remain contained in their scrollable canvases.
+- Kept zoom independent from playback and model state, added screen-reader announcements and keyboard focus, and covered the shared behavior in component and desktop/mobile browser tests.
+
 ## 2026-11-11: Heap pseudocode matches comparisons that do not swap
 
 - Fixed a mismatch in Priority Queue pseudocode. When sift-up or sift-down compared two items and did not swap (for example, inserting 2 below a parent that is also 2), the comparison step highlighted the "stop" line, so the "compare" line stayed pending while the narration described a comparison.

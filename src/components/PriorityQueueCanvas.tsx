@@ -8,6 +8,7 @@ import { useKeepInView } from './useKeepInView';
 interface PriorityQueueCanvasProps {
   readonly snapshot: PriorityQueueSnapshot;
   readonly step?: VisualizationStep<PriorityQueueSnapshot>;
+  readonly zoom?: number;
 }
 
 const SLOT_WIDTH = 64;
@@ -29,7 +30,7 @@ function levelOf(index: number): number {
   return Math.floor(Math.log2(index + 1));
 }
 
-export function PriorityQueueCanvas({ snapshot, step }: PriorityQueueCanvasProps) {
+export function PriorityQueueCanvas({ snapshot, step, zoom = 1 }: PriorityQueueCanvasProps) {
   const { items } = snapshot;
 
   const levels = levelOf(Math.max(items.length, 1) - 1) + 1;
@@ -54,7 +55,9 @@ export function PriorityQueueCanvas({ snapshot, step }: PriorityQueueCanvasProps
 
   const focusId = step?.activeNodeIds[0] ?? items[0]?.id;
   const focusIndex = items.findIndex((item) => item.id === focusId);
-  const scrollRef = useKeepInView<HTMLDivElement>(focusIndex >= 0 ? position(focusIndex).x : null);
+  const scrollRef = useKeepInView<HTMLDivElement>(
+    focusIndex >= 0 ? position(focusIndex).x * zoom : null,
+  );
 
   if (items.length === 0) {
     return (
@@ -78,8 +81,8 @@ export function PriorityQueueCanvas({ snapshot, step }: PriorityQueueCanvasProps
       <svg
         className="heap-svg"
         viewBox={`0 0 ${contentWidth} ${contentHeight}`}
-        width={contentWidth}
-        height={contentHeight}
+        width={contentWidth * zoom}
+        height={contentHeight * zoom}
         role="img"
         aria-labelledby="heap-title heap-description"
       >
