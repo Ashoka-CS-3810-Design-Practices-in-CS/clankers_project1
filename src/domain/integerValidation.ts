@@ -19,7 +19,11 @@ export function parseIntegerInput(input: string): ValidationResult<number> {
 
   const value = Number(trimmed);
   if (!Number.isSafeInteger(value)) {
-    return { ok: false, message: 'Use a whole number within JavaScript’s safe integer range.' };
+    return {
+      ok: false,
+      message:
+        'Use a whole number within JavaScript’s safe integer range: -9,007,199,254,740,991 to 9,007,199,254,740,991 (inclusive).',
+    };
   }
 
   return { ok: true, value: value === 0 ? 0 : value };

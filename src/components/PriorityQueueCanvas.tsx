@@ -18,6 +18,16 @@ const TOP = 46;
 const LEVEL_HEIGHT = 78;
 const CELL_WIDTH = 46;
 const CELL_HEIGHT = 40;
+const VALUE_CHARACTER_WIDTH = 10;
+const VALUE_PADDING = 24;
+
+function valueWidth(value: number): number {
+  return String(value).length * VALUE_CHARACTER_WIDTH + VALUE_PADDING;
+}
+
+function nodeRadius(value: number): number {
+  return Math.max(NODE_RADIUS, valueWidth(value) / 2);
+}
 
 function itemState(itemId: string, step?: VisualizationStep<PriorityQueueSnapshot>): string {
   if (step?.matchedNodeIds.includes(itemId)) return 'matched';
@@ -33,15 +43,20 @@ function levelOf(index: number): number {
 export function PriorityQueueCanvas({ snapshot, step, zoom = 1 }: PriorityQueueCanvasProps) {
   const { items } = snapshot;
 
+  const maxRadius = Math.max(NODE_RADIUS, ...items.map((item) => nodeRadius(item.value)));
+  const slotWidth = Math.max(SLOT_WIDTH, maxRadius * 2 + 20);
+  const levelHeight = Math.max(LEVEL_HEIGHT, maxRadius * 2 + 34);
+  const top = Math.max(TOP, maxRadius + 24);
+  const cellWidth = Math.max(CELL_WIDTH, ...items.map((item) => valueWidth(item.value)));
   const levels = levelOf(Math.max(items.length, 1) - 1) + 1;
-  const treeWidth = Math.max(MIN_WIDTH, 2 ** (levels - 1) * SLOT_WIDTH);
-  const arrayWidth = items.length * CELL_WIDTH + 80;
+  const treeWidth = Math.max(MIN_WIDTH, 2 ** (levels - 1) * slotWidth);
+  const arrayWidth = items.length * cellWidth + 80;
   const contentWidth = Math.max(treeWidth, arrayWidth);
   const treeOffset = (contentWidth - treeWidth) / 2;
-  const treeBottom = TOP + (levels - 1) * LEVEL_HEIGHT + NODE_RADIUS;
+  const treeBottom = top + (levels - 1) * levelHeight + maxRadius;
   const arrayTop = treeBottom + 74;
   const contentHeight = arrayTop + CELL_HEIGHT + 34;
-  const arrayLeft = (contentWidth - items.length * CELL_WIDTH) / 2;
+  const arrayLeft = (contentWidth - items.length * cellWidth) / 2;
 
   const position = (index: number) => {
     const level = levelOf(index);
@@ -49,7 +64,7 @@ export function PriorityQueueCanvas({ snapshot, step, zoom = 1 }: PriorityQueueC
     const slots = 2 ** level;
     return {
       x: treeOffset + ((offsetInLevel + 0.5) * treeWidth) / slots,
-      y: TOP + level * LEVEL_HEIGHT,
+      y: top + level * levelHeight,
     };
   };
 
@@ -110,14 +125,15 @@ export function PriorityQueueCanvas({ snapshot, step, zoom = 1 }: PriorityQueueC
 
         {items.map((item, index) => {
           const { x, y } = position(index);
+          const radius = nodeRadius(item.value);
           return (
             <g key={item.id} className={`heap-node state-${itemState(item.id, step)}`}>
               {index === 0 && (
-                <text x={x} y={y - NODE_RADIUS - 10} textAnchor="middle" className="node-role">
+                <text x={x} y={y - radius - 10} textAnchor="middle" className="node-role">
                   min
                 </text>
               )}
-              <circle cx={x} cy={y} r={NODE_RADIUS} />
+              <circle cx={x} cy={y} r={radius} />
               <text x={x} y={y + 5} textAnchor="middle" className="heap-value">
                 {item.value}
               </text>
@@ -129,15 +145,15 @@ export function PriorityQueueCanvas({ snapshot, step, zoom = 1 }: PriorityQueueC
           heap array
         </text>
         {items.map((item, index) => {
-          const x = arrayLeft + index * CELL_WIDTH;
+          const x = arrayLeft + index * cellWidth;
           return (
             <g key={`cell-${item.id}`} className={`heap-cell state-${itemState(item.id, step)}`}>
-              <text x={x + CELL_WIDTH / 2} y={arrayTop - 8} textAnchor="middle" className="node-id">
+              <text x={x + cellWidth / 2} y={arrayTop - 8} textAnchor="middle" className="node-id">
                 {index}
               </text>
-              <rect x={x} y={arrayTop} width={CELL_WIDTH} height={CELL_HEIGHT} />
+              <rect x={x} y={arrayTop} width={cellWidth} height={CELL_HEIGHT} />
               <text
-                x={x + CELL_WIDTH / 2}
+                x={x + cellWidth / 2}
                 y={arrayTop + 25}
                 textAnchor="middle"
                 className="heap-value"

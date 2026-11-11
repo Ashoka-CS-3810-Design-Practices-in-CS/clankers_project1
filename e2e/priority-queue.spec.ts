@@ -6,6 +6,88 @@ async function finishOperation(page: import('@playwright/test').Page) {
   while (await next.isEnabled()) await next.click();
 }
 
+test('large integers fit inside heap nodes and array cells at the zoom limits', async ({
+  page,
+}, testInfo) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Open Priority Queue workspace' }).click();
+  const main = page.locator('main:not([hidden])');
+  await main.getByRole('button', { name: 'Load sample' }).click();
+  for (const value of ['1000000000000', '9007199254740991', '-9007199254740991']) {
+    await main.getByLabel('Priority value').fill(value);
+    await main.getByRole('button', { name: 'Insert', exact: true }).click();
+    await finishOperation(page);
+  }
+
+  async function assertGeometry() {
+    const geometry = await main.locator('.heap-svg').evaluate((svg) => {
+      const nodes = Array.from(svg.querySelectorAll('.heap-node')).map((node) => {
+        const text = node.querySelector<SVGTextElement>('.heap-value')!;
+        const box = text.getBBox();
+        const circle = node.querySelector('circle')!;
+        const x = Number(circle.getAttribute('cx'));
+        const y = Number(circle.getAttribute('cy'));
+        const radius = Number(circle.getAttribute('r'));
+        return {
+          value: text.textContent,
+          x,
+          y,
+          radius,
+          fits: [box.x, box.x + box.width].every((cornerX) =>
+            [box.y, box.y + box.height].every(
+              (cornerY) => Math.hypot(cornerX - x, cornerY - y) < radius - 2,
+            ),
+          ),
+        };
+      });
+      const cells = Array.from(svg.querySelectorAll('.heap-cell')).map((cell) => {
+        const text = cell.querySelector<SVGTextElement>('.heap-value')!;
+        const box = text.getBBox();
+        const rect = cell.querySelector<SVGRectElement>('rect')!.getBBox();
+        return {
+          value: text.textContent,
+          fits:
+            box.x > rect.x + 4 &&
+            box.x + box.width < rect.x + rect.width - 4 &&
+            box.y > rect.y &&
+            box.y + box.height < rect.y + rect.height,
+        };
+      });
+      return { nodes, cells };
+    });
+    expect(geometry.nodes).toHaveLength(9);
+    expect(geometry.nodes.every((node) => node.fits)).toBe(true);
+    expect(geometry.cells.every((cell) => cell.fits)).toBe(true);
+    expect(geometry.nodes.map((node) => node.value)).toEqual(
+      geometry.cells.map((cell) => cell.value),
+    );
+    expect(geometry.nodes.map((node) => node.value)).toEqual(
+      expect.arrayContaining(['1000000000000', '9007199254740991', '-9007199254740991']),
+    );
+    geometry.nodes.forEach((node, index) => {
+      for (const other of geometry.nodes.slice(index + 1)) {
+        expect(Math.hypot(node.x - other.x, node.y - other.y)).toBeGreaterThan(
+          node.radius + other.radius,
+        );
+      }
+    });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  }
+
+  await assertGeometry();
+  await main.getByRole('button', { name: 'Zoom out visualization' }).click();
+  await assertGeometry();
+  const zoomIn = main.getByRole('button', { name: 'Zoom in visualization' });
+  while (await zoomIn.isEnabled()) await zoomIn.click();
+  await assertGeometry();
+  await page.getByTestId('theme-toggle').click();
+  await assertGeometry();
+  await main.getByRole('button', { name: 'Reset visualization zoom to 100 percent' }).click();
+  await page.screenshot({ path: testInfo.outputPath('heap-large-integers.png') });
+});
+
 test('inserts, peeks, extracts, switches, and resets a priority queue', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Open Priority Queue workspace' }).click();

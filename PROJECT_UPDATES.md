@@ -1,11 +1,24 @@
 # Project Updates
 
+## 2026-11-11: Main integration
+
+- Integrated the Complexity table page from `main` with the local heap-sizing and integer-validation fixes; resolved the updates-log conflict by preserving both sets of entries.
+
 ## 2026-11-11: Complexity table
 
 - Added a **Complexities** page that lists the worst-case time and auxiliary space of all 26 operations across the six structures, each with its one-line reason. It opens from a new sidebar entry below Graph and from a "Complexity table" card on the landing page, and each structure's table links back to its workspace.
 - The table reads the same exported constants (`LINKED_LIST_COMPLEXITY`, `STACK_COMPLEXITY`, and so on) that every operation attaches to its trace, so the reference page cannot drift from what playback shows. Tests check that every defined complexity appears in the table and that operations report exactly the listed values.
 - Columns line up across tables on desktop; on phones each row shows the operation, time, and space, with the reason underneath, so the page never scrolls sideways. Switching views now starts each view at the top.
 - Added component tests for the sidebar order, keyboard order, landing link, and workspace links, and a desktop/mobile axe-core audit of the page in both themes.
+
+## 2026-11-11: Heap integer overflow fix
+
+- Sized heap circles and array cells for complete integer labels, with matching tree spacing and SVG bounds so large values remain readable inside the scrollable canvas.
+- Added desktop/mobile browser checks for both safe-integer limits, text containment, nonoverlapping nodes, zoom limits, and themes.
+
+## 2026-11-11: Clear integer limits
+
+- Included the exact inclusive safe-integer limits in out-of-range validation feedback: -9,007,199,254,740,991 to 9,007,199,254,740,991.
 
 ## 2026-11-11: CI formatting repair
 
