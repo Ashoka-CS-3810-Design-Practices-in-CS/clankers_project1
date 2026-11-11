@@ -4,7 +4,12 @@ const structures = [
   { name: 'Linked List', input: 'Node value', operation: 'Insert head', reset: 'Reset list' },
   { name: 'Stack', input: 'Item value', operation: 'Push', reset: 'Reset stack' },
   { name: 'Queue', input: 'Queue value', operation: 'Enqueue', reset: 'Reset queue' },
-  { name: 'Binary Search Tree', input: 'Tree node value', operation: 'Insert', reset: 'Reset tree' },
+  {
+    name: 'Binary Search Tree',
+    input: 'Tree node value',
+    operation: 'Insert',
+    reset: 'Reset tree',
+  },
   {
     name: 'Priority Queue',
     input: 'Priority value',
