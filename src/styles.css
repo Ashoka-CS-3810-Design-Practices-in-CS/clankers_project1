@@ -2224,3 +2224,186 @@ input:disabled {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Complexity reference: sidebar entry, landing link, and page */
+
+.nav-reference-item {
+  position: relative;
+  margin-top: 17px;
+}
+
+.nav-reference-item::before {
+  content: '';
+  position: absolute;
+  top: -9px;
+  left: 12px;
+  right: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.landing-complexities {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 64px) 56px;
+}
+
+.landing-card-wide {
+  width: 100%;
+}
+
+.complexity-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 560px), 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+.complexity-section {
+  min-width: 0;
+  padding: 20px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+
+.complexity-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.complexity-section-head h2 {
+  margin: 0;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+
+.complexity-section-head p {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.complexity-table-scroll {
+  overflow-x: auto;
+  border-radius: var(--radius-sm);
+}
+
+.complexity-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 0.86rem;
+}
+
+/* Fixed widths keep Time and Space lined up across every structure's table. */
+.complexity-table thead th:nth-child(1) {
+  width: 26%;
+}
+
+.complexity-table thead th:nth-child(2) {
+  width: 12%;
+}
+
+.complexity-table thead th:nth-child(3) {
+  width: 10%;
+}
+
+.complexity-table th,
+.complexity-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.complexity-table thead th {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.complexity-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.complexity-table tbody th {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.complexity-table .complexity-value {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.complexity-table td:last-child {
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.complexity-footnote {
+  max-width: 80ch;
+  margin: 18px 0 0;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 760px) {
+  .nav-reference-item {
+    margin-top: 0;
+  }
+
+  .nav-reference-item::before {
+    content: none;
+  }
+
+  .complexity-section {
+    padding: 16px 14px;
+  }
+
+  /* On phones each row becomes: operation, time, space, then the reason underneath. */
+  .complexity-table {
+    min-width: 0;
+    table-layout: auto;
+  }
+
+  .complexity-table tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 6.2em 4.6em;
+    column-gap: 14px;
+    padding: 10px 2px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .complexity-table tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .complexity-table th,
+  .complexity-table td {
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .complexity-table tbody th {
+    white-space: normal;
+  }
+
+  .complexity-table thead th:last-child {
+    display: none;
+  }
+
+  .complexity-table td:last-child {
+    grid-column: 1 / -1;
+    margin-top: 5px;
+  }
+}

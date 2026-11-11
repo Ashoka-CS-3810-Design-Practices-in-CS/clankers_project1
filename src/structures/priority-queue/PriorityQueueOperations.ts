@@ -9,7 +9,8 @@ import {
 
 export type PriorityQueueResult = OperationResult<PriorityQueueModel, PriorityQueueSnapshot>;
 
-const COMPLEXITY = {
+/** Worst-case costs shown in each trace and in the complexity reference page. */
+export const PRIORITY_QUEUE_COMPLEXITY = {
   insert: {
     time: 'O(log n)',
     space: 'O(1)',
@@ -103,7 +104,7 @@ export class PriorityQueueOperations {
       }
     });
 
-    return this.result(working, recorder, 'success', COMPLEXITY.insert, 'Insert');
+    return this.result(working, recorder, 'success', PRIORITY_QUEUE_COMPLEXITY.insert, 'Insert');
   }
 
   extractMin(model: PriorityQueueModel): PriorityQueueResult {
@@ -117,7 +118,13 @@ export class PriorityQueueOperations {
         message: 'The priority queue is empty, so there is no minimum to remove.',
         snapshot: working.snapshot(),
       });
-      return this.result(working, recorder, 'blocked', COMPLEXITY.extract, 'Extract min');
+      return this.result(
+        working,
+        recorder,
+        'blocked',
+        PRIORITY_QUEUE_COMPLEXITY.extract,
+        'Extract min',
+      );
     }
 
     recorder.record({
@@ -203,7 +210,13 @@ export class PriorityQueueOperations {
       });
     }
 
-    return this.result(working, recorder, 'success', COMPLEXITY.extract, 'Extract min');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      PRIORITY_QUEUE_COMPLEXITY.extract,
+      'Extract min',
+    );
   }
 
   peekMin(model: PriorityQueueModel): PriorityQueueResult {
@@ -217,7 +230,7 @@ export class PriorityQueueOperations {
         message: 'The priority queue is empty, so there is no minimum to inspect.',
         snapshot: working.snapshot(),
       });
-      return this.result(working, recorder, 'blocked', COMPLEXITY.peek, 'Peek min');
+      return this.result(working, recorder, 'blocked', PRIORITY_QUEUE_COMPLEXITY.peek, 'Peek min');
     }
 
     recorder.record({
@@ -233,7 +246,7 @@ export class PriorityQueueOperations {
       matchedNodeIds: [root.id],
       output: [root.value],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.peek, 'Peek min');
+    return this.result(working, recorder, 'success', PRIORITY_QUEUE_COMPLEXITY.peek, 'Peek min');
   }
 
   private result(

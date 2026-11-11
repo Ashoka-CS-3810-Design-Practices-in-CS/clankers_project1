@@ -1,13 +1,20 @@
 import { STRUCTURES } from '../registry/structures';
-import type { AvailableStructureId } from '../App';
+import type { AvailableStructureId, ShellViewId } from '../App';
 
 interface StructureNavProps {
-  readonly activeId: AvailableStructureId;
+  readonly activeId: ShellViewId;
   readonly onSelect: (id: AvailableStructureId) => void;
+  readonly onOpenComplexities: () => void;
   readonly onGoHome?: () => void;
 }
 
-export function StructureNav({ activeId, onSelect, onGoHome }: StructureNavProps) {
+export function StructureNav({
+  activeId,
+  onSelect,
+  onOpenComplexities,
+  onGoHome,
+}: StructureNavProps) {
+  const complexitiesActive = activeId === 'complexities';
   return (
     <nav className="structure-nav" aria-label="Data structures">
       <button
@@ -43,6 +50,16 @@ export function StructureNav({ activeId, onSelect, onGoHome }: StructureNavProps
             </small>
           </button>
         ))}
+        <button
+          className={`structure-item nav-reference-item ${complexitiesActive ? 'is-active' : ''}`}
+          type="button"
+          onClick={onOpenComplexities}
+          aria-label={`Complexities, ${complexitiesActive ? 'active' : 'reference'}`}
+          aria-current={complexitiesActive ? 'page' : undefined}
+        >
+          <span>Complexities</span>
+          <small>{complexitiesActive ? 'Active' : 'Big-O'}</small>
+        </button>
       </div>
       <p className="nav-note">
         Build the structure, then inspect each pointer change at your own pace.

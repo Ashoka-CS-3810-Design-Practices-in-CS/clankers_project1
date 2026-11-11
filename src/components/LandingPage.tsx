@@ -1,8 +1,10 @@
+import { COMPLEXITY_TABLE } from '../registry/complexities';
 import { STRUCTURES } from '../registry/structures';
 import type { AvailableStructureId } from '../App';
 
 interface LandingPageProps {
   readonly onSelect: (id: AvailableStructureId) => void;
+  readonly onOpenComplexities: () => void;
 }
 
 const STRUCTURE_ICONS: Record<string, string> = {
@@ -27,7 +29,7 @@ const STRUCTURE_HIGHLIGHTS: Record<string, string[]> = {
   graph: ['BFS & DFS', 'Add vertices & edges', 'Traversal visualization'],
 };
 
-export function LandingPage({ onSelect }: LandingPageProps) {
+export function LandingPage({ onSelect, onOpenComplexities }: LandingPageProps) {
   return (
     <main className="landing" id="main-content">
       <section className="landing-hero">
@@ -93,6 +95,33 @@ export function LandingPage({ onSelect }: LandingPageProps) {
             </button>
           ))}
         </div>
+      </section>
+
+      <section className="landing-complexities" aria-labelledby="landing-complexities-heading">
+        <h2 className="landing-section-heading" id="landing-complexities-heading">
+          Compare every operation
+        </h2>
+        <button
+          className="landing-card landing-card-wide"
+          type="button"
+          onClick={onOpenComplexities}
+          aria-label="Open the complexity table"
+        >
+          <span className="landing-card-icon" aria-hidden="true">
+            📊
+          </span>
+          <div className="landing-card-body">
+            <h3>Complexity table</h3>
+            <p>
+              Worst-case time and space for all {COMPLEXITY_TABLE.length} structures and{' '}
+              {COMPLEXITY_TABLE.reduce((total, structure) => total + structure.rows.length, 0)}{' '}
+              operations on one page, with the reason for each.
+            </p>
+          </div>
+          <span className="landing-card-arrow" aria-hidden="true">
+            →
+          </span>
+        </button>
       </section>
 
       <section className="landing-how" aria-label="How it works">

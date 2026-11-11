@@ -5,7 +5,8 @@ import { BstModel, type BstSnapshot, type TraversalOrder } from './BstModel';
 
 export type BstResult = OperationResult<BstModel, BstSnapshot>;
 
-const COMPLEXITY = {
+/** Worst-case costs shown in each trace and in the complexity reference page. */
+export const BST_COMPLEXITY = {
   insert: {
     time: 'O(n)',
     space: 'O(1)',
@@ -73,7 +74,7 @@ export class BstOperations {
       visitedNodeIds: [...visited, inserted.node.id],
       matchedNodeIds: [inserted.node.id],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.insert, 'Insert');
+    return this.result(working, recorder, 'success', BST_COMPLEXITY.insert, 'Insert');
   }
 
   search(model: BstModel, value: number): BstResult {
@@ -105,7 +106,8 @@ export class BstOperations {
         matchedNodeIds: matched ? [node.id] : [],
         output: matched ? [node.value] : [],
       });
-      if (matched) return this.result(working, recorder, 'success', COMPLEXITY.search, 'Search');
+      if (matched)
+        return this.result(working, recorder, 'success', BST_COMPLEXITY.search, 'Search');
     }
 
     recorder.record({
@@ -114,7 +116,7 @@ export class BstOperations {
       snapshot: working.snapshot(),
       visitedNodeIds: visited,
     });
-    return this.result(working, recorder, 'not-found', COMPLEXITY.search, 'Search');
+    return this.result(working, recorder, 'not-found', BST_COMPLEXITY.search, 'Search');
   }
 
   delete(model: BstModel, value: number): BstResult {
@@ -155,7 +157,7 @@ export class BstOperations {
         snapshot: working.snapshot(),
         visitedNodeIds: visited,
       });
-      return this.result(working, recorder, 'not-found', COMPLEXITY.delete, 'Delete');
+      return this.result(working, recorder, 'not-found', BST_COMPLEXITY.delete, 'Delete');
     }
 
     const deletion = working.delete(value);
@@ -177,7 +179,7 @@ export class BstOperations {
       activeNodeIds: deletion.replacementId ? [deletion.replacementId] : [],
       output: [value],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.delete, 'Delete');
+    return this.result(working, recorder, 'success', BST_COMPLEXITY.delete, 'Delete');
   }
 
   traverse(model: BstModel, order: TraversalOrder): BstResult {
@@ -213,7 +215,7 @@ export class BstOperations {
       visitedNodeIds: visited,
       output,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.traverse, label);
+    return this.result(working, recorder, 'success', BST_COMPLEXITY.traverse, label);
   }
 
   private orderLabel(order: TraversalOrder): string {

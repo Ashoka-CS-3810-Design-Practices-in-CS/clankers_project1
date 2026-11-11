@@ -46,3 +46,23 @@ for (const workspace of WORKSPACES) {
     expect(await audit(page)).toEqual([]);
   });
 }
+
+test('the complexity table has no detectable WCAG A/AA violations in either theme', async ({
+  page,
+}) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Open the complexity table' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Complexities' })).toBeVisible();
+  await expect(page.getByRole('table')).toHaveCount(6);
+
+  expect(await audit(page)).toEqual([]);
+
+  await page.getByRole('button', { name: 'Switch to light mode' }).click();
+  expect(await audit(page)).toEqual([]);
+
+  // The page never scrolls sideways; wide tables scroll inside their own region.
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
+});

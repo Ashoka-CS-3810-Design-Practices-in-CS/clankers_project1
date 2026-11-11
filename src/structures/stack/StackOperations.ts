@@ -5,7 +5,8 @@ import { StackModel, type StackSnapshot } from './StackModel';
 
 export type StackResult = OperationResult<StackModel, StackSnapshot>;
 
-const COMPLEXITY = {
+/** Worst-case costs shown in each trace and in the complexity reference page. */
+export const STACK_COMPLEXITY = {
   push: {
     time: 'O(1)',
     space: 'O(1)',
@@ -45,7 +46,7 @@ export class StackOperations {
       activeNodeIds: [pushed.id],
       visitedNodeIds: [pushed.id],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.push, 'Push');
+    return this.result(working, recorder, 'success', STACK_COMPLEXITY.push, 'Push');
   }
 
   pop(model: StackModel): StackResult {
@@ -59,7 +60,7 @@ export class StackOperations {
         message: 'The stack is empty, so there is no top item to remove.',
         snapshot: working.snapshot(),
       });
-      return this.result(working, recorder, 'blocked', COMPLEXITY.pop, 'Pop');
+      return this.result(working, recorder, 'blocked', STACK_COMPLEXITY.pop, 'Pop');
     }
 
     recorder.record({
@@ -76,7 +77,7 @@ export class StackOperations {
       snapshot: working.snapshot(),
       output: [top.value],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.pop, 'Pop');
+    return this.result(working, recorder, 'success', STACK_COMPLEXITY.pop, 'Pop');
   }
 
   peek(model: StackModel): StackResult {
@@ -90,7 +91,7 @@ export class StackOperations {
         message: 'The stack is empty, so there is no top item to inspect.',
         snapshot: working.snapshot(),
       });
-      return this.result(working, recorder, 'blocked', COMPLEXITY.peek, 'Peek');
+      return this.result(working, recorder, 'blocked', STACK_COMPLEXITY.peek, 'Peek');
     }
 
     recorder.record({
@@ -106,7 +107,7 @@ export class StackOperations {
       matchedNodeIds: [top.id],
       output: [top.value],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.peek, 'Peek');
+    return this.result(working, recorder, 'success', STACK_COMPLEXITY.peek, 'Peek');
   }
 
   inspect(model: StackModel): StackResult {
@@ -144,7 +145,7 @@ export class StackOperations {
       visitedNodeIds: visited,
       output,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.inspect, 'Inspect all');
+    return this.result(working, recorder, 'success', STACK_COMPLEXITY.inspect, 'Inspect all');
   }
 
   private result(
