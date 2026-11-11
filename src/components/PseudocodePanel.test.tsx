@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { PseudocodePanel } from './PseudocodePanel';
 import { LinkedListModel } from '../structures/linked-list/LinkedListModel';
 import { LinkedListOperations } from '../structures/linked-list/LinkedListOperations';
+import { PriorityQueueModel } from '../structures/priority-queue/PriorityQueueModel';
+import { PriorityQueueOperations } from '../structures/priority-queue/PriorityQueueOperations';
 import App from '../App';
 
 describe('PseudocodePanel', () => {
@@ -50,5 +52,30 @@ describe('PseudocodePanel', () => {
     expect(status).toHaveTextContent('current.value ≠ value');
     await user.click(screen.getByRole('button', { name: 'Previous' }));
     expect(status).toHaveTextContent('current ← head');
+  });
+
+  it('marks the heap compare line as done, not pending, once sift-up stops', () => {
+    const result = new PriorityQueueOperations().insert(
+      PriorityQueueModel.fromValues([1, 2, 3]),
+      2,
+    );
+    const compareIndex = result.steps.findIndex((step) =>
+      step.message.startsWith('Compare 2 with its parent 2'),
+    );
+    const panel = (index: number) => (
+      <PseudocodePanel definition={result.pseudocode} steps={result.steps} index={index} />
+    );
+    const { rerender } = render(panel(compareIndex));
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Currently executing: compare heap[i] with heap[parent(i)]',
+    );
+    rerender(panel(result.steps.length - 1));
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Currently executing: otherwise: stop; heap order holds',
+    );
+    const compareLine = screen
+      .getByText('compare heap[i] with heap[parent(i)]')
+      .closest('[data-state]');
+    expect(compareLine).toHaveAttribute('data-state', 'executed');
   });
 });

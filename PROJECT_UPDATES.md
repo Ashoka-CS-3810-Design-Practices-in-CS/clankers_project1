@@ -1,5 +1,11 @@
 # Project Updates
 
+## 2026-11-11: Heap pseudocode matches comparisons that do not swap
+
+- Fixed a mismatch in Priority Queue pseudocode. When sift-up or sift-down compared two items and did not swap (for example, inserting 2 below a parent that is also 2), the comparison step highlighted the "stop" line, so the "compare" line stayed pending while the narration described a comparison.
+- Every comparison now highlights the compare line. When it does not swap, a separate step highlights the stop line and explains why heap order holds. Insert and Extract min traces that end early are one step longer; practice questions are unchanged.
+- Added unit tests for the reported case and for extract min, a sweep checking that every comparison runs the compare line and every stop follows a compare, and a panel test that the compare line ends as done, not pending.
+
 ## 2026-10-25: Bounded learning workspaces
 
 - Standardized one bounded learning stage across all six structures, keeping the visualization, active pseudocode, and step explanation together on desktop and laptop widths.
