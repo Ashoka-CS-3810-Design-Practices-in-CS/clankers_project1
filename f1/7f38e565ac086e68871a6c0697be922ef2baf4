@@ -1,0 +1,26 @@
+PROJECT_UPDATES.md
+  s_3eb8e14d84cbd2::t_b2bd80b2db413e 3-7
+src/components/LinkedListCanvas.tsx
+  s_3eb8e14d84cbd2::t_26d67ed55553fd 10-13,37,40-45,47,49,70,76,80-88,99,101,110,115
+  s_3eb8e14d84cbd2::t_8f58284e651fe9 38-39,46,48
+  s_3eb8e14d84cbd2::t_22cfe5b26675aa 91-96,109
+e2e/linked-list.spec.ts
+  s_3eb8e14d84cbd2::t_b2bd80b2db413e 4-44,48-59
+  s_3eb8e14d84cbd2::t_22cfe5b26675aa 45-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "f17f38e565ac086e68871a6c0697be922ef2baf4",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
