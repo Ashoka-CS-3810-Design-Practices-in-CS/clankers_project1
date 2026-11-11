@@ -1,0 +1,28 @@
+src/components/PriorityQueueCanvas.tsx
+  s_3eb8e14d84cbd2::t_844df431dcef58 21-30,46-50,52-53,56,59,67,128,132,136,148,151,154,156
+PROJECT_UPDATES.md
+  s_3eb8e14d84cbd2::t_a0ab23008fb9af 3-6
+  s_3eb8e14d84cbd2::t_d106356c7a6b25 14-18
+  s_3eb8e14d84cbd2::t_6c6d75929e34cc 19-22
+e2e/priority-queue.spec.ts
+  s_3eb8e14d84cbd2::t_d5b5cf7dcdcb0c 9-11,37-38,49-53,61-66,69-71,74-76
+  s_3eb8e14d84cbd2::t_d106356c7a6b25 12-36,39-48,54-60,67-68,72-73,77-90
+src/domain/integerValidation.ts
+  s_3eb8e14d84cbd2::t_6c6d75929e34cc 22-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c4055a2650185a5e31677fbbe467b7d1e7e3736a",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
