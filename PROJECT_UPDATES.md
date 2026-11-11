@@ -1,5 +1,10 @@
 # Project Updates
 
+## 2026-11-11: Linked List integer overflow fix
+
+- Sized each node's value compartment for its full signed integer and derived pointer, arrow, and following-node positions from the resulting width.
+- Preserved readable text, stable IDs, and canvas scrolling; added browser regression coverage for both safe-integer limits, duplicates, mixed widths, zoom limits, and themes on desktop and mobile.
+
 ## 2026-10-25: Visualization zoom and brand asset
 
 - Replaced the shared navigation, landing-page, and favicon logo asset with the supplied Clankers artwork.
