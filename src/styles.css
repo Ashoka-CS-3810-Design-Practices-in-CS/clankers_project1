@@ -646,7 +646,7 @@ input:disabled {
 }
 
 .zoom-toolbar button:focus-visible {
-  outline: 3px solid var(--focus-ring);
+  outline: 3px solid var(--canvas-ink);
   outline-offset: 2px;
 }
 

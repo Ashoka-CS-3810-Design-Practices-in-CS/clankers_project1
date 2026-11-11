@@ -1,5 +1,9 @@
 # Project Updates
 
+## 2026-11-11: Zoom keyboard focus
+
+- Fixed zoom-button focus outlines to use the contrasting canvas text colour, keeping keyboard focus visible against the pale toolbar in both themes; added desktop/mobile keyboard regression coverage.
+
 ## 2026-11-11: Main integration
 
 - Integrated the Complexity table page from `main` with the local heap-sizing and integer-validation fixes; resolved the updates-log conflict by preserving both sets of entries.
