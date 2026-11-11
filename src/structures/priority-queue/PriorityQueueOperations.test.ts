@@ -64,6 +64,53 @@ describe('PriorityQueueOperations', () => {
     expect(result.steps.at(-1)?.message).toContain('heap order holds');
   });
 
+  it('runs the compare line before the stop line when sift-up does not swap', () => {
+    // Reported case: the new 2 is compared with an equal parent 2.
+    const result = operations.insert(PriorityQueueModel.fromValues([1, 2, 3]), 2);
+    expect(result.steps.map((step) => step.pseudocodeLineId)).toEqual([
+      'insert.start',
+      'insert.place',
+      'insert.compare',
+      'insert.stop',
+    ]);
+    expect(result.steps[2].message).toBe(
+      'Compare 2 with its parent 2: 2 is not smaller, so no swap is needed.',
+    );
+  });
+
+  it('runs the compare line before the stop line when sift-down does not swap', () => {
+    const result = operations.extractMin(PriorityQueueModel.fromValues([1, 2, 3, 10, 11, 4]));
+    expect(result.steps.map((step) => step.pseudocodeLineId)).toEqual([
+      'extract.read',
+      'extract.replace',
+      'extract.compare',
+      'extract.swap',
+      'extract.compare',
+      'extract.stop',
+    ]);
+    expect(result.steps.at(-1)?.message).toContain('heap order is restored');
+  });
+
+  it('highlights the compare line at every comparison, swap or not', () => {
+    const heaps = [[], [5], [1, 5], [7, 3, 9, 1, 5, 8], [4, 4, 4, 4], [1, 2, 3, 10, 11, 4]];
+    heaps.forEach((heap) => {
+      [-3, 0, 2, 4, 6, 50].forEach((value) => {
+        const steps = [
+          ...operations.insert(PriorityQueueModel.fromValues(heap), value).steps,
+          ...operations.extractMin(PriorityQueueModel.fromValues(heap)).steps,
+        ];
+        steps
+          .filter((step) => step.message.startsWith('Compare '))
+          .forEach((step) => expect(step.pseudocodeLineId).toMatch(/\.compare$/));
+        steps.forEach((step, index) => {
+          if (step.pseudocodeLineId?.endsWith('.stop')) {
+            expect(steps[index - 1].pseudocodeLineId).toMatch(/\.compare$/);
+          }
+        });
+      });
+    });
+  });
+
   it('extracts the minimum and restores heap order', () => {
     const result = operations.extractMin(PriorityQueueModel.sample());
     expect(result.status).toBe('success');

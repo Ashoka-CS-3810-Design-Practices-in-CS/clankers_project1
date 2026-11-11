@@ -56,16 +56,29 @@ export class PriorityQueueOperations {
           });
           break;
         case 'compare':
+          // Every comparison runs the compare line. When it does not swap, a
+          // separate step then runs the stop line, so the highlighted
+          // pseudocode always matches what the narration describes.
           recorder.record({
-            pseudocodeLineId: event.willSwap ? 'insert.compare' : 'insert.stop',
+            pseudocodeLineId: 'insert.compare',
             message: event.willSwap
               ? `Compare ${event.item.value} with its parent ${event.other.value}: the child is smaller, so they must swap.`
-              : `Compare ${event.item.value} with its parent ${event.other.value}: the parent is not larger, so heap order holds.`,
+              : `Compare ${event.item.value} with its parent ${event.other.value}: ${event.item.value} is not smaller, so no swap is needed.`,
             snapshot: working.snapshot(),
             activeNodeIds: [event.item.id],
             visitedNodeIds: visited,
             matchedNodeIds: [event.other.id],
           });
+          if (!event.willSwap) {
+            recorder.record({
+              pseudocodeLineId: 'insert.stop',
+              message: `The parent ${event.other.value} is not larger than ${event.item.value}, so heap order holds and sift-up stops.`,
+              snapshot: working.snapshot(),
+              activeNodeIds: [event.item.id],
+              visitedNodeIds: visited,
+              matchedNodeIds: [event.other.id],
+            });
+          }
           break;
         case 'swap':
           recorder.record({
@@ -132,17 +145,29 @@ export class PriorityQueueOperations {
           });
           break;
         case 'compare':
+          // As in insert: compare first, then a separate stop step if no swap.
           recorder.record({
-            pseudocodeLineId: event.willSwap ? 'extract.compare' : 'extract.stop',
+            pseudocodeLineId: 'extract.compare',
             message: event.willSwap
               ? `Compare ${event.item.value} with its smaller child ${event.other.value}: the child is smaller, so they must swap.`
-              : `Compare ${event.item.value} with its smaller child ${event.other.value}: the parent is not larger, so heap order is restored.`,
+              : `Compare ${event.item.value} with its smaller child ${event.other.value}: ${event.item.value} is not larger, so no swap is needed.`,
             snapshot: working.snapshot(),
             activeNodeIds: [event.item.id],
             visitedNodeIds: visited,
             matchedNodeIds: [event.other.id],
             output,
           });
+          if (!event.willSwap) {
+            recorder.record({
+              pseudocodeLineId: 'extract.stop',
+              message: `${event.item.value} is no larger than either child, so heap order is restored and sift-down stops.`,
+              snapshot: working.snapshot(),
+              activeNodeIds: [event.item.id],
+              visitedNodeIds: visited,
+              matchedNodeIds: [event.other.id],
+              output,
+            });
+          }
           break;
         case 'swap':
           recorder.record({

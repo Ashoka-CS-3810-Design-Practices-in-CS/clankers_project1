@@ -17,6 +17,11 @@
 - Replaced the shared navigation, landing-page, and favicon logo asset with the supplied Clankers artwork.
 - Added reusable 75%–200% visualization zoom controls with a one-click 100% reset across all six structures; enlarged diagrams remain contained in their scrollable canvases.
 - Kept zoom independent from playback and model state, added screen-reader announcements and keyboard focus, and covered the shared behavior in component and desktop/mobile browser tests.
+## 2026-11-11: Heap pseudocode matches comparisons that do not swap
+
+- Fixed a mismatch in Priority Queue pseudocode. When sift-up or sift-down compared two items and did not swap (for example, inserting 2 below a parent that is also 2), the comparison step highlighted the "stop" line, so the "compare" line stayed pending while the narration described a comparison.
+- Every comparison now highlights the compare line. When it does not swap, a separate step highlights the stop line and explains why heap order holds. Insert and Extract min traces that end early are one step longer; practice questions are unchanged.
+- Added unit tests for the reported case and for extract min, a sweep checking that every comparison runs the compare line and every stop follows a compare, and a panel test that the compare line ends as done, not pending.
 
 ## 2026-10-25: Bounded learning workspaces
 
