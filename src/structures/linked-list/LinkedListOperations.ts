@@ -5,7 +5,8 @@ import { LinkedListModel, type LinkedListSnapshot } from './LinkedListModel';
 
 export type LinkedListResult = OperationResult<LinkedListModel, LinkedListSnapshot>;
 
-const COMPLEXITY = {
+/** Worst-case costs shown in each trace and in the complexity reference page. */
+export const LINKED_LIST_COMPLEXITY = {
   insertHead: {
     time: 'O(1)',
     space: 'O(1)',
@@ -52,7 +53,13 @@ export class LinkedListOperations {
       activeNodeIds: [inserted.id],
       visitedNodeIds: [inserted.id],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.insertHead, 'Insert at head');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      LINKED_LIST_COMPLEXITY.insertHead,
+      'Insert at head',
+    );
   }
 
   insertTail(model: LinkedListModel, value: number): LinkedListResult {
@@ -91,7 +98,13 @@ export class LinkedListOperations {
       activeNodeIds: [inserted.id],
       visitedNodeIds: [...visited, inserted.id],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.insertTail, 'Insert at tail');
+    return this.result(
+      working,
+      recorder,
+      'success',
+      LINKED_LIST_COMPLEXITY.insertTail,
+      'Insert at tail',
+    );
   }
 
   search(model: LinkedListModel, value: number): LinkedListResult {
@@ -119,7 +132,7 @@ export class LinkedListOperations {
         matchedNodeIds: matched ? [item.id] : [],
       });
       if (matched) {
-        return this.result(working, recorder, 'success', COMPLEXITY.search, 'Search');
+        return this.result(working, recorder, 'success', LINKED_LIST_COMPLEXITY.search, 'Search');
       }
     }
 
@@ -129,7 +142,7 @@ export class LinkedListOperations {
       snapshot: working.snapshot(),
       visitedNodeIds: visited,
     });
-    return this.result(working, recorder, 'not-found', COMPLEXITY.search, 'Search');
+    return this.result(working, recorder, 'not-found', LINKED_LIST_COMPLEXITY.search, 'Search');
   }
 
   deleteFirstMatch(model: LinkedListModel, value: number): LinkedListResult {
@@ -164,7 +177,13 @@ export class LinkedListOperations {
           snapshot: working.snapshot(),
           visitedNodeIds: visited.filter((id) => id !== item.id),
         });
-        return this.result(working, recorder, 'success', COMPLEXITY.delete, 'Delete first match');
+        return this.result(
+          working,
+          recorder,
+          'success',
+          LINKED_LIST_COMPLEXITY.delete,
+          'Delete first match',
+        );
       }
     }
 
@@ -174,7 +193,13 @@ export class LinkedListOperations {
       snapshot: working.snapshot(),
       visitedNodeIds: visited,
     });
-    return this.result(working, recorder, 'not-found', COMPLEXITY.delete, 'Delete first match');
+    return this.result(
+      working,
+      recorder,
+      'not-found',
+      LINKED_LIST_COMPLEXITY.delete,
+      'Delete first match',
+    );
   }
 
   traverse(model: LinkedListModel): LinkedListResult {
@@ -212,7 +237,7 @@ export class LinkedListOperations {
       visitedNodeIds: visited,
       output,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.traverse, 'Traverse');
+    return this.result(working, recorder, 'success', LINKED_LIST_COMPLEXITY.traverse, 'Traverse');
   }
 
   private result(

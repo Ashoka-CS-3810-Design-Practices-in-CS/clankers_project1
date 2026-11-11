@@ -11,7 +11,8 @@ import {
 
 export type GraphResult = OperationResult<GraphModel, GraphSnapshot>;
 
-const COMPLEXITY = {
+/** Worst-case costs shown in each trace and in the complexity reference page. */
+export const GRAPH_COMPLEXITY = {
   addVertex: {
     time: 'O(V)',
     space: 'O(1)',
@@ -66,7 +67,7 @@ export class GraphOperations {
       activeNodeIds: [vertex.id],
       visitedNodeIds: [vertex.id],
     });
-    return this.result(working, recorder, COMPLEXITY.addVertex, 'Add vertex');
+    return this.result(working, recorder, GRAPH_COMPLEXITY.addVertex, 'Add vertex');
   }
 
   removeVertex(model: GraphModel, label: number): GraphResult {
@@ -92,7 +93,7 @@ export class GraphOperations {
       snapshot: working.snapshot(),
       output: [label],
     });
-    return this.result(working, recorder, COMPLEXITY.removeVertex, 'Remove vertex');
+    return this.result(working, recorder, GRAPH_COMPLEXITY.removeVertex, 'Remove vertex');
   }
 
   addEdge(model: GraphModel, from: number, to: number): GraphResult {
@@ -115,7 +116,7 @@ export class GraphOperations {
       activeNodeIds: [first.id, second.id, edge.id],
       visitedNodeIds: [edge.id],
     });
-    return this.result(working, recorder, COMPLEXITY.addEdge, 'Add edge');
+    return this.result(working, recorder, GRAPH_COMPLEXITY.addEdge, 'Add edge');
   }
 
   removeEdge(model: GraphModel, from: number, to: number): GraphResult {
@@ -138,7 +139,7 @@ export class GraphOperations {
       snapshot: working.snapshot(),
       activeNodeIds: [first.id, second.id],
     });
-    return this.result(working, recorder, COMPLEXITY.removeEdge, 'Remove edge');
+    return this.result(working, recorder, GRAPH_COMPLEXITY.removeEdge, 'Remove edge');
   }
 
   bfs(model: GraphModel, startLabel: number): GraphResult {
@@ -217,7 +218,7 @@ export class GraphOperations {
       visitedNodeIds: [...visited, ...treeEdges],
       output,
     });
-    return this.result(working, recorder, COMPLEXITY.bfs, 'Breadth-first search');
+    return this.result(working, recorder, GRAPH_COMPLEXITY.bfs, 'Breadth-first search');
   }
 
   dfs(model: GraphModel, startLabel: number): GraphResult {
@@ -308,7 +309,7 @@ export class GraphOperations {
       visitedNodeIds: [...visited, ...treeEdges],
       output,
     });
-    return this.result(working, recorder, COMPLEXITY.dfs, 'Depth-first search');
+    return this.result(working, recorder, GRAPH_COMPLEXITY.dfs, 'Depth-first search');
   }
 
   private finishMessage(

@@ -5,7 +5,8 @@ import { QueueModel, type QueueSnapshot } from './QueueModel';
 
 export type QueueResult = OperationResult<QueueModel, QueueSnapshot>;
 
-const COMPLEXITY = {
+/** Worst-case costs shown in each trace and in the complexity reference page. */
+export const QUEUE_COMPLEXITY = {
   enqueue: {
     time: 'O(1)',
     space: 'O(1)',
@@ -51,7 +52,7 @@ export class QueueOperations {
       activeNodeIds: [added.id],
       visitedNodeIds: [added.id],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.enqueue, 'Enqueue');
+    return this.result(working, recorder, 'success', QUEUE_COMPLEXITY.enqueue, 'Enqueue');
   }
 
   dequeue(model: QueueModel): QueueResult {
@@ -65,7 +66,7 @@ export class QueueOperations {
         message: 'The queue is empty, so there is no front item to remove.',
         snapshot: working.snapshot(),
       });
-      return this.result(working, recorder, 'blocked', COMPLEXITY.dequeue, 'Dequeue');
+      return this.result(working, recorder, 'blocked', QUEUE_COMPLEXITY.dequeue, 'Dequeue');
     }
 
     recorder.record({
@@ -84,7 +85,7 @@ export class QueueOperations {
       snapshot: working.snapshot(),
       output: [front.value],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.dequeue, 'Dequeue');
+    return this.result(working, recorder, 'success', QUEUE_COMPLEXITY.dequeue, 'Dequeue');
   }
 
   peek(model: QueueModel): QueueResult {
@@ -98,7 +99,7 @@ export class QueueOperations {
         message: 'The queue is empty, so there is no front item to inspect.',
         snapshot: working.snapshot(),
       });
-      return this.result(working, recorder, 'blocked', COMPLEXITY.peek, 'Peek front');
+      return this.result(working, recorder, 'blocked', QUEUE_COMPLEXITY.peek, 'Peek front');
     }
 
     recorder.record({
@@ -114,7 +115,7 @@ export class QueueOperations {
       matchedNodeIds: [front.id],
       output: [front.value],
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.peek, 'Peek front');
+    return this.result(working, recorder, 'success', QUEUE_COMPLEXITY.peek, 'Peek front');
   }
 
   inspect(model: QueueModel): QueueResult {
@@ -152,7 +153,7 @@ export class QueueOperations {
       visitedNodeIds: visited,
       output,
     });
-    return this.result(working, recorder, 'success', COMPLEXITY.inspect, 'Inspect all');
+    return this.result(working, recorder, 'success', QUEUE_COMPLEXITY.inspect, 'Inspect all');
   }
 
   private result(
