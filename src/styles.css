@@ -1482,6 +1482,7 @@ input:disabled {
 
 .playback-buttons {
   display: flex;
+  flex-wrap: wrap;
   gap: 7px;
 }
 
@@ -1891,7 +1892,7 @@ input:disabled {
 
   .playback-buttons {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .playback-buttons button {

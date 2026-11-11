@@ -1,6 +1,6 @@
 import { PseudocodePanel } from '../components/PseudocodePanel';
 import { VisualizationZoom } from '../components/VisualizationZoom';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
 import { PracticeBar } from '../components/PracticeBar';
@@ -28,6 +28,7 @@ interface StackWorkspaceProps {
 
 export function StackWorkspace({ active }: StackWorkspaceProps) {
   const [model, setModel] = useState(() => new StackModel());
+  const previousModel = useRef(model);
   const [result, setResult] = useState<StackResult | null>(null);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
@@ -54,9 +55,18 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
     const checkpoints = practice.prepare(() =>
       containerPractice(STACK_WORDS, operation, value, nextResult.steps),
     );
+    previousModel.current = model;
     setModel(nextResult.model);
     setResult(nextResult);
     playback.load(nextResult.steps.length, checkpoints);
+    setError('');
+  }
+
+  function cancelOperation() {
+    setModel(previousModel.current);
+    setResult(null);
+    playback.clear();
+    practice.prepare(() => []);
     setError('');
   }
 
@@ -183,6 +193,7 @@ export function StackWorkspace({ active }: StackWorkspaceProps) {
         onPrevious={playback.previous}
         onNext={playback.next}
         onRestart={playback.restart}
+        onCancel={cancelOperation}
         onSpeedChange={(speed: PlaybackSpeed) => playback.setSpeed(speed)}
       />
     </main>

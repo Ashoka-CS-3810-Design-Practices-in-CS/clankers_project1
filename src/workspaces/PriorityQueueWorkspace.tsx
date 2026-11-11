@@ -1,6 +1,6 @@
 import { PseudocodePanel } from '../components/PseudocodePanel';
 import { VisualizationZoom } from '../components/VisualizationZoom';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Inspector } from '../components/Inspector';
 import { PlaybackControls } from '../components/PlaybackControls';
 import { PracticeBar } from '../components/PracticeBar';
@@ -30,6 +30,7 @@ interface PriorityQueueWorkspaceProps {
 
 export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) {
   const [model, setModel] = useState(() => new PriorityQueueModel());
+  const previousModel = useRef(model);
   const [result, setResult] = useState<PriorityQueueResult | null>(null);
   const [input, setInput] = useState('');
   const [error, setError] = useState('');
@@ -58,9 +59,18 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
     value?: number,
   ) {
     const checkpoints = practice.prepare(() => priorityQueuePractice(operation, value, nextResult));
+    previousModel.current = model;
     setModel(nextResult.model);
     setResult(nextResult);
     playback.load(nextResult.steps.length, checkpoints);
+    setError('');
+  }
+
+  function cancelOperation() {
+    setModel(previousModel.current);
+    setResult(null);
+    playback.clear();
+    practice.prepare(() => []);
     setError('');
   }
 
@@ -190,6 +200,7 @@ export function PriorityQueueWorkspace({ active }: PriorityQueueWorkspaceProps) 
         onPrevious={playback.previous}
         onNext={playback.next}
         onRestart={playback.restart}
+        onCancel={cancelOperation}
         onSpeedChange={(speed: PlaybackSpeed) => playback.setSpeed(speed)}
       />
     </main>

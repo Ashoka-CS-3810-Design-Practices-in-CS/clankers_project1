@@ -73,7 +73,7 @@ export function StackOperationPanel({
         <button type="button" className="quiet-button" onClick={onSample} disabled={disabled}>
           Load sample
         </button>
-        <button type="button" className="quiet-button danger" onClick={onReset} disabled={disabled}>
+        <button type="button" className="quiet-button danger" onClick={onReset}>
           Reset stack
         </button>
       </div>

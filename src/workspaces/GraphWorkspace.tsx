@@ -1,6 +1,6 @@
 import { PseudocodePanel } from '../components/PseudocodePanel';
 import { VisualizationZoom } from '../components/VisualizationZoom';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GraphCanvas } from '../components/GraphCanvas';
 import { GraphOperationPanel } from '../components/GraphOperationPanel';
 import { Inspector } from '../components/Inspector';
@@ -31,6 +31,7 @@ interface GraphWorkspaceProps {
 
 export function GraphWorkspace({ active }: GraphWorkspaceProps) {
   const [model, setModel] = useState(() => new GraphModel());
+  const previousModel = useRef(model);
   const [result, setResult] = useState<GraphResult | null>(null);
   const [vertexInput, setVertexInput] = useState('');
   const [targetInput, setTargetInput] = useState('');
@@ -53,9 +54,18 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
 
   function begin(nextResult: GraphResult, kind: PracticeKind = 'edit') {
     const checkpoints = practice.prepare(() => graphPractice(kind, nextResult));
+    previousModel.current = model;
     setModel(nextResult.model);
     setResult(nextResult);
     playback.load(nextResult.steps.length, checkpoints);
+    setError('');
+  }
+
+  function cancelOperation() {
+    setModel(previousModel.current);
+    setResult(null);
+    playback.clear();
+    practice.prepare(() => []);
     setError('');
   }
 
@@ -239,6 +249,7 @@ export function GraphWorkspace({ active }: GraphWorkspaceProps) {
         onPrevious={playback.previous}
         onNext={playback.next}
         onRestart={playback.restart}
+        onCancel={cancelOperation}
         onSpeedChange={(speed: PlaybackSpeed) => playback.setSpeed(speed)}
       />
     </main>

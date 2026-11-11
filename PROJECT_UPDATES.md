@@ -1,5 +1,12 @@
 # Project Updates
 
+## 2026-11-11: Cancel operations and unlock reset
+
+- Added Cancel operation to every workspace: it stops playback, discards the trace and practice questions, and restores the model from before the operation.
+- Kept Reset available during paused playback, autoplay, and practice checkpoints; clearing playback also removes its timer.
+- Added regression coverage for rollback, stable IDs, resumed editing, timer cleanup, practice holds, and keyboard cancellation across all six structures on desktop and mobile.
+- Verification: `npm run check` passed with 227 tests; the full Playwright suite passed all 72 desktop/mobile tests.
+
 ## 2026-11-11: Linked List integer overflow fix
 
 - Sized each node's value compartment for its full signed integer and derived pointer, arrow, and following-node positions from the resulting width.
