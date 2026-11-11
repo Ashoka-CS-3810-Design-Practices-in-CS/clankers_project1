@@ -1,0 +1,55 @@
+src/workspaces/GraphWorkspace.tsx
+  s_3eb8e14d84cbd2::t_8b506b6e6debf5 3,34,57,64-71,252
+src/components/PlaybackControls.tsx
+  s_3eb8e14d84cbd2::t_440513bcaf0ac3 11,23,56-62
+  s_3eb8e14d84cbd2::t_8969acc9dbdb08 63
+src/workspaces/BstWorkspace.tsx
+  s_3eb8e14d84cbd2::t_d6d6abc1fc977a 3,28,53,60-67,204
+src/workspaces/LinkedListWorkspace.tsx
+  s_3eb8e14d84cbd2::t_49525674026e01 3,34,63,70-77,214
+src/workspaces/StackWorkspace.tsx
+  s_3eb8e14d84cbd2::t_77dd7970c10527 3,31,58,65-72,196
+src/workspaces/QueueWorkspace.tsx
+  s_3eb8e14d84cbd2::t_eff12ea6e74da4 3,31,58,65-72,196
+src/components/PriorityQueueOperationPanel.tsx
+  s_3eb8e14d84cbd2::t_4edddcf9e2ca43 71
+src/styles.css
+  s_3eb8e14d84cbd2::t_440513bcaf0ac3 1485,1895
+src/components/GraphOperationPanel.tsx
+  s_3eb8e14d84cbd2::t_d4e42422096f6b 111
+src/components/QueueOperationPanel.tsx
+  s_3eb8e14d84cbd2::t_633693af3e7eea 76
+e2e/cancellation.spec.ts
+  s_3eb8e14d84cbd2::t_ba404590d4bfb5 1-5,14-46
+  s_3eb8e14d84cbd2::t_28b219354035c3 6-13
+src/workspaces/PriorityQueueWorkspace.tsx
+  s_3eb8e14d84cbd2::t_53bf7e2843c678 3,33,62,69-76,203
+src/OperationCancellation.test.tsx
+  s_3eb8e14d84cbd2::t_2bc78c167f0c24 23-25
+  s_3eb8e14d84cbd2::t_ba404590d4bfb5 1-22,26-75
+src/components/StackOperationPanel.tsx
+  s_3eb8e14d84cbd2::t_027335ed2cbfb4 76
+PROJECT_UPDATES.md
+  s_3eb8e14d84cbd2::t_ba404590d4bfb5 3-7,9
+  s_3eb8e14d84cbd2::t_7b75ae3c6ec519 8
+src/components/BstOperationPanel.tsx
+  s_3eb8e14d84cbd2::t_7811bcd05ecae1 86
+src/components/OperationPanel.tsx
+  s_3eb8e14d84cbd2::t_9c9adc8bdba83f 85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "607418e35bdfb107bb82866206a4fef9dbd90df4",
+  "prompts": {},
+  "sessions": {
+    "s_3eb8e14d84cbd2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a12547-7d56-7312-bb58-0a50f2876027",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Anurag Dey <anuragdey2k@gmail.com>"
+    }
+  }
+}
